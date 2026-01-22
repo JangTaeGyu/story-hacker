@@ -37,11 +37,11 @@ export default function StoryGameOverPage() {
         }`}
       >
         {/* 실패 아이콘 */}
-        <div className="text-6xl mb-4">💀</div>
+        <div className="text-6xl mb-4">🔒</div>
 
         {/* 타이틀 */}
         <h1 className="text-3xl font-bold text-hacker-rose mb-2">
-          HACKING FAILED
+          ACCESS DENIED
         </h1>
         <p className="text-gray-400 font-mono text-sm mb-6">
           EP.{episode.id} - {episode.title}

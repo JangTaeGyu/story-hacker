@@ -61,12 +61,15 @@ export default function DeductionCompletePage() {
         }`}
       >
         {/* 성공 아이콘 */}
-        <div className="text-6xl mb-4">🔓</div>
+        <div className="text-6xl mb-4 animate-bounce">🏆</div>
 
         {/* 타이틀 */}
         <h1 className="text-3xl font-bold text-hacker-cyan mb-2">
-          CODE CRACKED
+          EPISODE CLEAR!
         </h1>
+        <p className="text-gray-500 font-mono text-xs mb-6">
+          모든 코드를 해독했습니다!
+        </p>
         <p className="text-gray-400 font-mono text-sm mb-6">
           EP.{episode.id - 100} - {episode.title}
         </p>

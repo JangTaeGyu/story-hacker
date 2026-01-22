@@ -60,12 +60,15 @@ export default function StoryCompletePage() {
         }`}
       >
         {/* 성공 아이콘 */}
-        <div className="text-6xl mb-4">🎉</div>
+        <div className="text-6xl mb-4 animate-bounce">🏆</div>
 
         {/* 타이틀 */}
         <h1 className="text-3xl font-bold text-hacker-emerald mb-2">
-          HACKING COMPLETE
+          EPISODE CLEAR!
         </h1>
+        <p className="text-gray-500 font-mono text-xs mb-6">
+          모든 스테이지를 해킹했습니다!
+        </p>
         <p className="text-gray-400 font-mono text-sm mb-6">
           EP.{episode.id} - {episode.title}
         </p>

@@ -41,7 +41,7 @@ export default function DeductionGameOverPage() {
 
         {/* 타이틀 */}
         <h1 className="text-3xl font-bold text-hacker-rose mb-2">
-          DECRYPTION FAILED
+          DECODE FAILED
         </h1>
         <p className="text-gray-400 font-mono text-sm mb-6">
           EP.{episode.id - 100} - {episode.title}
