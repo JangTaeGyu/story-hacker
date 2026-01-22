@@ -19,6 +19,7 @@ export default function StoryGamePlay({ episode }: StoryGamePlayProps) {
   const router = useRouter();
   const [showSuccess, setShowSuccess] = useState(false);
   const [stageKey, setStageKey] = useState(0);
+  const [showKeypad, setShowKeypad] = useState(false);
 
   const {
     currentStageIndex,
@@ -106,7 +107,7 @@ export default function StoryGamePlay({ episode }: StoryGamePlayProps) {
       </header>
 
       {/* 메인 컨텐츠 */}
-      <main className="flex-1 p-4 overflow-y-auto pb-72">
+      <main className={`flex-1 p-4 overflow-y-auto ${showKeypad ? 'pb-96' : 'pb-24'}`}>
         {/* 스테이지 타이틀 */}
         <div className="mb-4">
           <h2 className="text-hacker-emerald font-bold text-lg flex items-center gap-2">
@@ -178,31 +179,56 @@ export default function StoryGamePlay({ episode }: StoryGamePlayProps) {
       {/* 입력 영역 (하단 고정) */}
       <footer className="fixed bottom-0 left-0 right-0 bg-hacker-dark/95 backdrop-blur border-t border-gray-800 p-4">
         <div className="max-w-md mx-auto">
-          {/* PIN 디스플레이 */}
-          <div className={`mb-2 ${isWrong ? 'animate-shake' : ''}`}>
-            <PinDisplay
-              pin={pin}
-              pinLength={pinLength}
-              isWrong={isWrong}
-              accentColor="emerald"
-            />
-          </div>
+          {showKeypad ? (
+            <>
+              {/* 키패드 닫기 버튼 */}
+              <button
+                onClick={() => setShowKeypad(false)}
+                className="absolute top-2 right-2 text-gray-500 hover:text-gray-300 p-2"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              </button>
 
-          {/* 남은 턴 (하트) */}
-          <HeartsDisplay
-            totalTurns={currentStage.maxTurns}
-            remainingTurns={remainingTurns}
-          />
+              {/* PIN 디스플레이 */}
+              <div className={`mb-2 ${isWrong ? 'animate-shake' : ''}`}>
+                <PinDisplay
+                  pin={pin}
+                  pinLength={pinLength}
+                  isWrong={isWrong}
+                  accentColor="emerald"
+                />
+              </div>
 
-          {/* 키패드 */}
-          <InputArea
-            onInput={handlePinInput}
-            onDelete={handlePinDelete}
-            onClear={handlePinClear}
-            onSubmit={handleSubmit}
-            canSubmit={pin.length === pinLength}
-            accentColor="emerald"
-          />
+              {/* 남은 턴 (하트) */}
+              <HeartsDisplay
+                totalTurns={currentStage.maxTurns}
+                remainingTurns={remainingTurns}
+              />
+
+              {/* 키패드 */}
+              <InputArea
+                onInput={handlePinInput}
+                onDelete={handlePinDelete}
+                onClear={handlePinClear}
+                onSubmit={handleSubmit}
+                canSubmit={pin.length === pinLength}
+                accentColor="emerald"
+              />
+            </>
+          ) : (
+            /* 키패드 열기 버튼 */
+            <button
+              onClick={() => setShowKeypad(true)}
+              className="w-full py-3 bg-hacker-emerald/20 border border-hacker-emerald/50 rounded-lg text-hacker-emerald font-mono text-sm hover:bg-hacker-emerald/30 transition-colors flex items-center justify-center gap-2"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clipRule="evenodd" />
+              </svg>
+              PIN 입력
+            </button>
+          )}
         </div>
       </footer>
     </div>
