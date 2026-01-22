@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next';
+import { Analytics } from '@vercel/analytics/react';
 import './globals.css';
 
 const SITE_URL = 'https://story-hacker.vercel.app';
@@ -66,6 +67,8 @@ export default function RootLayout({
         <main className="relative z-10 mx-auto max-w-md min-h-screen">
           {children}
         </main>
+
+        <Analytics />
       </body>
     </html>
   );
