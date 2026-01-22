@@ -2,13 +2,15 @@
 // 스토리 모드 타입
 // ============================================
 
+export type LockType = 'pin1' | 'pin2' | 'pin3' | 'pin4' | 'pin5' | 'pin6';
+
 export interface StoryStage {
   id: number;
   title: string;
   story: string;
   clue: string;
   hint: string;
-  lockType: 'pin4' | 'pin6';
+  lockType: LockType;
   answers: string[];
   maxTurns: number;
 }
@@ -16,6 +18,9 @@ export interface StoryStage {
 export interface StoryEpisode {
   id: number;
   title: string;
+  subtitle?: string;
+  synopsis?: string;
+  previousEpisode?: number;
   difficulty: 1 | 2 | 3;
   mode: 'story';
   stages: StoryStage[];
@@ -34,7 +39,7 @@ export interface DeductionStage {
   id: number;
   title: string;
   situation: string;
-  lockType: 'pin4' | 'pin6';
+  lockType: LockType;
   answer: string;
   maxTurns: number;
   clues: DeductionClue[];

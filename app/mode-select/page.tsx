@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import { storyEpisodes } from '@/data/storyEpisodes';
+import { deductionEpisodes } from '@/data/deductionEpisodes';
 
 export default function ModeSelectPage() {
   return (
@@ -29,7 +31,7 @@ export default function ModeSelectPage() {
               <div className="flex items-center gap-2">
                 <h3 className="text-hacker-emerald font-bold text-lg">스토리 모드</h3>
                 <span className="text-xs bg-hacker-emerald/20 text-hacker-emerald px-2 py-0.5 rounded">
-                  10 EP
+                  {storyEpisodes.length} EP
                 </span>
               </div>
               <p className="text-gray-400 text-sm mt-1 leading-relaxed">
@@ -61,7 +63,7 @@ export default function ModeSelectPage() {
               <div className="flex items-center gap-2">
                 <h3 className="text-hacker-cyan font-bold text-lg">추리 모드</h3>
                 <span className="text-xs bg-hacker-cyan/20 text-hacker-cyan px-2 py-0.5 rounded">
-                  8 EP
+                  {deductionEpisodes.length} EP
                 </span>
               </div>
               <p className="text-gray-400 text-sm mt-1 leading-relaxed">

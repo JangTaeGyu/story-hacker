@@ -1,4 +1,4 @@
-import type { DifficultyLevel, DifficultyInfo } from './types';
+import type { DifficultyLevel, DifficultyInfo, LockType } from './types';
 
 /**
  * 난이도 정보 반환
@@ -33,8 +33,16 @@ export function calculateDeductionStars(turnsUsed: number): number {
 /**
  * PIN 길이 반환
  */
-export function getPinLength(lockType: 'pin4' | 'pin6'): number {
-  return lockType === 'pin6' ? 6 : 4;
+export function getPinLength(lockType: LockType): number {
+  const lengthMap: Record<LockType, number> = {
+    pin1: 1,
+    pin2: 2,
+    pin3: 3,
+    pin4: 4,
+    pin5: 5,
+    pin6: 6,
+  };
+  return lengthMap[lockType];
 }
 
 /**

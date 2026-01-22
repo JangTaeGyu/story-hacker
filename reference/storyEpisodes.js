@@ -1,364 +1,39 @@
-import type { StoryEpisode } from '@/lib/types';
+// Story Hacker - 스토리 모드 에피소드 데이터
+// 전체 스토리: "네오 시티의 그림자" - 신입 해커 '제로'의 성장과 거대 음모 해결
 
-export const storyEpisodes: StoryEpisode[] = [
+export const storyEpisodes = [
+  // ============================================
+  // 🟢 EASY (난이도 1) - 신입 해커의 시작
+  // ============================================
   {
     id: 1,
-    title: "수상한 이웃",
-    difficulty: 1,
-    mode: "story",
-    stages: [
-      {
-        id: 1, title: "떨어진 스마트폰",
-        story: `공원 벤치에서 스마트폰을 발견했다.\n주인에게 돌려주려면 연락처를 찾아야 한다.`,
-        clue: `폰 뒷면 스티커:\n"우리 첫 만남 2019.07.23"`,
-        hint: "특별한 날짜의 월과 일을 생각해보세요.",
-        lockType: "pin4", answers: ["0723", "7232"], maxTurns: 3,
-      },
-      {
-        id: 2, title: "잠긴 메모장",
-        story: `폰은 열렸지만 메모장 앱에 또 비밀번호가!\n배경화면에 귀여운 고양이 사진이 보인다.`,
-        clue: `이름표: "나비 2017년생"\nSNS 상태: "나비는 내 행운의 숫자 7을 좋아해"`,
-        hint: "고양이 태어난 해를 입력해보세요.",
-        lockType: "pin4", answers: ["2017", "7777"], maxTurns: 3,
-      },
-      {
-        id: 3, title: "비밀 갤러리",
-        story: `메모장에서 비밀 갤러리 앱을 발견했다.\n6자리 비밀번호가 필요하다.`,
-        clue: `메모장 내용:\n"내 생일 0315 + 나비 입양일 12월"\n"절대 잊으면 안 돼!"`,
-        hint: "생일 4자리와 입양 월 2자리를 연결해보세요.",
-        lockType: "pin6", answers: ["031512"], maxTurns: 3,
-      },
-      {
-        id: 4, title: "최종 단서",
-        story: `갤러리에서 수상한 사진을 발견했다.\n마지막 잠금 폴더에 증거가 있을 것 같다.`,
-        clue: `사진 속 메모:\n"A=1, B=2, C=3..."\n"비밀번호는 CAT"`,
-        hint: "C=3, A=1, T=20 → 3120",
-        lockType: "pin4", answers: ["3120"], maxTurns: 3,
-      },
-    ],
-  },
-  {
-    id: 2,
-    title: "사라진 보물",
-    difficulty: 1,
-    mode: "story",
-    stages: [
-      {
-        id: 1, title: "할아버지의 유품",
-        story: `돌아가신 할아버지의 오래된 스마트폰.\n유언장이 이 안에 있다고 한다.`,
-        clue: `할아버지 정보:\n• 1945년 8월 15일생\n• "광복절에 태어난 게 내 자랑이지"`,
-        hint: "할아버지가 자랑스러워하던 그 날짜입니다.",
-        lockType: "pin4", answers: ["0815", "1945"], maxTurns: 3,
-      },
-      {
-        id: 2, title: "금고 번호",
-        story: `스마트폰 메모에서 금고 위치를 찾았다!\n하지만 6자리 금고 비밀번호가 필요하다.`,
-        clue: `메모 내용:\n"금고 번호: 손자들 생년 앞 2자리씩"\n"민수 2015, 영희 2018, 철수 2020"`,
-        hint: "15 + 18 + 20 = 151820",
-        lockType: "pin6", answers: ["151820"], maxTurns: 3,
-      },
-    ],
-  },
-  {
-    id: 3,
-    title: "학교의 미스터리",
-    difficulty: 1,
-    mode: "story",
-    stages: [
-      {
-        id: 1, title: "선생님의 태블릿",
-        story: `방과 후 교무실에서 선생님의 태블릿을 발견했다.\n내일 시험 범위가 저장되어 있다는 소문이...`,
-        clue: `책상 위 메모:\n"우리 반 학생 수: 28명"\n"내 담당 과목 수: 3개"\n"비번은 둘을 곱한 숫자!"`,
-        hint: "28 × 3 = ?",
-        lockType: "pin4", answers: ["0084", "84"], maxTurns: 3,
-      },
-      {
-        id: 2, title: "동아리 방 자물쇠",
-        story: `시험 범위 파일이 동아리 방 사물함에 백업되어 있다!\n자물쇠 비밀번호를 알아내야 한다.`,
-        clue: `동아리 방 포스터:\n"미술부 창립 2019년"\n"사물함 번호는 창립연도 뒤집기!"`,
-        hint: "2019를 거꾸로 하면?",
-        lockType: "pin4", answers: ["9102"], maxTurns: 3,
-      },
-      {
-        id: 3, title: "USB 암호",
-        story: `사물함 안에서 USB를 찾았다!\n하지만 암호가 걸려있다.`,
-        clue: `USB에 붙은 스티커:\n"MATH = 13+1+20+8"\n"이게 비밀번호야 ㅋㅋ"`,
-        hint: "M=13, A=1, T=20, H=8을 더하세요.",
-        lockType: "pin4", answers: ["0042", "42"], maxTurns: 3,
-      },
-    ],
-  },
-  {
-    id: 4,
-    title: "탐정 사무소",
-    difficulty: 2,
-    mode: "story",
-    stages: [
-      {
-        id: 1, title: "의뢰인의 폰",
-        story: `의뢰인이 폰을 두고 갔다.\n급한 연락처를 찾아야 하는데 잠겨있다.`,
-        clue: `명함 정보:\n이름: 김사월\n"4월에 태어나서 사월이에요"\n"생일이랑 이름이랑 똑같죠?"`,
-        hint: "4월 4일 = 0404",
-        lockType: "pin4", answers: ["0404"], maxTurns: 3,
-      },
-      {
-        id: 2, title: "사건 파일",
-        story: `폰 안에 '극비 사건'이라는 폴더가 있다.\n6자리 암호가 필요하다.`,
-        clue: `폴더 설명:\n"2023년 5월 17일 사건"\n"날짜 전체가 비밀번호"`,
-        hint: "연도 뒤 2자리 + 월 + 일",
-        lockType: "pin6", answers: ["230517"], maxTurns: 3,
-      },
-      {
-        id: 3, title: "용의자 명단",
-        story: `사건 파일 안에 용의자 명단이 있다.\n하지만 또 암호가...`,
-        clue: `메모:\n"용의자 3명의 나이 합"\n"• 김씨: 32세\n• 이씨: 27세\n• 박씨: 25세"`,
-        hint: "32 + 27 + 25 = ?",
-        lockType: "pin4", answers: ["0084", "84"], maxTurns: 3,
-      },
-      {
-        id: 4, title: "최종 증거",
-        story: `진범의 정보가 담긴 최종 파일!\n마지막 관문이다.`,
-        clue: `암호 힌트:\n"진범의 이니셜은 L.E.E"\n"알파벳 순서로 변환하면..."\n(A=01, B=02, C=03...)`,
-        hint: "L=12, E=05, E=05",
-        lockType: "pin6", answers: ["120505"], maxTurns: 3,
-      },
-    ],
-  },
-  {
-    id: 5,
-    title: "게이머의 비밀",
-    difficulty: 2,
-    mode: "story",
-    stages: [
-      {
-        id: 1, title: "게임 계정",
-        story: `친구가 게임 계정 비밀번호를 까먹었다.\n힌트를 보고 찾아달라고 한다.`,
-        clue: `친구의 힌트:\n"내 최고 점수랑 같아"\n게임 화면에 보이는 점수: 7,777점`,
-        hint: "최고 점수 그대로!",
-        lockType: "pin4", answers: ["7777"], maxTurns: 3,
-      },
-      {
-        id: 2, title: "길드 금고",
-        story: `계정에 들어왔는데 길드 금고 비밀번호가 필요하다.`,
-        clue: `길드 공지사항:\n"금고 비번: 길드 창설일"\n"2022년 12월 25일 창설"\n"연도 빼고 월일만!"`,
-        hint: "12월 25일 = 1225",
-        lockType: "pin4", answers: ["1225"], maxTurns: 3,
-      },
-      {
-        id: 3, title: "비밀 던전",
-        story: `금고 안에 비밀 던전 입장 코드가 있다!`,
-        clue: `던전 입구 안내:\n"입장 코드는 6자리"\n"길드원 수(15) × 던전 층수(42)"\n"결과값이 코드!"`,
-        hint: "15 × 42 = 630, 6자리로 만들면?",
-        lockType: "pin6", answers: ["000630", "630"], maxTurns: 3,
-      },
-      {
-        id: 4, title: "전설의 아이템",
-        story: `비밀 던전 끝에 전설 아이템 상자가!\n최종 암호를 입력해야 한다.`,
-        clue: `상자에 적힌 글:\n"용사의 숫자를 입력하라"\n"HP: 999, MP: 777"\n"두 수의 차이가 열쇠"`,
-        hint: "999 - 777 = ?",
-        lockType: "pin4", answers: ["0222", "222"], maxTurns: 3,
-      },
-    ],
-  },
-  {
-    id: 6,
-    title: "카페 미스터리",
-    difficulty: 2,
-    mode: "story",
-    stages: [
-      {
-        id: 1, title: "와이파이 비밀번호",
-        story: `처음 온 카페인데 와이파이 비밀번호를 모른다.\n힌트가 적힌 포스터가 보인다.`,
-        clue: `카페 포스터:\n"비밀번호는 우리 카페 이름에!"\n카페 이름: "CAFE 2580"\n"숫자만 입력하세요~"`,
-        hint: "카페 이름에 있는 숫자!",
-        lockType: "pin4", answers: ["2580"], maxTurns: 3,
-      },
-      {
-        id: 2, title: "직원 전용 문",
-        story: `화장실을 찾다가 '직원 전용' 문을 발견했다.\n문 옆에 힌트가 적혀있다.`,
-        clue: `문 옆 메모:\n"오늘의 비번: 오픈 시간 + 마감 시간"\n영업시간: 09:00 ~ 22:00`,
-        hint: "09 + 22 = 31? 아니면 0922?",
-        lockType: "pin4", answers: ["0922", "0031", "31"], maxTurns: 3,
-      },
-      {
-        id: 3, title: "금고 발견",
-        story: `직원 전용 공간에서 작은 금고를 발견했다!\n6자리 비밀번호가 필요하다.`,
-        clue: `금고 위 메모:\n"커피 원두 주문 코드"\n"에티오피아(ETH) 원두"\n"E=5, T=20, H=8"`,
-        hint: "05 + 20 + 08 = 052008",
-        lockType: "pin6", answers: ["052008"], maxTurns: 3,
-      },
-    ],
-  },
-  {
-    id: 7,
-    title: "병원 탈출",
-    difficulty: 3,
-    mode: "story",
-    stages: [
-      {
-        id: 1, title: "병실 태블릿",
-        story: `입원 중인데 너무 심심하다.\n침대 옆 태블릿으로 영화라도 보고 싶은데...`,
-        clue: `태블릿 화면:\n"환자 인증 필요"\n"생년월일 뒤 4자리를 입력하세요"\n내 주민번호: 050815-3xxxxxx`,
-        hint: "생년월일 뒤 4자리 = 월일",
-        lockType: "pin4", answers: ["0815"], maxTurns: 3,
-      },
-      {
-        id: 2, title: "의사 노트북",
-        story: `의사 선생님이 노트북을 열어두고 잠깐 나갔다.\n내 검사 결과가 궁금한데...`,
-        clue: `책상 위 힌트:\n"비번 까먹을까봐 적어둠"\n"내 사번 앞 4자리: 2019"\n"의사 면허 번호 끝 2자리: 77"`,
-        hint: "사번 + 면허번호 = 201977",
-        lockType: "pin6", answers: ["201977"], maxTurns: 3,
-      },
-      {
-        id: 3, title: "약품 보관함",
-        story: `복도를 걷다가 약품 보관함을 발견했다.\n호기심에 비밀번호를 추리해본다.`,
-        clue: `보관함 라벨:\n"관리 코드: MED-0925"\n"숫자만 입력"`,
-        hint: "MED-0925에서 숫자만!",
-        lockType: "pin4", answers: ["0925"], maxTurns: 3,
-      },
-      {
-        id: 4, title: "비상구 코드",
-        story: `갑자기 정전이 됐다!\n비상구로 나가려면 코드가 필요하다.`,
-        clue: `비상구 안내판:\n"화재 시 탈출 코드"\n"119 + 병원 설립연도(1995)"\n"앞 3자리 + 뒤 3자리"`,
-        hint: "119995 또는 연도만",
-        lockType: "pin6", answers: ["119995", "199511"], maxTurns: 3,
-      },
-    ],
-  },
-  {
-    id: 8,
-    title: "우주 정거장",
-    difficulty: 3,
-    mode: "story",
-    stages: [
-      {
-        id: 1, title: "탈출 포드",
-        story: `우주 정거장에 사고가 발생했다!\n탈출 포드를 활성화해야 한다.`,
-        clue: `포드 콘솔 화면:\n"인증 코드 입력"\n"코드: 지구까지 거리(km)의 앞 4자리"\n현재 고도: 408km (ISS 궤도)`,
-        hint: "408km → 0408",
-        lockType: "pin4", answers: ["0408"], maxTurns: 3,
-      },
-      {
-        id: 2, title: "산소 공급 장치",
-        story: `산소가 부족하다!\n예비 산소 탱크의 잠금을 해제해야 한다.`,
-        clue: `탱크 라벨:\n"O2 탱크 #21"\n"잠금 해제: 산소 원자번호 × 탱크번호"\n산소(O) 원자번호: 8`,
-        hint: "8 × 21 = ?",
-        lockType: "pin4", answers: ["0168", "168"], maxTurns: 3,
-      },
-      {
-        id: 3, title: "통신 장비",
-        story: `지구와 통신해서 구조 요청을 해야 한다!\n통신 장비 암호가 필요하다.`,
-        clue: `통신기 매뉴얼:\n"비상 통신 코드"\n"SOS를 숫자로: S=19, O=15, S=19"\n"연속으로 입력"`,
-        hint: "19 + 15 + 19 = 191519",
-        lockType: "pin6", answers: ["191519"], maxTurns: 3,
-      },
-      {
-        id: 4, title: "자동 항법",
-        story: `구조대가 온다!\n자동 항법 장치로 안전한 궤도로 이동해야 한다.`,
-        clue: `항법 컴퓨터:\n"목표 궤도 코드 입력"\n"안전 궤도: 지구 둘레의 1/10000"\n지구 둘레: 약 40,075km`,
-        hint: "40075 ÷ 10000 ≈ 4.0 → 4007?",
-        lockType: "pin4", answers: ["4007", "4008", "0400"], maxTurns: 3,
-      },
-    ],
-  },
-  {
-    id: 9,
-    title: "마법사의 탑",
-    difficulty: 2,
-    mode: "story",
-    stages: [
-      {
-        id: 1, title: "탑 입구",
-        story: `전설의 마법사의 탑을 찾았다!\n입구에 마법 자물쇠가 있다.`,
-        clue: `입구의 비문:\n"불의 원소 + 물의 원소 = ?"\n불 = 7\n물 = 3`,
-        hint: "7 + 3 = 10? 아니면 73?",
-        lockType: "pin4", answers: ["0010", "10", "0073", "73"], maxTurns: 3,
-      },
-      {
-        id: 2, title: "2층 문",
-        story: `1층을 지나 2층으로 가는 문 앞에 섰다.`,
-        clue: `문에 새겨진 수수께끼:\n"마법의 숫자 셋을 나열하라"\n"3, 7, 그리고 7과 3의 곱"`,
-        hint: "3, 7, 21 → 0721? 또는 3721?",
-        lockType: "pin4", answers: ["0721", "3721", "3737"], maxTurns: 3,
-      },
-      {
-        id: 3, title: "마법 도서관",
-        story: `2층은 거대한 마법 도서관이다.\n금지된 마법서 구역으로 가려면...`,
-        clue: `사서 골렘의 말:\n"통행 코드를 대라"\n"마법사 등급 × 마법서 권수"\n등급: 9급, 권수: 108권`,
-        hint: "9 × 108 = ?",
-        lockType: "pin4", answers: ["0972", "972"], maxTurns: 3,
-      },
-      {
-        id: 4, title: "비밀의 방",
-        story: `마침내 마법사의 비밀의 방에 도착했다!\n최후의 수수께끼가 기다린다.`,
-        clue: ` 수정 구슬의 메시지:\n"시간을 거스르는 자여"\n"마법사가 태어난 해: 1234년"\n"거꾸로 입력하라"`,
-        hint: "1234를 거꾸로 → 4321",
-        lockType: "pin4", answers: ["4321"], maxTurns: 3,
-      },
-    ],
-  },
-  {
-    id: 10,
-    title: "타임캡슐",
-    difficulty: 1,
-    mode: "story",
-    stages: [
-      {
-        id: 1, title: "10년 전 타임캡슐",
-        story: `10년 전에 묻어둔 타임캡슐을 찾았다!\n자물쇠 비밀번호가 기억나지 않는다.`,
-        clue: ` 캡슐에 붙은 메모:\n"2015년 1월 1일에 묻음"\n"비번은 묻은 날짜!"`,
-        hint: "2015년 1월 1일 → 0101",
-        lockType: "pin4", answers: ["0101", "2015"], maxTurns: 3,
-      },
-      {
-        id: 2, title: "편지 봉투",
-        story: `캡슐 안에서 봉인된 편지를 발견했다.\n봉인에 또 자물쇠가?!`,
-        clue: ` 봉투에 적힌 글:\n"10년 후의 나에게"\n"내 나이 + 10 = 비밀번호"\n"PS. 2015년에 난 12살"`,
-        hint: "12 + 10 = 22",
-        lockType: "pin4", answers: ["0022", "22", "2215"], maxTurns: 3,
-      },
-      {
-        id: 3, title: "USB 속 영상",
-        story: `캡슐 안에서 오래된 USB도 발견!\n암호화된 영상 파일이 있다.`,
-        clue: ` 파일 이름:\n"memories_123456.mp4.locked"\n"암호: 파일명의 숫자"`,
-        hint: "파일명에 있는 숫자 그대로!",
-        lockType: "pin6", answers: ["123456"], maxTurns: 3,
-      },
-    ],
-  },
-  // ============================================
-  // 새로운 스토리: "네오 시티의 그림자" - 신입 해커 '제로'의 성장과 거대 음모 해결
-  // ============================================
-  //  EASY (난이도 1) - 신입 해커의 시작
-  {
-    id: 11,
     title: "첫 번째 임무",
     subtitle: "Chapter 1: 해커의 탄생",
-    difficulty: 1 as const,
-    mode: "story" as const,
+    difficulty: 1,
+    mode: "story",
     synopsis: "네오 시티의 뒷골목. 당신은 해커 조직 '쉐도우넷'에 스카우트되어 첫 임무를 받는다.",
     stages: [
       {
         id: 1,
         title: "스카우트",
         story: `2087년, 네오 시티.
-
-당신은 허름한 아파트에서 눈을 뜬다.
+        
+당신은 허름한 아파트에서 눈을 뜬다. 
 오래된 모니터에 녹색 글자가 깜빡인다.
 
 [SYSTEM] 새로운 메시지가 도착했습니다.
 
 "환영해, 제로. 우리가 널 지켜봤어.
-네 첫 임무는 간단해.
+네 첫 임무는 간단해. 
 이 건물 1층 편의점의 보안 카메라를 끄는 거야.
 비밀번호 힌트: 편의점 이름의 숫자를 거꾸로."
 
 건물 밖을 보니 '세븐24 마트'라는 간판이 보인다.`,
         clue: "편의점 이름: 세븐24 마트 → 숫자 7, 24를 거꾸로",
         hint: "7과 24를 이어붙인 후 뒤집으면?",
-        lockType: "pin4" as const,
+        lockType: "pin4",
         answers: ["4272"],
-        maxTurns: 3,
+        maxAttempts: 5,
       },
       {
         id: 2,
@@ -374,40 +49,40 @@ export const storyEpisodes: StoryEpisode[] = [
 "팁: 년도 뒤 두자리 + 월 + 일을 더해봐."`,
         clue: "2087.01.15 → 87 + 01 + 15 = ?",
         hint: "87 + 1 + 15 = 103",
-        lockType: "pin3" as const,
+        lockType: "pin3",
         answers: ["103"],
-        maxTurns: 3,
+        maxAttempts: 5,
       },
       {
         id: 3,
         title: "첫 동료",
         story: `뒷문이 열리고, 검은 후드를 쓴 소녀가 나타난다.
 
-"넌 제로구나? 난 '네온'이야.
+"넌 제로구나? 난 '네온'이야. 
 쉐도우넷에서 같이 일하게 될 거야."
 
 그녀가 작은 칩을 건넨다.
 
 "이건 네 첫 장비야. 암호화된 통신 칩이지.
-활성화 코드가 필요해.
+활성화 코드가 필요해. 
 내 이름 '네온(NEON)'을 숫자로 바꿔봐.
 A=1, B=2, C=3... 그런 식으로."`,
         clue: "NEON → N(14) + E(5) + O(15) + N(14) = ?",
         hint: "알파벳 순서: N=14, E=5, O=15, N=14를 모두 더하면?",
-        lockType: "pin2" as const,
+        lockType: "pin2",
         answers: ["48"],
-        maxTurns: 3,
+        maxAttempts: 5,
       }
     ]
   },
   {
-    id: 12,
+    id: 2,
     title: "기업 정찰",
     subtitle: "Chapter 2: 첫 번째 타겟",
-    difficulty: 1 as const,
-    mode: "story" as const,
+    difficulty: 1,
+    mode: "story",
     synopsis: "쉐도우넷의 첫 공식 임무. 거대 기업 '옴니코프'의 하급 서버에 침투한다.",
-    previousEpisode: 11,
+    previousEpisode: 1,
     stages: [
       {
         id: 1,
@@ -423,9 +98,9 @@ A=1, B=2, C=3... 그런 식으로."`,
 비밀번호는 회사 설립년도(2045)의 각 숫자를 제곱해서 더한 거래."`,
         clue: "2045 → 2² + 0² + 4² + 5² = ?",
         hint: "4 + 0 + 16 + 25 = ?",
-        lockType: "pin2" as const,
+        lockType: "pin2",
         answers: ["45"],
-        maxTurns: 3,
+        maxAttempts: 5,
       },
       {
         id: 2,
@@ -437,32 +112,32 @@ A=1, B=2, C=3... 그런 식으로."`,
 직원 인증이 필요합니다.
 
 [오늘의 인증 코드]
-우리 회사 층수(52층)에서
+우리 회사 층수(52층)에서 
 오늘 온도(영하 8도)를 빼세요."`,
         clue: "52층, 영하 8도(-8) → 52 - (-8) = ?",
         hint: "마이너스를 빼면 플러스가 된다: 52 - (-8) = 52 + 8",
-        lockType: "pin2" as const,
+        lockType: "pin2",
         answers: ["60"],
-        maxTurns: 3,
+        maxAttempts: 5,
       },
       {
         id: 3,
         title: "숨겨진 파일",
-        story: `터미널 접속 성공!
+        story: `터미널 접속 성공! 
 방문자용 공개 폴더에서 이상한 파일을 발견한다.
 
 [파일명: secret_01.enc]
-암호화된 파일이다.
+암호화된 파일이다. 
 파일 메타데이터에 메모가 있다:
 
-"비밀번호 힌트:
+"비밀번호 힌트: 
 옴니(OMNI) + 코프(CORP) = ?
 각 글자의 알파벳 순서 중 홀수만 더해라."`,
         clue: "OMNICORP → O(15), M(13), N(14), I(9), C(3), O(15), R(18), P(16) 중 홀수만",
         hint: "15, 13, 9, 3, 15를 더하면?",
-        lockType: "pin2" as const,
+        lockType: "pin2",
         answers: ["55"],
-        maxTurns: 3,
+        maxAttempts: 5,
       },
       {
         id: 4,
@@ -475,37 +150,37 @@ A=1, B=2, C=3... 그런 식으로."`,
 예산: ████ 크레딧
 목표: ████████
 
-대부분 검열되어 있지만,
+대부분 검열되어 있지만, 
 하단에 다음 파일 위치가 적혀있다:
 
 "다음 파일: 서버룸 B-███
-접속 코드: 보고서 작성일(12월 25일)을
+접속 코드: 보고서 작성일(12월 25일)을 
 시간 형식(HHMM)처럼 이어붙여라."`,
         clue: "12월 25일 → 12와 25를 HHMM 형식으로",
         hint: "시간처럼 1225로 이어붙이면?",
-        lockType: "pin4" as const,
+        lockType: "pin4",
         answers: ["1225"],
-        maxTurns: 3,
+        maxAttempts: 5,
       }
     ]
   },
   {
-    id: 13,
+    id: 3,
     title: "추적자",
     subtitle: "Chapter 3: 그림자의 발자국",
-    difficulty: 1 as const,
-    mode: "story" as const,
+    difficulty: 1,
+    mode: "story",
     synopsis: "옴니코프가 쉐도우넷을 추적하기 시작한다. 흔적을 지우며 도망쳐야 한다.",
-    previousEpisode: 12,
+    previousEpisode: 2,
     stages: [
       {
         id: 1,
         title: "경고",
         story: `다음 날 새벽, 긴급 메시지가 도착한다.
 
-[팬텀]: 비상사태!
+[팬텀]: 비상사태! 
 옴니코프가 어젯밤 침입을 감지했어.
-역추적이 시작됐다.
+역추적이 시작됐다. 
 지금 바로 시스템에서 흔적을 지워!
 
 로그 삭제 터미널이 열린다.
@@ -514,9 +189,9 @@ A=1, B=2, C=3... 그런 식으로."`,
 "코드 = 오늘 날짜(1월 16일) × 3"`,
         clue: "1월 16일 = 116, 116 × 3 = ?",
         hint: "116 × 3을 계산하면?",
-        lockType: "pin3" as const,
+        lockType: "pin3",
         answers: ["348"],
-        maxTurns: 3,
+        maxAttempts: 5,
       },
       {
         id: 2,
@@ -526,21 +201,21 @@ A=1, B=2, C=3... 그런 식으로."`,
 [네온]: 제로, 안전가옥으로 가!
 주소: 네오 시티 D구역 ███번지
 
-안전가옥 도어락 비밀번호는
-'쉐도우넷'을 거꾸로 읽은
+안전가옥 도어락 비밀번호는 
+'쉐도우넷'을 거꾸로 읽은 
 '텐우도쉐'의 초성이야.
 
 ㅌ=8, ㅇ=0, ㄷ=3, ㅅ=4 라고 정했어.`,
         clue: "텐우도쉐 → ㅌㅇㄷㅅ → 8, 0, 3, 4",
         hint: "순서대로 8034",
-        lockType: "pin4" as const,
+        lockType: "pin4",
         answers: ["8034"],
-        maxTurns: 3,
+        maxAttempts: 5,
       },
       {
         id: 3,
         title: "숨은 단서",
-        story: `안전가옥에 도착했다.
+        story: `안전가옥에 도착했다. 
 네온이 남긴 긴급 물자 상자가 있다.
 
 상자에 자물쇠가 걸려있고 메모가 붙어있다:
@@ -552,28 +227,31 @@ A=1, B=2, C=3... 그런 식으로."`,
 - 네온`,
         clue: "4272 → 4 + 2 + 7 + 2 = ?",
         hint: "각 숫자를 하나씩 더하면?",
-        lockType: "pin2" as const,
+        lockType: "pin2",
         answers: ["15"],
-        maxTurns: 3,
+        maxAttempts: 5,
       }
     ]
   },
-  //  NORMAL (난이도 2) - 조직의 비밀
+
+  // ============================================
+  // 🟡 NORMAL (난이도 2) - 조직의 비밀
+  // ============================================
   {
-    id: 14,
+    id: 4,
     title: "내부자",
     subtitle: "Chapter 4: 이중 스파이",
-    difficulty: 2 as const,
-    mode: "story" as const,
+    difficulty: 2,
+    mode: "story",
     synopsis: "쉐도우넷 내부에 스파이가 있다는 정보를 입수한다. 팬텀의 지시로 조사를 시작한다.",
-    previousEpisode: 13,
+    previousEpisode: 3,
     stages: [
       {
         id: 1,
         title: "의심의 시작",
         story: `안전가옥에서 일주일. 팬텀이 직접 찾아온다.
 
-"제로, 문제가 있어.
+"제로, 문제가 있어. 
 옴니코프가 우리 동선을 너무 잘 알아.
 내부에 스파이가 있어."
 
@@ -581,18 +259,18 @@ A=1, B=2, C=3... 그런 식으로."`,
 
 "이건 멤버들의 활동 로그야.
 암호화되어 있어. 복호화 키는...
-쉐도우넷 멤버 수(7명) × 첫 임무 코드(103)를
+쉐도우넷 멤버 수(7명) × 첫 임무 코드(103)를 
 3으로 나눈 나머지를 뒤에 붙여."`,
         clue: "7 × 103 = 721, 721을 3으로 나눈 나머지는 1 → 7211",
         hint: "721 ÷ 3 = 240 나머지 1, 답은 7211",
-        lockType: "pin4" as const,
+        lockType: "pin4",
         answers: ["7211"],
-        maxTurns: 3,
+        maxAttempts: 4,
       },
       {
         id: 2,
         title: "수상한 통신",
-        story: `로그를 분석한다.
+        story: `로그를 분석한다. 
 멤버 '바이퍼'의 통신 기록이 이상하다.
 
 [바이퍼 통신 로그]
@@ -608,9 +286,9 @@ A=1, B=2, C=3... 그런 식으로."`,
 접속 날짜들의 일(10, 12, 14)을 모두 더해 조합해."`,
         clue: "02:13 = 213(또는 0213), 10+12+14=36 → 조합",
         hint: "21336 또는 36213... 시간 먼저 쓰면 21336",
-        lockType: "pin5" as const,
+        lockType: "pin5",
         answers: ["21336"],
-        maxTurns: 3,
+        maxAttempts: 4,
       },
       {
         id: 3,
@@ -631,9 +309,9 @@ V=5, I=1, P=2, E=3, R=4로 재배열했을 때
 V(22), I(9), P(16), E(5), R(18)`,
         clue: "순서: E(5)=3번째, I(9)=1번째, P(16)=2번째, R(18)=4번째, V(22)=5번째",
         hint: "작은 순서대로: I(1), P(2), E(3), R(4), V(5) → 9+16+5+18+22=70",
-        lockType: "pin2" as const,
+        lockType: "pin2",
         answers: ["70"],
-        maxTurns: 3,
+        maxAttempts: 4,
       },
       {
         id: 4,
@@ -647,30 +325,30 @@ V(22), I(9), P(16), E(5), R(18)`,
 "잡아! 비상 봉쇄 코드 입력해!"
 
 [비상 봉쇄 시스템]
-코드 힌트: 오늘(1월 20일)에서
-바이퍼가 첫 접속한 날(1월 10일)까지의 일수 ×
+코드 힌트: 오늘(1월 20일)에서 
+바이퍼가 첫 접속한 날(1월 10일)까지의 일수 × 
 쉐도우넷 멤버 수(7, 바이퍼 제외하면 6)`,
         clue: "1월 20일 - 1월 10일 = 10일, 10 × 6 = ?",
         hint: "10일 × 6명 = 60",
-        lockType: "pin2" as const,
+        lockType: "pin2",
         answers: ["60"],
-        maxTurns: 3,
+        maxAttempts: 4,
       }
     ]
   },
   {
-    id: 15,
+    id: 5,
     title: "옴니코프의 심장",
     subtitle: "Chapter 5: 본사 침투",
-    difficulty: 2 as const,
-    mode: "story" as const,
+    difficulty: 2,
+    mode: "story",
     synopsis: "바이퍼를 통해 옴니코프 본사의 보안 취약점을 알아낸다. 직접 침투 작전이 시작된다.",
-    previousEpisode: 14,
+    previousEpisode: 4,
     stages: [
       {
         id: 1,
         title: "잠입 준비",
-        story: `바이퍼는 도망쳤지만, 그의 서버에서
+        story: `바이퍼는 도망쳤지만, 그의 서버에서 
 옴니코프 본사 보안 정보를 얻었다.
 
 [옴니코프 본사 보안 분석]
@@ -683,9 +361,9 @@ V(22), I(9), P(16), E(5), R(18)`,
 그게 우리 작전 개시 코드야."`,
         clue: "23 × 3 × 7 = ?",
         hint: "23 × 3 = 69, 69 × 7 = 483",
-        lockType: "pin3" as const,
+        lockType: "pin3",
         answers: ["483"],
-        maxTurns: 3,
+        maxAttempts: 4,
       },
       {
         id: 2,
@@ -704,9 +382,9 @@ V(22), I(9), P(16), E(5), R(18)`,
 최종 코드: [87][05][합계]`,
         clue: "87, 05, 87+05=92 → 870592",
         hint: "87 + 05 = 92, 이어붙이면 870592",
-        lockType: "pin6" as const,
+        lockType: "pin6",
         answers: ["870592"],
-        maxTurns: 3,
+        maxAttempts: 4,
       },
       {
         id: 3,
@@ -720,20 +398,20 @@ V(22), I(9), P(16), E(5), R(18)`,
 
 엘리베이터 옆 안내판:
 - 지하 1층: 주차장 (P1)
-- 지하 2층: 창고 (S2)
+- 지하 2층: 창고 (S2)  
 - 지하 3층: 제한구역 (R3)
 
 보안 메모: PIN = 층별 코드 숫자의 합 × 지하 층수`,
         clue: "P1=1, S2=2, R3=3 → (1+2+3) × 3 = ?",
         hint: "6 × 3 = 18",
-        lockType: "pin2" as const,
+        lockType: "pin2",
         answers: ["18"],
-        maxTurns: 3,
+        maxAttempts: 4,
       },
       {
         id: 4,
         title: "서버룸 진입",
-        story: `지하 3층 도착.
+        story: `지하 3층 도착. 
 거대한 서버룸 앞에 생체 인식 장치가 있다.
 
 네온(통신):
@@ -747,14 +425,14 @@ V(22), I(9), P(16), E(5), R(18)`,
 물음표에 들어갈 숫자가 오버라이드 코드.`,
         clue: "2, 4, 8, 16, ?, 64 → 각각 2배씩 증가",
         hint: "16 × 2 = 32",
-        lockType: "pin2" as const,
+        lockType: "pin2",
         answers: ["32"],
-        maxTurns: 3,
+        maxAttempts: 4,
       },
       {
         id: 5,
         title: "프로젝트 X의 진실",
-        story: `서버룸 진입!
+        story: `서버룸 진입! 
 메인 서버에서 'PROJECT-X' 폴더를 찾았다.
 
 [PROJECT-X 최종 보고서]
@@ -771,20 +449,20 @@ V(22), I(9), P(16), E(5), R(18)`,
 세 결과를 곱하면 최종 키`,
         clue: "2+0+4+5=11, 0+3=3, 1+5=6 → 11×3×6=?",
         hint: "11 × 3 = 33, 33 × 6 = 198",
-        lockType: "pin3" as const,
+        lockType: "pin3",
         answers: ["198"],
-        maxTurns: 3,
+        maxAttempts: 4,
       }
     ]
   },
   {
-    id: 16,
+    id: 6,
     title: "진실의 무게",
     subtitle: "Chapter 6: 배신의 연쇄",
-    difficulty: 2 as const,
-    mode: "story" as const,
+    difficulty: 2,
+    mode: "story",
     synopsis: "프로젝트 X의 충격적인 진실과 함께, 쉐도우넷 내부의 더 큰 배신이 드러난다.",
-    previousEpisode: 15,
+    previousEpisode: 5,
     stages: [
       {
         id: 1,
@@ -793,27 +471,27 @@ V(22), I(9), P(16), E(5), R(18)`,
 내용을 읽는 순간 손이 떨린다.
 
 [PROJECT-X: 신경 제어 프로토콜]
-목표: 시민의 뇌파를 조작하여
+목표: 시민의 뇌파를 조작하여 
       완벽한 사회 통제 달성
 1단계: 의료 칩 보급 - 완료
 2단계: 네트워크 연동 - 진행중
 3단계: 전면 활성화 - D-███
 
-팬텀에게 전송하려는데,
+팬텀에게 전송하려는데, 
 암호화된 2차 파일이 더 있다.
 
-힌트: "프로젝트명(X=24)에 단계 수(3)를
+힌트: "프로젝트명(X=24)에 단계 수(3)를 
       거듭제곱해라."`,
         clue: "X=24 (알파벳 24번째), 24의 3제곱 = ?",
         hint: "24 × 24 = 576, 576 × 24 = 13824",
-        lockType: "pin5" as const,
+        lockType: "pin5",
         answers: ["13824"],
-        maxTurns: 3,
+        maxAttempts: 4,
       },
       {
         id: 2,
         title: "숨겨진 이름",
-        story: `2차 파일이 열렸다.
+        story: `2차 파일이 열렸다. 
 프로젝트 X의 내부 협력자 목록이다.
 
 [내부 협력자 - 기밀]
@@ -826,20 +504,20 @@ V(22), I(9), P(16), E(5), R(18)`,
 파일에 영상이 첨부되어 있다.
 재생하려면 코드가 필요하다.
 
-힌트: "PHANTOM의 알파벳 순서 중
+힌트: "PHANTOM의 알파벳 순서 중 
       가장 큰 수에서 가장 작은 수를 빼라."
 
 P(16), H(8), A(1), N(14), T(20), O(15), M(13)`,
         clue: "가장 큰 수: T(20), 가장 작은 수: A(1) → 20-1=?",
         hint: "20 - 1 = 19",
-        lockType: "pin2" as const,
+        lockType: "pin2",
         answers: ["19"],
-        maxTurns: 3,
+        maxAttempts: 4,
       },
       {
         id: 3,
         title: "네온의 선택",
-        story: `영상이 재생된다.
+        story: `영상이 재생된다. 
 팬텀이 옴니코프 임원과 악수하는 장면.
 
 뒤에서 네온의 목소리가 들린다:
@@ -850,13 +528,13 @@ P(16), H(8), A(1), N(14), T(20), O(15), M(13)`,
 비상 탈출구의 잠금을 해제해야 한다.
 
 [비상 탈출 시스템]
-코드 = 현재 시각(03:47)의 시×분 +
+코드 = 현재 시각(03:47)의 시×분 + 
        현재 층수(B3 = -3)의 절댓값`,
         clue: "03:47 → 3 × 47 = 141, |-3| = 3 → 141 + 3 = ?",
         hint: "141 + 3 = 144",
-        lockType: "pin3" as const,
+        lockType: "pin3",
         answers: ["144"],
-        maxTurns: 3,
+        maxAttempts: 4,
       },
       {
         id: 4,
@@ -864,35 +542,38 @@ P(16), H(8), A(1), N(14), T(20), O(15), M(13)`,
         story: `건물에서 탈출했다.
 네온과 함께 도시 외곽으로 달린다.
 
-네온: "팬텀이 배신자라면,
+네온: "팬텀이 배신자라면, 
        쉐도우넷의 다른 멤버들은 어떻게 됐을까?"
 
-안전한 곳에서 다른 멤버들에게
+안전한 곳에서 다른 멤버들에게 
 경고 메시지를 보내야 한다.
 
 [암호화 메신저]
 긴급 코드 생성:
-"배신자(TRAITOR)의 자음만 추출해
+"배신자(TRAITOR)의 자음만 추출해 
 알파벳 순서를 모두 더해라."
 
 T, R, T, R → T(20), R(18)`,
         clue: "TRAITOR에서 자음: T, R, T, R → 20+18+20+18=?",
         hint: "20 + 18 + 20 + 18 = 76",
-        lockType: "pin2" as const,
+        lockType: "pin2",
         answers: ["76"],
-        maxTurns: 3,
+        maxAttempts: 4,
       }
     ]
   },
-  //  HARD (난이도 3) - 최후의 대결
+
+  // ============================================
+  // 🔴 HARD (난이도 3) - 최후의 대결
+  // ============================================
   {
-    id: 17,
+    id: 7,
     title: "저항군",
     subtitle: "Chapter 7: 연합의 시작",
-    difficulty: 3 as const,
-    mode: "story" as const,
+    difficulty: 3,
+    mode: "story",
     synopsis: "쉐도우넷은 무너졌다. 살아남은 해커들과 함께 진정한 저항 조직을 결성한다.",
-    previousEpisode: 16,
+    previousEpisode: 6,
     stages: [
       {
         id: 1,
@@ -910,15 +591,15 @@ T, R, T, R → T(20), R(18)`,
 
 "'PHOENIX'는 어때? 재로부터 일어나는 새.
 조직 코드는 PHOENIX를 피보나치로 인코딩하자.
-각 글자 순서(P=1, H=2...)에 대응하는
+각 글자 순서(P=1, H=2...)에 대응하는 
 피보나치 수를 더해."
 
 피보나치: 1, 1, 2, 3, 5, 8, 13, 21...`,
         clue: "P(1)=1, H(2)=1, O(3)=2, E(4)=3, N(5)=5, I(6)=8, X(7)=13",
         hint: "1+1+2+3+5+8+13 = 33",
-        lockType: "pin2" as const,
+        lockType: "pin2",
         answers: ["33"],
-        maxTurns: 3,
+        maxAttempts: 3,
       },
       {
         id: 2,
@@ -937,9 +618,9 @@ T, R, T, R → T(20), R(18)`,
 도시 코드: 네오(NEO) = 14+5+15 = 34`,
         clue: "(5² + 198) × 34 = (25 + 198) × 34 = ?",
         hint: "223 × 34 = 7582",
-        lockType: "pin4" as const,
+        lockType: "pin4",
         answers: ["7582"],
-        maxTurns: 3,
+        maxAttempts: 3,
       },
       {
         id: 3,
@@ -960,9 +641,9 @@ A=10, K=11처럼 16진수 규칙으로.
 그리고 모두 더해 제곱근을 구하세요."`,
         clue: "A=10, 7=7, K=11, 9=9 → 10+7+11+9=37 → √37≈6.08...",
         hint: "37의 제곱근을 정수로 반올림하면 6",
-        lockType: "pin1" as const,
+        lockType: "pin1",
         answers: ["6"],
-        maxTurns: 3,
+        maxAttempts: 3,
       },
       {
         id: 4,
@@ -970,32 +651,32 @@ A=10, K=11처럼 16진수 규칙으로.
         story: `내부자 '델타'가 중요한 정보를 보내왔다.
 
 [델타의 메시지]
-"프로젝트 X 전면 활성화가
+"프로젝트 X 전면 활성화가 
 2087년 2월 1일로 예정되어 있습니다.
 D-Day까지 11일 남았습니다.
 
-활성화를 막으려면 3개의 서버를
+활성화를 막으려면 3개의 서버를 
 동시에 무력화해야 합니다.
 서버 위치 파일을 첨부합니다."
 
-파일 암호: D-Day(11) × 서버 수(3) ×
+파일 암호: D-Day(11) × 서버 수(3) × 
           팀원 수(5) + 델타 코드(37)`,
         clue: "11 × 3 × 5 + 37 = 165 + 37 = ?",
         hint: "165 + 37 = 202",
-        lockType: "pin3" as const,
+        lockType: "pin3",
         answers: ["202"],
-        maxTurns: 3,
+        maxAttempts: 3,
       }
     ]
   },
   {
-    id: 18,
+    id: 8,
     title: "삼중 공격",
     subtitle: "Chapter 8: 동시 침투",
-    difficulty: 3 as const,
-    mode: "story" as const,
+    difficulty: 3,
+    mode: "story",
     synopsis: "프로젝트 X를 막기 위해 세 개의 서버를 동시에 공격한다. 피닉스의 가장 위험한 작전.",
-    previousEpisode: 17,
+    previousEpisode: 7,
     stages: [
       {
         id: 1,
@@ -1013,13 +694,13 @@ D-Day까지 11일 남았습니다.
 - 연구소: 제로, 네온
 
 작전 개시 코드:
-"세 서버 층수(52, 1, -5)의
+"세 서버 층수(52, 1, -5)의 
 절댓값 합계 × 팀원 수(5) - 출발 시각(21시)"`,
         clue: "(|52| + |1| + |-5|) × 5 - 21 = (52+1+5) × 5 - 21",
         hint: "58 × 5 = 290, 290 - 21 = 269",
-        lockType: "pin3" as const,
+        lockType: "pin3",
         answers: ["269"],
-        maxTurns: 3,
+        maxAttempts: 3,
       },
       {
         id: 2,
@@ -1027,7 +708,7 @@ D-Day까지 11일 남았습니다.
         story: `스파크가 북부 데이터센터에 도착했다.
 통신이 들어온다.
 
-[스파크]: 도착했어.
+[스파크]: 도착했어. 
 서버룸 앞이야. 복잡한 잠금장치네.
 
 디스플레이에 수학 퍼즐이 있다:
@@ -1038,9 +719,9 @@ D-Day까지 11일 남았습니다.
 힌트: 각 항은 이전 항 × 2 + 2`,
         clue: "2×2+2=6, 6×2+2=14, 14×2+2=30, 30×2+2=62, 62×2+2=?",
         hint: "62 × 2 + 2 = 126",
-        lockType: "pin3" as const,
+        lockType: "pin3",
         answers: ["126"],
-        maxTurns: 3,
+        maxAttempts: 3,
       },
       {
         id: 3,
@@ -1055,13 +736,13 @@ D-Day까지 11일 남았습니다.
 PIN을 찾아야 한다.
 
 패널 옆 메모:
-"PIN = 층수(52)와 경비원 수(8)의
+"PIN = 층수(52)와 경비원 수(8)의 
 최소공배수의 각 자릿수 합"`,
         clue: "52와 8의 최소공배수(LCM) 계산 후 자릿수 합",
         hint: "LCM(52,8)=104, 1+0+4=5",
-        lockType: "pin1" as const,
+        lockType: "pin1",
         answers: ["5"],
-        maxTurns: 3,
+        maxAttempts: 3,
       },
       {
         id: 4,
@@ -1080,13 +761,13 @@ PIN을 찾아야 한다.
 1. 프로젝트(PROJECT) 글자 수: 7
 2. 버전(X=24)
 3. 서버 심도(-5층의 절댓값): 5
-연산: (글자수 × 버전) ÷ 심도 +
+연산: (글자수 × 버전) ÷ 심도 + 
       오늘 날짜(2087.01.31) 일(日)`,
         clue: "(7 × 24) ÷ 5 + 31 = 168 ÷ 5 + 31",
         hint: "168 ÷ 5 = 33.6 ≈ 34(반올림), 34 + 31 = 65",
-        lockType: "pin2" as const,
+        lockType: "pin2",
         answers: ["65"],
-        maxTurns: 3,
+        maxAttempts: 3,
       },
       {
         id: 5,
@@ -1106,20 +787,20 @@ PIN을 찾아야 한다.
 결과의 첫 네 자리`,
         clue: "5 × 126 + 65 = 630 + 65 = 695",
         hint: "695... 세 자리뿐이므로 앞에 0을 붙여 0695",
-        lockType: "pin4" as const,
+        lockType: "pin4",
         answers: ["0695", "695"],
-        maxTurns: 3,
+        maxAttempts: 3,
       }
     ]
   },
   {
-    id: 19,
+    id: 9,
     title: "팬텀의 역습",
     subtitle: "Chapter 9: 최후의 대결",
-    difficulty: 3 as const,
-    mode: "story" as const,
+    difficulty: 3,
+    mode: "story",
     synopsis: "서버 셧다운 직전, 팬텀이 나타난다. 모든 것을 건 최후의 대결이 시작된다.",
-    previousEpisode: 18,
+    previousEpisode: 8,
     stages: [
       {
         id: 1,
@@ -1133,19 +814,19 @@ PIN을 찾아야 한다.
 
 그의 손에 비상 정지 장치가 있다.
 
-팬텀: "이 장치를 해제하지 않으면
+팬텀: "이 장치를 해제하지 않으면 
       셧다운은 불가능해.
       재미있는 게임을 하자."
 
 장치의 첫 번째 잠금:
-"내가 쉐도우넷을 이끈 햇수(5년) ×
-배신한 조직 수(3개) ×
+"내가 쉐도우넷을 이끈 햇수(5년) × 
+배신한 조직 수(3개) × 
 받은 돈의 자릿수(8자리)"`,
         clue: "5 × 3 × 8 = ?",
         hint: "5 × 3 = 15, 15 × 8 = 120",
-        lockType: "pin3" as const,
+        lockType: "pin3",
         answers: ["120"],
-        maxTurns: 3,
+        maxAttempts: 3,
       },
       {
         id: 2,
@@ -1158,17 +839,17 @@ PIN을 찾아야 한다.
 
 충격적인 말.
 
-팬텀: "2082년, 옴니코프의
+팬텀: "2082년, 옴니코프의 
       '의료 사고'로 네 부모님이...
       그때 사건 번호를 기억해?
-
+      
       82-7-15-A의 숫자만 더하고,
       A는 알파벳 순서로 계산해."`,
         clue: "82 + 7 + 15 + A(1) = ?",
         hint: "82 + 7 + 15 + 1 = 105",
-        lockType: "pin3" as const,
+        lockType: "pin3",
         answers: ["105"],
-        maxTurns: 3,
+        maxAttempts: 3,
       },
       {
         id: 3,
@@ -1183,18 +864,18 @@ PIN을 찾아야 한다.
 
 화면에 타이머가 나타난다: 02:00
 
-팬텀: "2분 안에 마지막 코드를
-      입력하지 않으면,
+팬텀: "2분 안에 마지막 코드를 
+      입력하지 않으면, 
       프로젝트 X가 즉시 활성화돼.
-
+      
       마지막 코드:
       (타이머 초(120) - 네 첫 코드(4272의 합=15))
       × (피닉스 코드(33) - 조직원 수(5))"`,
         clue: "(120 - 15) × (33 - 5) = 105 × 28 = ?",
         hint: "105 × 28 = 2940",
-        lockType: "pin4" as const,
+        lockType: "pin4",
         answers: ["2940"],
-        maxTurns: 3,
+        maxAttempts: 3,
       },
       {
         id: 4,
@@ -1213,25 +894,25 @@ PIN을 찾아야 한다.
 네온: "해냈어, 제로. 우리가 해냈어."
 
 에필로그 파일이 나타난다.
-열람 코드:
-"FREEDOM의 모음(E, E, O)의
+열람 코드: 
+"FREEDOM의 모음(E, E, O)의 
 알파벳 순서 합 × 해방된 년도(87)"`,
         clue: "E(5) + E(5) + O(15) = 25, 25 × 87 = ?",
         hint: "25 × 87 = 2175",
-        lockType: "pin4" as const,
+        lockType: "pin4",
         answers: ["2175"],
-        maxTurns: 3,
+        maxAttempts: 3,
       }
     ]
   },
   {
-    id: 20,
+    id: 10,
     title: "새로운 여명",
     subtitle: "Epilogue: 피닉스의 비상",
-    difficulty: 3 as const,
-    mode: "story" as const,
+    difficulty: 3,
+    mode: "story",
     synopsis: "프로젝트 X는 막았지만, 이야기는 끝나지 않았다. 네오 시티의 새로운 시대가 열린다.",
-    previousEpisode: 19,
+    previousEpisode: 9,
     stages: [
       {
         id: 1,
@@ -1250,14 +931,14 @@ PIN을 찾아야 한다.
 저도 곧 떠납니다. 안전한 곳으로.
 마지막 선물입니다."
 
-파일 암호:
-"새 시대(NEW ERA)의 자음만
+파일 암호: 
+"새 시대(NEW ERA)의 자음만 
 알파벳 순서로, 모음은 제외"`,
         clue: "NEW ERA → N(14), W(23), R(18) = 자음만",
         hint: "14 + 23 + 18 = 55",
-        lockType: "pin2" as const,
+        lockType: "pin2",
         answers: ["55"],
-        maxTurns: 3,
+        maxAttempts: 3,
       },
       {
         id: 2,
@@ -1265,7 +946,7 @@ PIN을 찾아야 한다.
         story: `파일이 열린다.
 옴니코프의 모든 기밀 자금 계좌 정보다.
 
-[델타]: 이 자금으로
+[델타]: 이 자금으로 
        도시를 재건하세요.
        사람들을 위해 써주세요.
 
@@ -1273,13 +954,13 @@ PIN을 찾아야 한다.
 
 [자금 이체 시스템]
 이체 금액: 8,888,888,888 크레딧
-인증 코드: 금액의 각 자릿수 합계를
+인증 코드: 금액의 각 자릿수 합계를 
           자릿수 개수(10)로 나눈 값`,
         clue: "8×10=80 (8이 10개), 80 ÷ 10 = ?",
         hint: "80 ÷ 10 = 8",
-        lockType: "pin1" as const,
+        lockType: "pin1",
         answers: ["8"],
-        maxTurns: 3,
+        maxAttempts: 3,
       },
       {
         id: 3,
@@ -1302,9 +983,9 @@ PIN을 찾아야 한다.
 W(1번), A(3번), E(5번)...`,
         clue: "W(23), A(1), E(5), P(16), O(15), N(14), X(24)",
         hint: "WAEPONX: 23+1+5+16+15+14+24 = 98",
-        lockType: "pin2" as const,
+        lockType: "pin2",
         answers: ["98"],
-        maxTurns: 3,
+        maxAttempts: 3,
       },
       {
         id: 4,
@@ -1316,7 +997,7 @@ W(1번), A(3번), E(5번)...`,
  도시가 우리를 필요로 할 때,
  우리는 언제나 일어설 것이다."
 
-한 달 후,
+한 달 후, 
 또 다른 메시지가 도착한다.
 
 [발신자: ???]
@@ -1326,15 +1007,77 @@ W(1번), A(3번), E(5번)...`,
 
 TO BE CONTINUED...
 
-최종 코드:
-"스토리의 시작(4272) + 끝(2175)의
+최종 코드: 
+"스토리의 시작(4272) + 끝(2175)의 
 각 자릿수 교차합(첫째+첫째, 둘째+둘째...)"`,
         clue: "4272, 2175 → 4+2=6, 2+1=3, 7+7=14, 2+5=7 → 6,3,14,7",
         hint: "교차합을 이어붙이면: 63147 (14는 두자리)",
-        lockType: "pin5" as const,
+        lockType: "pin5",
         answers: ["63147"],
-        maxTurns: 3,
+        maxAttempts: 3,
       }
     ]
-  },
+  }
 ];
+
+// 난이도별 설정
+export const difficultyConfig = {
+  1: {
+    name: "EASY",
+    nameKo: "쉬움",
+    color: "#00FF88",
+    bg: "rgba(0, 255, 136, 0.1)",
+    border: "rgba(0, 255, 136, 0.3)",
+    maxAttempts: 5,
+    hintPenalty: 1,
+  },
+  2: {
+    name: "NORMAL",
+    nameKo: "보통",
+    color: "#FFD700",
+    bg: "rgba(255, 215, 0, 0.1)",
+    border: "rgba(255, 215, 0, 0.3)",
+    maxAttempts: 4,
+    hintPenalty: 1,
+  },
+  3: {
+    name: "HARD",
+    nameKo: "어려움",
+    color: "#FF3366",
+    bg: "rgba(255, 51, 102, 0.1)",
+    border: "rgba(255, 51, 102, 0.3)",
+    maxAttempts: 3,
+    hintPenalty: 2,
+  }
+};
+
+// 에피소드 연결 정보
+export const storyFlow = {
+  mainArc: "네오 시티의 그림자",
+  protagonist: "제로 (Zero)",
+  chapters: [
+    { id: 1, title: "해커의 탄생", episodes: [1, 2, 3], difficulty: 1 },
+    { id: 2, title: "조직의 비밀", episodes: [4, 5, 6], difficulty: 2 },
+    { id: 3, title: "최후의 대결", episodes: [7, 8, 9, 10], difficulty: 3 },
+  ],
+  characters: [
+    { name: "제로", role: "주인공", description: "신입 해커, 부모님의 죽음에 대한 진실을 찾는다" },
+    { name: "네온", role: "동료", description: "제로의 파트너, 복잡한 과거를 가진 해커" },
+    { name: "팬텀", role: "적대자", description: "쉐도우넷 리더, 이중 스파이" },
+    { name: "고스트", role: "동료", description: "침투 전문가" },
+    { name: "바이트", role: "동료", description: "암호 해독 전문가" },
+    { name: "스파크", role: "동료", description: "하드웨어 전문가" },
+    { name: "델타", role: "조력자", description: "옴니코프 내부 협력자" },
+  ]
+};
+
+// 에피소드별 총 스테이지 수 통계
+export const episodeStats = {
+  easy: storyEpisodes.filter(e => e.difficulty === 1),
+  normal: storyEpisodes.filter(e => e.difficulty === 2),
+  hard: storyEpisodes.filter(e => e.difficulty === 3),
+  totalEpisodes: storyEpisodes.length,
+  totalStages: storyEpisodes.reduce((sum, e) => sum + e.stages.length, 0),
+};
+
+export default storyEpisodes;

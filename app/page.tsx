@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { storyEpisodes } from '@/data/storyEpisodes';
+import { deductionEpisodes } from '@/data/deductionEpisodes';
 
 export default function HomePage() {
   const [glitch, setGlitch] = useState(false);
@@ -53,11 +55,11 @@ export default function HomePage() {
       {/* 통계 */}
       <div className="mt-8 grid grid-cols-2 gap-4 text-center">
         <div className="bg-gray-800/50 p-3 rounded-lg">
-          <p className="text-hacker-emerald font-mono text-2xl font-bold">10</p>
+          <p className="text-hacker-emerald font-mono text-2xl font-bold">{storyEpisodes.length}</p>
           <p className="text-gray-500 font-mono text-xs">STORY</p>
         </div>
         <div className="bg-gray-800/50 p-3 rounded-lg">
-          <p className="text-hacker-cyan font-mono text-2xl font-bold">8</p>
+          <p className="text-hacker-cyan font-mono text-2xl font-bold">{deductionEpisodes.length}</p>
           <p className="text-gray-500 font-mono text-xs">DEDUCTION</p>
         </div>
       </div>
