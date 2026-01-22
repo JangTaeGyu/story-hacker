@@ -1,9 +1,37 @@
 'use client';
 
+import Image from 'next/image';
+
 // ============================================
-// 스토리 모드 SVG 일러스트 컴포넌트들
+// 스토리 모드 일러스트 컴포넌트들
 // ============================================
 
+// 에피소드 1: 수상한 이웃 (PNG 이미지) - 420x240 (1.75:1 비율)
+export const Illust1_1 = () => (
+  <div className="w-full aspect-[7/4] relative overflow-hidden">
+    <Image src="/images/story/1-1.png" alt="떨어진 스마트폰" fill className="object-cover" />
+  </div>
+);
+
+export const Illust1_2 = () => (
+  <div className="w-full aspect-[7/4] relative overflow-hidden">
+    <Image src="/images/story/1-2.png" alt="잠긴 메모장" fill className="object-cover" />
+  </div>
+);
+
+export const Illust1_3 = () => (
+  <div className="w-full aspect-[7/4] relative overflow-hidden">
+    <Image src="/images/story/1-3.png" alt="비밀 갤러리" fill className="object-cover" />
+  </div>
+);
+
+export const Illust1_4 = () => (
+  <div className="w-full aspect-[7/4] relative overflow-hidden">
+    <Image src="/images/story/1-4.png" alt="최종 단서" fill className="object-cover" />
+  </div>
+);
+
+// 기존 SVG 일러스트 (에피소드 2-10)
 export const IllustSmartphone = () => (
   <svg viewBox="0 0 200 160" className="w-full h-32">
     <defs>
@@ -417,10 +445,11 @@ export const IllustTimeCapsule = () => (
 
 // 스토리 일러스트 매핑
 export const storyIllustrations: Record<string, React.ComponentType> = {
-  "1-1": IllustSmartphone,
-  "1-2": IllustCat,
-  "1-3": IllustGallery,
-  "1-4": IllustCode,
+  // 에피소드 1: 수상한 이웃 (PNG 이미지)
+  "1-1": Illust1_1,
+  "1-2": Illust1_2,
+  "1-3": Illust1_3,
+  "1-4": Illust1_4,
   "2-1": IllustGrandpa,
   "2-2": IllustSafe,
   "3-1": IllustSchool,
