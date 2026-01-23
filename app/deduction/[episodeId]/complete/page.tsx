@@ -21,12 +21,13 @@ export default function DeductionCompletePage() {
   const nextEpisode = deductionEpisodes.find((ep) => ep.id === episodeId + 1);
 
   const [showContent, setShowContent] = useState(false);
-  const [progress, setProgress] = useLocalStorage<GameProgress>('story-hacker-progress', {
+  const [progress, setProgress, isInitialized] = useLocalStorage<GameProgress>('story-hacker-progress', {
     completedEpisodes: {},
   });
 
-  // 에피소드 완료 저장
+  // 에피소드 완료 저장 (localStorage 초기화 완료 후 실행)
   useEffect(() => {
+    if (!isInitialized) return;
     const existingRecord = progress.completedEpisodes[episodeId];
     // 더 높은 별점이거나 처음 완료한 경우에만 저장
     if (!existingRecord || existingRecord.stars < stars) {
@@ -38,7 +39,7 @@ export default function DeductionCompletePage() {
         },
       });
     }
-  }, [episodeId, stars]);
+  }, [isInitialized, episodeId, stars]);
 
   useEffect(() => {
     const timer = setTimeout(() => setShowContent(true), 300);

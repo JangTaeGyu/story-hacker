@@ -115,7 +115,16 @@ export function useSound(): {
 
 ## 5. 버그 및 개선
 
-### 확인 필요 항목
+### 버그 (수정 필요)
+- [x] **[Critical] 에피소드 클리어 진행 데이터 덮어쓰기 버그**
+  - 증상: 2개 이상 에피소드 클리어 시 마지막 클리어만 표시됨
+  - 원인: `complete/page.tsx`의 저장 useEffect가 localStorage 초기화 이전에 실행되어 `completedEpisodes: {}`로 기존 데이터 덮어씀
+  - 영향 파일:
+    - `app/story/[episodeId]/complete/page.tsx:28-40`
+    - `app/deduction/[episodeId]/complete/page.tsx:29-41`
+  - 해결 방안: `useLocalStorage`에서 `isInitialized` 반환 → 초기화 완료 후에만 저장 실행
+
+### 확인 완료 항목
 - [x] `pin2`, `pin3` lockType에 대한 PinDisplay/InputArea 대응 확인 — 문제 없음 (pin1~pin6 모두 지원)
 - [x] 모바일 키패드 레이아웃 터치 영역 최적화 — 문제 없음 (h-14=56px, 최소 48px 충족)
 - [ ] 페이지 전환 시 로딩 상태 표시 — 경미 (게임오버 시 즉시 이동, 체감 이슈 적음)
@@ -127,7 +136,7 @@ export function useSound(): {
 
 | 순위 | 기능 | 이유 |
 |------|------|------|
-| 1 | 버그 및 개선 (5장) | 기본 안정성 확보 |
+| 1 | 클리어 진행 데이터 버그 수정 | 핵심 기능 장애 — localStorage 초기화 타이밍 |
 | 2 | 에피소드 잠금 해제 | 게임 진행 흐름 개선 |
 | 3 | 효과음 시스템 | 게임 몰입감 향상 |
 | 4 | 튜토리얼 모드 | 신규 유저 온보딩 |

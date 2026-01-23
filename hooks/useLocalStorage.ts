@@ -5,7 +5,7 @@ import { useState, useEffect, useCallback } from 'react';
 export function useLocalStorage<T>(
   key: string,
   initialValue: T
-): [T, (value: T | ((prev: T) => T)) => void] {
+): [T, (value: T | ((prev: T) => T)) => void, boolean] {
   // 초기값 설정 (SSR 호환)
   const [storedValue, setStoredValue] = useState<T>(initialValue);
   const [isInitialized, setIsInitialized] = useState(false);
@@ -42,5 +42,5 @@ export function useLocalStorage<T>(
     [key, storedValue]
   );
 
-  return [storedValue, setValue];
+  return [storedValue, setValue, isInitialized];
 }
