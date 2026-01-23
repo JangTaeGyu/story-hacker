@@ -100,10 +100,12 @@ export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
           />
         </div>
 
-        {/* 일러스트 */}
+        {/* 일러스트 (배경) */}
         {IllustrationComponent && (
-          <div className="mb-4 bg-gray-900/30 rounded-lg overflow-hidden border border-gray-800">
-            <IllustrationComponent />
+          <div className="absolute inset-0 z-0 opacity-15 pointer-events-none overflow-hidden">
+            <div className="absolute inset-0 flex items-center justify-center">
+              <IllustrationComponent />
+            </div>
           </div>
         )}
 
