@@ -4,7 +4,6 @@ import { cn } from '@/lib/utils';
 
 interface InputAreaProps {
   onInput: (digit: string) => void;
-  onDelete: () => void;
   onClear: () => void;
   onSubmit: () => void;
   canSubmit: boolean;
@@ -14,7 +13,6 @@ interface InputAreaProps {
 
 export default function InputArea({
   onInput,
-  onDelete,
   onClear,
   onSubmit,
   canSubmit,
@@ -41,7 +39,7 @@ export default function InputArea({
   return (
     <div className="w-full max-w-xs mx-auto">
       {/* 숫자 패드 */}
-      <div className="grid grid-cols-3 gap-2 mb-3">
+      <div className="grid grid-cols-3 gap-2">
         {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map((digit) => (
           <button
             key={digit}
@@ -71,29 +69,20 @@ export default function InputArea({
           0
         </button>
 
-        {/* Delete 버튼 */}
+        {/* Submit 버튼 */}
         <button
-          onClick={onDelete}
-          disabled={disabled}
-          className={cn(buttonBaseClass, 'bg-gray-900 text-gray-400 hover:bg-gray-800 border border-gray-700 h-14 text-lg')}
+          onClick={onSubmit}
+          disabled={disabled || !canSubmit}
+          className={cn(
+            buttonBaseClass,
+            'h-14 border-2 text-sm',
+            canSubmit && !disabled ? submitActiveClass : accentBorderClass,
+            !canSubmit && 'opacity-50'
+          )}
         >
-          ⌫
+          OK
         </button>
       </div>
-
-      {/* Submit 버튼 */}
-      <button
-        onClick={onSubmit}
-        disabled={disabled || !canSubmit}
-        className={cn(
-          buttonBaseClass,
-          'w-full h-12 border-2',
-          canSubmit && !disabled ? submitActiveClass : accentBorderClass,
-          !canSubmit && 'opacity-50'
-        )}
-      >
-        SUBMIT
-      </button>
     </div>
   );
 }

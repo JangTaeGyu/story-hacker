@@ -7,13 +7,13 @@ interface HeartsDisplayProps {
 
 export default function HeartsDisplay({ totalTurns, remainingTurns }: HeartsDisplayProps) {
   return (
-    <div className="flex justify-center gap-1 mb-3">
+    <div className="flex gap-0.5">
       {Array(totalTurns)
         .fill(0)
         .map((_, i) => (
           <span
             key={i}
-            className={`text-base sm:text-lg transition-all duration-200 ${
+            className={`text-lg sm:text-xl transition-all duration-200 ${
               i < remainingTurns
                 ? 'text-hacker-rose scale-100'
                 : 'text-gray-700 scale-75'

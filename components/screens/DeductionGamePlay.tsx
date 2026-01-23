@@ -87,11 +87,17 @@ export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
       {/* 메인 컨텐츠 */}
       <main className={`flex-1 p-4 pt-16 overflow-y-auto ${showKeypad ? 'pb-96' : 'pb-24'}`}>
         {/* 스테이지 타이틀 */}
-        <div className="mb-4">
-          <h2 className="text-hacker-cyan font-bold text-lg">{currentStage.title}</h2>
-          <p className="text-gray-500 font-mono text-xs mt-1">
-            TURN: {turnsUsed}/{currentStage.maxTurns} • REMAINING: {remainingTurns}
-          </p>
+        <div className="mb-4 flex items-start justify-between">
+          <div>
+            <h2 className="text-hacker-cyan font-bold text-lg">{currentStage.title}</h2>
+            <p className="text-gray-500 font-mono text-xs mt-1">
+              TURNS: {turnsUsed}/{currentStage.maxTurns}
+            </p>
+          </div>
+          <HeartsDisplay
+            totalTurns={currentStage.maxTurns}
+            remainingTurns={remainingTurns}
+          />
         </div>
 
         {/* 일러스트 */}
@@ -156,22 +162,33 @@ export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
       </main>
 
       {/* 입력 영역 (하단 고정) */}
-      <footer className="fixed bottom-0 left-0 right-0 bg-hacker-dark/95 backdrop-blur border-t border-gray-800 p-4">
-        <div className="max-w-md mx-auto">
-          {showKeypad ? (
-            <>
-              {/* 키패드 닫기 버튼 */}
-              <button
-                onClick={() => setShowKeypad(false)}
-                className="absolute top-2 right-2 text-gray-500 hover:text-gray-300 p-2"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                </svg>
-              </button>
+      <footer className="fixed bottom-0 left-0 right-0 bg-hacker-dark/95 backdrop-blur border-t border-gray-800">
+        <div className="max-w-md mx-auto px-4">
+          {/* 토글 버튼 */}
+          <button
+            onClick={() => setShowKeypad(!showKeypad)}
+            className="w-full py-3 text-hacker-cyan font-mono text-sm flex items-center justify-center gap-2"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className={`h-4 w-4 transition-transform duration-300 ${showKeypad ? 'rotate-180' : ''}`}
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path fillRule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clipRule="evenodd" />
+            </svg>
+            PIN 입력
+          </button>
 
+          {/* 키패드 영역 (슬라이드 애니메이션) */}
+          <div
+            className={`grid transition-all duration-300 ease-in-out ${
+              showKeypad ? 'grid-rows-[1fr] opacity-100 pb-4' : 'grid-rows-[0fr] opacity-0'
+            }`}
+          >
+            <div className="overflow-hidden">
               {/* PIN 디스플레이 */}
-              <div className={`mb-2 ${isWrong ? 'animate-shake' : ''}`}>
+              <div className={`mb-3 ${isWrong ? 'animate-shake' : ''}`}>
                 <PinDisplay
                   pin={pin}
                   pinLength={pinLength}
@@ -180,34 +197,16 @@ export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
                 />
               </div>
 
-              {/* 남은 턴 (하트) */}
-              <HeartsDisplay
-                totalTurns={currentStage.maxTurns}
-                remainingTurns={remainingTurns}
-              />
-
               {/* 키패드 */}
               <InputArea
                 onInput={handlePinInput}
-                onDelete={handlePinDelete}
                 onClear={handlePinClear}
                 onSubmit={handleSubmit}
                 canSubmit={pin.length === pinLength}
                 accentColor="cyan"
               />
-            </>
-          ) : (
-            /* 키패드 열기 버튼 */
-            <button
-              onClick={() => setShowKeypad(true)}
-              className="w-full py-3 bg-hacker-cyan/20 border border-hacker-cyan/50 rounded-lg text-hacker-cyan font-mono text-sm hover:bg-hacker-cyan/30 transition-colors flex items-center justify-center gap-2"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clipRule="evenodd" />
-              </svg>
-              PIN 입력
-            </button>
-          )}
+            </div>
+          </div>
         </div>
       </footer>
     </div>
