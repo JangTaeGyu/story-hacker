@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { storyEpisodes } from '@/data/storyEpisodes';
 import { getDifficultyInfo, getDifficultyStars } from '@/lib/utils';
@@ -10,27 +11,60 @@ interface GameProgress {
   completedEpisodes: Record<number, { stars: number; completed: boolean }>;
 }
 
+const FILTERS = [
+  { value: 0, label: 'ALL' },
+  { value: 1, label: 'EASY', color: 'text-green-400', activeClass: 'border-green-400 bg-green-400/10 text-green-400' },
+  { value: 2, label: 'NORMAL', color: 'text-yellow-400', activeClass: 'border-yellow-400 bg-yellow-400/10 text-yellow-400' },
+  { value: 3, label: 'HARD', color: 'text-red-400', activeClass: 'border-red-400 bg-red-400/10 text-red-400' },
+] as const;
+
 export default function StoryEpisodeSelectPage() {
   const [progress] = useLocalStorage<GameProgress>('story-hacker-progress', {
     completedEpisodes: {},
   });
+  const [filter, setFilter] = useState<number>(0);
+
+  const filteredEpisodes = filter === 0
+    ? storyEpisodes
+    : storyEpisodes.filter((ep) => ep.difficulty === filter);
 
   return (
     <div className="min-h-screen pb-20">
       <Header backHref="/mode-select" />
 
       <div className="p-4 sm:p-6 pt-16">
-      {/* 타이틀 */}
-      <h2 className="text-xl sm:text-2xl font-bold text-hacker-emerald font-mono mb-2 tracking-wider">
-        STORY MODE
-      </h2>
-      <p className="text-gray-500 font-mono text-xs mb-4">
-        {storyEpisodes.length} EPISODES AVAILABLE
-      </p>
+      {/* 타이틀 + 필터 */}
+      <div className="flex items-start justify-between mb-4">
+        <div>
+          <h2 className="text-xl sm:text-2xl font-bold text-hacker-emerald font-mono tracking-wider">
+            STORY MODE
+          </h2>
+          <p className="text-gray-500 font-mono text-xs mt-1">
+            {filteredEpisodes.length} EPISODES
+          </p>
+        </div>
+        <div className="flex gap-1.5">
+          {FILTERS.map((f) => (
+            <button
+              key={f.value}
+              onClick={() => setFilter(f.value)}
+              className={`px-2 py-1 text-xs font-mono rounded border transition-colors ${
+                filter === f.value
+                  ? f.value === 0
+                    ? 'border-hacker-emerald bg-hacker-emerald/10 text-hacker-emerald'
+                    : f.activeClass
+                  : 'border-gray-700 text-gray-500 hover:border-gray-500'
+              }`}
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
+      </div>
 
       {/* 에피소드 목록 */}
       <div className="space-y-3">
-        {storyEpisodes.map((episode) => {
+        {filteredEpisodes.map((episode) => {
           const diffInfo = getDifficultyInfo(episode.difficulty);
           const completedInfo = progress.completedEpisodes[episode.id];
           const isCompleted = completedInfo?.completed;
