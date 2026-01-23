@@ -78,7 +78,7 @@ export default function StoryEpisodeSelectPage() {
             >
               {/* 에피소드 카드 배경 이미지 */}
               <div className="absolute inset-0 opacity-10 pointer-events-none">
-                <img src={`/images/story/ep-${episode.id}.png`} alt="" className="w-full h-full object-cover" />
+                <img src={`/images/story/ep-${episode.id}.png`} alt="" className="w-full h-full object-cover" onError={(e) => { e.currentTarget.style.display = 'none' }} />
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex-1">
