@@ -23,25 +23,26 @@
 
 ## 작업 항목
 
-- [ ] 1. `components/ui/Header.tsx` 공용 헤더 컴포넌트 생성
+- [x] 1. `components/ui/Header.tsx` 공용 헤더 컴포넌트 생성
   - Props 설계:
     - `backHref: string` - 뒤로가기 링크
     - `backText?: string` - 버튼 텍스트 (기본값: "BACK")
     - `accentColor?: 'emerald' | 'cyan'` - 테마 색상
     - `center?: React.ReactNode` - 중앙 영역 (진행 정보 등)
     - `right?: React.ReactNode` - 우측 영역 (별점 등)
+  - 추가: `fixed top-0 z-40 bg-hacker-dark/95 backdrop-blur` 적용
 
-- [ ] 2. `app/mode-select/page.tsx` 헤더 교체
+- [x] 2. `app/mode-select/page.tsx` 헤더 교체
 
-- [ ] 3. `app/story/page.tsx` 헤더 교체
+- [x] 3. `app/story/page.tsx` 헤더 교체
 
-- [ ] 4. `app/deduction/page.tsx` 헤더 교체
+- [x] 4. `app/deduction/page.tsx` 헤더 교체
 
-- [ ] 5. `components/screens/StoryGamePlay.tsx` 헤더 교체
+- [x] 5. `components/screens/StoryGamePlay.tsx` 헤더 교체
 
-- [ ] 6. `components/screens/DeductionGamePlay.tsx` 헤더 교체
+- [x] 6. `components/screens/DeductionGamePlay.tsx` 헤더 교체
 
-- [ ] 7. 동작 확인 및 테스트
+- [x] 7. 동작 확인 및 테스트
 
 ## 네비게이션 플로우
 
