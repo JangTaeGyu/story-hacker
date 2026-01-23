@@ -57,4 +57,8 @@ export const storyIllustrations: Record<string, React.ComponentType> = {
   "10-1": () => <BgImage src="/images/story/10-1.png" alt="타임캡슐 스테이지 1" />,
   "10-2": () => <BgImage src="/images/story/10-2.png" alt="타임캡슐 스테이지 2" />,
   "10-3": () => <BgImage src="/images/story/10-3.png" alt="타임캡슐 스테이지 3" />,
+  // EP.11 첫 번째 임무
+  "11-1": () => <BgImage src="/images/story/11-1.png" alt="첫 번째 임무 스테이지 1" />,
+  "11-2": () => <BgImage src="/images/story/11-2.png" alt="첫 번째 임무 스테이지 2" />,
+  "11-3": () => <BgImage src="/images/story/11-3.png" alt="첫 번째 임무 스테이지 3" />,
 };
