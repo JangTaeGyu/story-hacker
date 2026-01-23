@@ -38,6 +38,11 @@ export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
     initializeStage,
   } = useDeductionGameState(episode.stages);
 
+  // 스테이지 변경 시 키패드 닫기
+  useEffect(() => {
+    setShowKeypad(false);
+  }, [currentStageIndex]);
+
   // 스테이지 시작 시 초기 단서 설정
   useEffect(() => {
     initializeStage();
@@ -46,6 +51,7 @@ export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
   // 완료 또는 게임오버 시 리다이렉트
   useEffect(() => {
     if (isComplete) {
+      setShowKeypad(false);
       setShowSuccess(true);
       const timer = setTimeout(() => {
         router.push(`/deduction/${episode.id}/complete?stars=${stars}&turns=${turnsUsed}`);

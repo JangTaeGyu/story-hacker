@@ -48,14 +48,16 @@ export default function StoryGamePlay({ episode }: StoryGamePlayProps) {
     delay: 300,
   });
 
-  // 스테이지 변경 시 타이핑 리셋을 위한 key 업데이트
+  // 스테이지 변경 시 타이핑 리셋 및 키패드 닫기
   useEffect(() => {
     setStageKey((prev) => prev + 1);
+    setShowKeypad(false);
   }, [currentStageIndex]);
 
   // 정답 시 성공 애니메이션 후 다음 스테이지로
   useEffect(() => {
     if (isComplete) {
+      setShowKeypad(false);
       setShowSuccess(true);
       const timer = setTimeout(() => {
         router.push(`/story/${episode.id}/complete?stars=${stars}`);
