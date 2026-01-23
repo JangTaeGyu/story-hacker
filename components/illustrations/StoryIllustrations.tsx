@@ -75,4 +75,10 @@ export const storyIllustrations: Record<string, React.ComponentType> = {
   "14-2": () => <BgImage src="/images/story/14-2.png" alt="내부자 스테이지 2" />,
   "14-3": () => <BgImage src="/images/story/14-3.png" alt="내부자 스테이지 3" />,
   "14-4": () => <BgImage src="/images/story/14-4.png" alt="내부자 스테이지 4" />,
+  // EP.15 옴니코프의 심장
+  "15-1": () => <BgImage src="/images/story/15-1.png" alt="옴니코프의 심장 스테이지 1" />,
+  "15-2": () => <BgImage src="/images/story/15-2.png" alt="옴니코프의 심장 스테이지 2" />,
+  "15-3": () => <BgImage src="/images/story/15-3.png" alt="옴니코프의 심장 스테이지 3" />,
+  "15-4": () => <BgImage src="/images/story/15-4.png" alt="옴니코프의 심장 스테이지 4" />,
+  "15-5": () => <BgImage src="/images/story/15-5.png" alt="옴니코프의 심장 스테이지 5" />,
 };
