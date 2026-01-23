@@ -29,4 +29,9 @@ export const storyIllustrations: Record<string, React.ComponentType> = {
   "4-2": () => <BgImage src="/images/story/4-2.png" alt="탐정 사무소 스테이지 2" />,
   "4-3": () => <BgImage src="/images/story/4-3.png" alt="탐정 사무소 스테이지 3" />,
   "4-4": () => <BgImage src="/images/story/4-4.png" alt="탐정 사무소 스테이지 4" />,
+  // EP.5 게이머의 비밀
+  "5-1": () => <BgImage src="/images/story/5-1.png" alt="게이머의 비밀 스테이지 1" />,
+  "5-2": () => <BgImage src="/images/story/5-2.png" alt="게이머의 비밀 스테이지 2" />,
+  "5-3": () => <BgImage src="/images/story/5-3.png" alt="게이머의 비밀 스테이지 3" />,
+  "5-4": () => <BgImage src="/images/story/5-4.png" alt="게이머의 비밀 스테이지 4" />,
 };
