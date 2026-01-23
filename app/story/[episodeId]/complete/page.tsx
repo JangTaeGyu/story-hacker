@@ -107,7 +107,7 @@ export default function StoryCompletePage() {
             <button
               onClick={() => {
                 const text = `Story Hacker EP.${episode.id} "${episode.title}" 클리어! ${'★'.repeat(stars)}${'☆'.repeat(3 - stars)}`;
-                window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.origin)}&quote=${encodeURIComponent(text)}`, '_blank');
+                window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent('https://story-hacker.jubrolab.dev/')}&quote=${encodeURIComponent(text)}`, '_blank');
               }}
               className="w-11 h-11 bg-gray-800 border border-gray-700 rounded-lg flex items-center justify-center hover:bg-gray-700 transition-colors"
               title="Facebook"
