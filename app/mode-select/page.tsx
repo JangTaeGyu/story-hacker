@@ -8,7 +8,7 @@ export default function ModeSelectPage() {
     <div className="min-h-screen">
       <Header backHref="/" />
 
-      <div className="p-4 sm:p-6">
+      <div className="p-4 sm:p-6 pt-16">
       {/* 타이틀 */}
       <h2 className="text-xl sm:text-2xl font-bold text-hacker-emerald font-mono mb-6 tracking-wider">
         SELECT MODE

@@ -19,7 +19,7 @@ export default function DeductionEpisodeSelectPage() {
     <div className="min-h-screen pb-20">
       <Header backHref="/mode-select" accentColor="cyan" />
 
-      <div className="p-4 sm:p-6">
+      <div className="p-4 sm:p-6 pt-16">
       {/* 타이틀 */}
       <h2 className="text-xl sm:text-2xl font-bold text-hacker-cyan font-mono mb-2 tracking-wider">
         DEDUCTION MODE

@@ -21,7 +21,7 @@ export default function Header({
   const hoverClass = accentColor === 'cyan' ? 'hover:text-hacker-cyan' : 'hover:text-hacker-emerald';
 
   return (
-    <header className="p-4 border-b border-gray-800">
+    <header className="fixed top-0 left-0 right-0 z-40 p-4 border-b border-gray-800 bg-hacker-dark/95 backdrop-blur">
       <div className="flex items-center justify-between">
         <Link
           href={backHref}

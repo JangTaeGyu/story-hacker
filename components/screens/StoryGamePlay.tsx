@@ -95,7 +95,7 @@ export default function StoryGamePlay({ episode }: StoryGamePlayProps) {
       />
 
       {/* 메인 컨텐츠 */}
-      <main className={`flex-1 p-4 overflow-y-auto ${showKeypad ? 'pb-96' : 'pb-24'}`}>
+      <main className={`flex-1 p-4 pt-16 overflow-y-auto ${showKeypad ? 'pb-96' : 'pb-24'}`}>
         {/* 스테이지 타이틀 */}
         <div className="mb-4">
           <h2 className="text-hacker-emerald font-bold text-lg flex items-center gap-2">
