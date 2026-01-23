@@ -12,9 +12,12 @@ const BgImage = ({ src, alt }: { src: string; alt: string }) => (
 // 스토리 일러스트 매핑 (에피소드ID-스테이지ID 기준)
 // 이미지 파일이 준비되면 매핑 추가
 export const storyIllustrations: Record<string, React.ComponentType> = {
-  // EP.1 수상한 이웃 (기존 이미지)
+  // EP.1 수상한 이웃
   "1-1": () => <BgImage src="/images/story/1-1.png" alt="수상한 이웃 스테이지 1" />,
   "1-2": () => <BgImage src="/images/story/1-2.png" alt="수상한 이웃 스테이지 2" />,
   "1-3": () => <BgImage src="/images/story/1-3.png" alt="수상한 이웃 스테이지 3" />,
   "1-4": () => <BgImage src="/images/story/1-4.png" alt="수상한 이웃 스테이지 4" />,
+  // EP.2 사라진 보물
+  "2-1": () => <BgImage src="/images/story/2-1.png" alt="사라진 보물 스테이지 1" />,
+  "2-2": () => <BgImage src="/images/story/2-2.png" alt="사라진 보물 스테이지 2" />,
 };
