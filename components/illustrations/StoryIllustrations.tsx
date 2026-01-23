@@ -34,4 +34,8 @@ export const storyIllustrations: Record<string, React.ComponentType> = {
   "5-2": () => <BgImage src="/images/story/5-2.png" alt="게이머의 비밀 스테이지 2" />,
   "5-3": () => <BgImage src="/images/story/5-3.png" alt="게이머의 비밀 스테이지 3" />,
   "5-4": () => <BgImage src="/images/story/5-4.png" alt="게이머의 비밀 스테이지 4" />,
+  // EP.6 카페 미스터리
+  "6-1": () => <BgImage src="/images/story/6-1.png" alt="카페 미스터리 스테이지 1" />,
+  "6-2": () => <BgImage src="/images/story/6-2.png" alt="카페 미스터리 스테이지 2" />,
+  "6-3": () => <BgImage src="/images/story/6-3.png" alt="카페 미스터리 스테이지 3" />,
 };
