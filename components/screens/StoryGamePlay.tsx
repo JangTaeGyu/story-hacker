@@ -69,7 +69,8 @@ export default function StoryGamePlay({ episode }: StoryGamePlayProps) {
   if (!currentStage) return null;
 
   // 일러스트 컴포넌트 가져오기
-  const IllustrationComponent = storyIllustrations[episode.id.toString()];
+  const illustrationKey = `${episode.id}-${currentStage.id}`;
+  const IllustrationComponent = storyIllustrations[illustrationKey];
 
   return (
     <div className="min-h-screen flex flex-col relative">

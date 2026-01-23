@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { deductionEpisodes } from '@/data/deductionEpisodes';
-import { getDifficultyInfo, getDifficultyStars } from '@/lib/utils';
+import { getDifficultyInfo } from '@/lib/utils';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import Header from '@/components/ui/Header';
 
@@ -83,21 +83,23 @@ export default function DeductionEpisodeSelectPage() {
                       EP.{episode.id - 100}
                     </span>
                     <span className={`text-xs ${diffInfo.color}`}>{diffInfo.text}</span>
-                    {isCompleted && (
-                      <span className="text-yellow-400 text-xs font-mono">✓ CLEAR</span>
-                    )}
                   </div>
                   <h3 className="text-white font-bold text-base">{episode.title}</h3>
                   <p className="text-gray-500 text-xs font-mono mt-1">
-                    {episode.stages.length} STAGES • {isCompleted
-                      ? `${'★'.repeat(completedInfo.stars)}${'☆'.repeat(3 - completedInfo.stars)}`
-                      : getDifficultyStars(episode.difficulty)
-                    }
+                    {episode.stages.length} STAGES
                   </p>
                 </div>
-                <span className="text-hacker-cyan text-xl opacity-0 group-hover:opacity-100 transition-opacity">
-                  ›
-                </span>
+                {isCompleted ? (
+                  <div className="w-12 h-12 rounded-full border-2 border-yellow-400 flex items-center justify-center rotate-[-12deg]">
+                    <span className="text-yellow-400 font-mono text-[10px] font-bold leading-tight text-center">
+                      CLEAR
+                    </span>
+                  </div>
+                ) : (
+                  <span className="text-hacker-cyan text-xl opacity-0 group-hover:opacity-100 transition-opacity">
+                    ›
+                  </span>
+                )}
               </div>
             </Link>
           );

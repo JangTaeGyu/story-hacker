@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { storyEpisodes } from '@/data/storyEpisodes';
-import { getDifficultyInfo, getDifficultyStars } from '@/lib/utils';
+import { getDifficultyInfo } from '@/lib/utils';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import Header from '@/components/ui/Header';
 
@@ -72,10 +72,16 @@ export default function StoryEpisodeSelectPage() {
             <Link
               key={episode.id}
               href={`/story/${episode.id}`}
-              className={`block w-full p-4 bg-gray-800/50 border text-left transition-all duration-200 active:scale-[0.98] group rounded hover:border-hacker-emerald hover:bg-gray-800 ${
+              className={`block w-full p-4 bg-gray-800/50 border text-left transition-all duration-200 active:scale-[0.98] group rounded hover:border-hacker-emerald hover:bg-gray-800 relative overflow-hidden ${
                 isCompleted ? 'border-yellow-500/50' : 'border-gray-700'
               }`}
             >
+              {/* 배경 이미지 테스트 (EP.1) */}
+              {episode.id === 1 && (
+                <div className="absolute inset-0 opacity-10 pointer-events-none">
+                  <img src="/images/story/1-1.png" alt="" className="w-full h-full object-cover" />
+                </div>
+              )}
               <div className="flex items-center justify-between">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
@@ -83,21 +89,23 @@ export default function StoryEpisodeSelectPage() {
                       EP.{episode.id}
                     </span>
                     <span className={`text-xs ${diffInfo.color}`}>{diffInfo.text}</span>
-                    {isCompleted && (
-                      <span className="text-yellow-400 text-xs font-mono">✓ CLEAR</span>
-                    )}
                   </div>
                   <h3 className="text-white font-bold text-base">{episode.title}</h3>
                   <p className="text-gray-500 text-xs font-mono mt-1">
-                    {episode.stages.length} STAGES • {isCompleted
-                      ? `${'★'.repeat(completedInfo.stars)}${'☆'.repeat(3 - completedInfo.stars)}`
-                      : getDifficultyStars(episode.difficulty)
-                    }
+                    {episode.stages.length} STAGES
                   </p>
                 </div>
-                <span className="text-hacker-emerald text-xl opacity-0 group-hover:opacity-100 transition-opacity">
-                  ›
-                </span>
+                {isCompleted ? (
+                  <div className="w-12 h-12 rounded-full border-2 border-yellow-400 flex items-center justify-center rotate-[-12deg]">
+                    <span className="text-yellow-400 font-mono text-[10px] font-bold leading-tight text-center">
+                      CLEAR
+                    </span>
+                  </div>
+                ) : (
+                  <span className="text-hacker-emerald text-xl opacity-0 group-hover:opacity-100 transition-opacity">
+                    ›
+                  </span>
+                )}
               </div>
             </Link>
           );

@@ -9,14 +9,7 @@ const BgImage = ({ src, alt }: { src: string; alt: string }) => (
   </div>
 );
 
-// 추론 일러스트 매핑 (에피소드 ID 기준)
+// 추론 일러스트 매핑 (에피소드ID-스테이지ID 기준)
+// 이미지 파일이 준비되면 매핑 추가
 export const deductionIllustrations: Record<string, React.ComponentType> = {
-  "101": () => <BgImage src="/images/deduction/bg-101.png" alt="숫자 추리" />,
-  "102": () => <BgImage src="/images/deduction/bg-102.png" alt="논리 게이트" />,
-  "103": () => <BgImage src="/images/deduction/bg-103.png" alt="수학 퍼즐" />,
-  "104": () => <BgImage src="/images/deduction/bg-104.png" alt="시간 퍼즐" />,
-  "105": () => <BgImage src="/images/deduction/bg-105.png" alt="색상 코드" />,
-  "106": () => <BgImage src="/images/deduction/bg-106.png" alt="음악 퍼즐" />,
-  "107": () => <BgImage src="/images/deduction/bg-107.png" alt="지리 퍼즐" />,
-  "108": () => <BgImage src="/images/deduction/bg-108.png" alt="과학 퍼즐" />,
 };
