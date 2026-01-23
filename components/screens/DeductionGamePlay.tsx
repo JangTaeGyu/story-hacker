@@ -1,13 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import type { DeductionEpisode } from '@/lib/types';
 import { useDeductionGameState } from '@/hooks/useGameState';
 import PinDisplay from '@/components/ui/PinDisplay';
 import InputArea from '@/components/ui/InputArea';
 import HeartsDisplay from '@/components/ui/HeartsDisplay';
+import Header from '@/components/ui/Header';
 import { deductionIllustrations } from '@/components/illustrations/DeductionIllustrations';
 
 interface DeductionGamePlayProps {
@@ -76,24 +76,13 @@ export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
       )}
 
       {/* 헤더 */}
-      <header className="p-4 border-b border-gray-800">
-        <div className="flex items-center justify-between">
-          <Link
-            href="/deduction"
-            className="text-gray-400 hover:text-hacker-cyan text-sm font-mono"
-          >
-            {'<'} EXIT
-          </Link>
-          <div className="text-center">
-            <span className="text-hacker-cyan font-mono text-xs">
-              EP.{episode.id - 100} - STAGE {currentStageIndex + 1}/{episode.stages.length}
-            </span>
-          </div>
-          <div className="text-right">
-            <span className="text-yellow-400 text-sm">{'★'.repeat(stars)}{'☆'.repeat(3 - stars)}</span>
-          </div>
-        </div>
-      </header>
+      <Header
+        backHref="/deduction"
+        backText="EXIT"
+        accentColor="cyan"
+        center={`EP.${episode.id - 100} - STAGE ${currentStageIndex + 1}/${episode.stages.length}`}
+        right={<span className="text-yellow-400 text-sm">{'★'.repeat(stars)}{'☆'.repeat(3 - stars)}</span>}
+      />
 
       {/* 메인 컨텐츠 */}
       <main className={`flex-1 p-4 overflow-y-auto ${showKeypad ? 'pb-96' : 'pb-24'}`}>

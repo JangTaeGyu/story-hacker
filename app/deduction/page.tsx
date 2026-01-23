@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { deductionEpisodes } from '@/data/deductionEpisodes';
 import { getDifficultyInfo, getDifficultyStars } from '@/lib/utils';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
+import Header from '@/components/ui/Header';
 
 interface GameProgress {
   completedEpisodes: Record<number, { stars: number; completed: boolean }>;
@@ -15,15 +16,10 @@ export default function DeductionEpisodeSelectPage() {
   });
 
   return (
-    <div className="min-h-screen p-4 sm:p-6 pb-20">
-      {/* 뒤로가기 */}
-      <Link
-        href="/mode-select"
-        className="text-hacker-cyan font-mono mb-6 hover:opacity-80 text-sm inline-block"
-      >
-        {'<'} BACK
-      </Link>
+    <div className="min-h-screen pb-20">
+      <Header backHref="/mode-select" accentColor="cyan" />
 
+      <div className="p-4 sm:p-6">
       {/* 타이틀 */}
       <h2 className="text-xl sm:text-2xl font-bold text-hacker-cyan font-mono mb-2 tracking-wider">
         DEDUCTION MODE
@@ -72,6 +68,7 @@ export default function DeductionEpisodeSelectPage() {
             </Link>
           );
         })}
+      </div>
       </div>
     </div>
   );

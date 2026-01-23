@@ -1,18 +1,14 @@
 import Link from 'next/link';
 import { storyEpisodes } from '@/data/storyEpisodes';
 import { deductionEpisodes } from '@/data/deductionEpisodes';
+import Header from '@/components/ui/Header';
 
 export default function ModeSelectPage() {
   return (
-    <div className="min-h-screen p-4 sm:p-6">
-      {/* 뒤로가기 */}
-      <Link
-        href="/"
-        className="text-hacker-emerald font-mono mb-6 hover:text-hacker-emerald/80 text-sm inline-block"
-      >
-        {'<'} BACK
-      </Link>
+    <div className="min-h-screen">
+      <Header backHref="/" />
 
+      <div className="p-4 sm:p-6">
       {/* 타이틀 */}
       <h2 className="text-xl sm:text-2xl font-bold text-hacker-emerald font-mono mb-6 tracking-wider">
         SELECT MODE
@@ -97,6 +93,7 @@ export default function ModeSelectPage() {
             고득점!)
           </p>
         </div>
+      </div>
       </div>
     </div>
   );

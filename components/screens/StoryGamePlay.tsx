@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import type { StoryEpisode } from '@/lib/types';
 import { useStoryGameState } from '@/hooks/useGameState';
@@ -9,6 +8,7 @@ import { useTypingEffect } from '@/hooks/useTypingEffect';
 import PinDisplay from '@/components/ui/PinDisplay';
 import InputArea from '@/components/ui/InputArea';
 import HeartsDisplay from '@/components/ui/HeartsDisplay';
+import Header from '@/components/ui/Header';
 import { storyIllustrations } from '@/components/illustrations/StoryIllustrations';
 
 interface StoryGamePlayProps {
@@ -87,24 +87,12 @@ export default function StoryGamePlay({ episode }: StoryGamePlayProps) {
       )}
 
       {/* 헤더 */}
-      <header className="p-4 border-b border-gray-800">
-        <div className="flex items-center justify-between">
-          <Link
-            href="/story"
-            className="text-gray-400 hover:text-hacker-emerald text-sm font-mono"
-          >
-            {'<'} EXIT
-          </Link>
-          <div className="text-center">
-            <span className="text-hacker-emerald font-mono text-xs">
-              EP.{episode.id} - STAGE {currentStageIndex + 1}/{episode.stages.length}
-            </span>
-          </div>
-          <div className="text-right">
-            <span className="text-yellow-400 text-sm">{'★'.repeat(stars)}{'☆'.repeat(3 - stars)}</span>
-          </div>
-        </div>
-      </header>
+      <Header
+        backHref="/story"
+        backText="EXIT"
+        center={`EP.${episode.id} - STAGE ${currentStageIndex + 1}/${episode.stages.length}`}
+        right={<span className="text-yellow-400 text-sm">{'★'.repeat(stars)}{'☆'.repeat(3 - stars)}</span>}
+      />
 
       {/* 메인 컨텐츠 */}
       <main className={`flex-1 p-4 overflow-y-auto ${showKeypad ? 'pb-96' : 'pb-24'}`}>
