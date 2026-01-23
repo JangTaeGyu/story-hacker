@@ -76,12 +76,10 @@ export default function StoryEpisodeSelectPage() {
                 isCompleted ? 'border-yellow-500/50' : 'border-gray-700'
               }`}
             >
-              {/* 배경 이미지 테스트 (EP.1) */}
-              {episode.id === 1 && (
-                <div className="absolute inset-0 opacity-10 pointer-events-none">
-                  <img src="/images/story/1-1.png" alt="" className="w-full h-full object-cover" />
-                </div>
-              )}
+              {/* 에피소드 카드 배경 이미지 */}
+              <div className="absolute inset-0 opacity-10 pointer-events-none">
+                <img src={`/images/story/ep-${episode.id}.png`} alt="" className="w-full h-full object-cover" />
+              </div>
               <div className="flex items-center justify-between">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">

@@ -4,17 +4,37 @@ const path = require("path");
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const OUTPUT_DIR = "public/images/story";
 
-// 80년대 일본 애니 + 픽셀아트 + 다크 분위기 + 여백 없이 꽉 채움
-const STYLE = "pixel art style, 8-bit retro game aesthetic, dark moody atmosphere, 1980s Japanese anime inspired, limited color palette with neon accents, CRT screen glow effect, cyberpunk noir, full bleed composition filling entire frame edge to edge, no borders no margins no empty space,";
-
 const prompts = [
-  { id: "1-1", prompt: `${STYLE} wide shot of abandoned smartphone glowing on park bench at dusk, dimly lit urban park scene fills entire image, mysterious atmosphere, heart sticker on phone case, shadowy trees background` },
-  { id: "1-2", prompt: `${STYLE} wide shot of dark room with smartphone screen glowing showing cute cat photo wallpaper, locked notepad app icon visible, scene fills entire image edge to edge, moody atmosphere` },
-  { id: "1-3", prompt: `${STYLE} wide shot of hands holding smartphone displaying photo gallery app with glowing lock icon, password protected folder, dark room scene fills entire image edge to edge` },
-  { id: "1-4", prompt: `${STYLE} wide shot of mysterious screen showing cryptic cipher code A=1 B=2 C=3, code breaking puzzle scene fills entire image edge to edge, dark dramatic atmosphere` },
+  // 에피소드 카드 배경 (가로 1792x1024)
+  {
+    id: "ep-1",
+    size: "1792x1024",
+    prompt: "Dark mysterious illustration of a shadowy suspicious neighbor figure peeking through apartment window blinds at night, silhouette only, ominous green glow from behind, urban apartment building setting, voyeuristic tension, cyberpunk hacker aesthetic, neon emerald green and dark navy palette, cinematic wide composition, no text",
+  },
+  // 스테이지 배경 (세로 1024x1792)
+  {
+    id: "1-1",
+    size: "1024x1792",
+    prompt: "Vertical illustration, a dropped smartphone lying on a park bench, screen cracked slightly with green glow leaking out, night time park setting, empty bench under dim streetlight, cyberpunk hacker aesthetic, neon emerald green and dark navy palette, dark moody atmosphere, no text, no people",
+  },
+  {
+    id: "1-2",
+    size: "1024x1792",
+    prompt: "Vertical illustration, a digital notepad app with a large glowing padlock in center, a cute cat silhouette faintly visible behind the lock screen, smartphone interface aesthetic, layered digital screens, cyberpunk hacker aesthetic, neon emerald green and dark navy palette, dark moody atmosphere, no text, no people",
+  },
+  {
+    id: "1-3",
+    size: "1024x1792",
+    prompt: "Vertical illustration, a hidden photo gallery with rows of blurred secret photos, a large 6-digit PIN lock overlay glowing in the center, mysterious forbidden folder concept, layered digital interface, cyberpunk hacker aesthetic, neon emerald green and dark navy palette, dark moody atmosphere, no text, no people",
+  },
+  {
+    id: "1-4",
+    size: "1024x1792",
+    prompt: "Vertical illustration, a final locked folder with evidence photos peeking out, dramatic reveal moment, golden light breaking through digital cracks, alphabet cipher symbols floating faintly around (A=1 B=2 style), cyberpunk hacker aesthetic, neon emerald green and dark navy palette, dark moody atmosphere, no text, no people",
+  },
 ];
 
-async function generateImage(prompt) {
+async function generateImage(prompt, size) {
   const res = await fetch("https://api.openai.com/v1/images/generations", {
     method: "POST",
     headers: {
@@ -25,7 +45,7 @@ async function generateImage(prompt) {
       model: "dall-e-3",
       prompt: prompt,
       n: 1,
-      size: "1792x1024",
+      size: size,
       response_format: "b64_json",
     }),
   });
@@ -56,7 +76,7 @@ async function main() {
 
   console.log("🎨 에피소드 1 '수상한 이웃' 이미지 생성 시작...\n");
 
-  for (const { id, prompt } of prompts) {
+  for (const { id, size, prompt } of prompts) {
     const outPath = path.join(OUTPUT_DIR, `${id}.png`);
 
     if (fs.existsSync(outPath)) {
@@ -64,10 +84,10 @@ async function main() {
       continue;
     }
 
-    console.log(`🖼️  ${id}: 생성 중...`);
+    console.log(`🖼️  ${id} (${size}): 생성 중...`);
 
     try {
-      const img = await generateImage(prompt);
+      const img = await generateImage(prompt, size);
       if (img) {
         fs.writeFileSync(outPath, img);
         console.log(`✅ ${id}: 완료 (${(img.length / 1024).toFixed(1)}KB)`);
