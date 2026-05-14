@@ -112,7 +112,7 @@ export default function StoryGamePlay({ episode }: StoryGamePlayProps) {
         {/* 스테이지 전환 — currentStageIndex 변경 시 페이드업 재생 */}
         <div key={currentStageIndex} className="animate-fadeInUp">
         {/* 히어로 이미지 밴드 */}
-        <div className="relative h-56 w-full overflow-hidden">
+        <div className="relative h-72 w-full overflow-hidden">
           {IllustrationComponent ? (
             <div className="absolute inset-0">
               <IllustrationComponent />
@@ -121,8 +121,8 @@ export default function StoryGamePlay({ episode }: StoryGamePlayProps) {
             <div className="absolute inset-0 bg-noct-black-2" />
           )}
           {/* 하단으로 가라앉히는 그라데이션 */}
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-noct-black/70 via-noct-black/10 to-noct-black" />
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-noct-black to-transparent" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-noct-black/55 via-noct-black/5 to-noct-black" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-noct-black to-transparent" />
 
           {/* 이미지 상단: 턴 표시 */}
           <div className="absolute inset-x-0 top-16 px-5 flex items-center justify-between">
