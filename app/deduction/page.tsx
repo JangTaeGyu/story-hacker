@@ -87,7 +87,7 @@ export default function DeductionEpisodeSelectPage() {
                   <div className="absolute inset-0 bg-gradient-to-r from-noct-page via-noct-page/80 to-transparent" />
                 </div>
 
-                <div className="relative flex items-center justify-between gap-4 px-1 py-5">
+                <div className="relative flex items-stretch justify-between gap-4 px-1 py-5">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 mb-1.5">
                       <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-noct-gold-dim">
@@ -105,17 +105,19 @@ export default function DeductionEpisodeSelectPage() {
                     </p>
                   </div>
 
-                  <div className="shrink-0 self-end text-right">
+                  <div className="shrink-0 flex flex-col items-end justify-between">
                     {isCompleted ? (
-                      <div className="flex flex-col items-end gap-1.5">
-                        <span className="text-noct-gold-dim text-xs tracking-[0.15em]">
+                      <>
+                        <span className="text-sm tracking-[0.2em] text-noct-gold">
                           {'★'.repeat(stars)}
-                          {'☆'.repeat(3 - stars)}
+                          <span className="text-noct-ink-faint">
+                            {'☆'.repeat(3 - stars)}
+                          </span>
                         </span>
                         <SolvedStamp />
-                      </div>
+                      </>
                     ) : (
-                      <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-noct-ink-faint group-hover:text-noct-ink-dim transition-colors">
+                      <span className="mt-auto font-mono text-[10px] tracking-[0.2em] uppercase text-noct-ink-faint group-hover:text-noct-ink-dim transition-colors">
                         Locked
                       </span>
                     )}

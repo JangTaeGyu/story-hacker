@@ -102,16 +102,20 @@ export default function StoryEpisodeSelectPage() {
                     </span>
                   </div>
 
+                  {/* 별점 — 우상단 (완료 시) */}
+                  {isCompleted && (
+                    <span className="absolute right-2 top-3 text-sm tracking-[0.2em] text-noct-gold">
+                      {'★'.repeat(completedInfo.stars)}
+                      <span className="text-noct-ink-faint">
+                        {'☆'.repeat(3 - completedInfo.stars)}
+                      </span>
+                    </span>
+                  )}
+
                   {/* 상태 — 우하단 */}
-                  <div className="absolute right-2 bottom-3 text-right">
+                  <div className="absolute right-2 bottom-3">
                     {isCompleted ? (
-                      <div className="flex flex-col items-end gap-1.5">
-                        <span className="font-mono text-[10px] tracking-[0.15em] text-noct-gold-dim">
-                          {'★'.repeat(completedInfo.stars)}
-                          {'☆'.repeat(3 - completedInfo.stars)}
-                        </span>
-                        <SolvedStamp />
-                      </div>
+                      <SolvedStamp />
                     ) : (
                       <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-noct-ink-faint">
                         미해결
