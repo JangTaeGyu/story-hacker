@@ -5,72 +5,48 @@ const OUTPUT_PATH = "public/og-image.png";
 const WIDTH = 1200;
 const HEIGHT = 630;
 
-// OG 이미지용 SVG 생성
+// OG 이미지용 SVG — NOCTURNE: 다크 문학 미스터리 톤
 const svgContent = `
 <svg width="${WIDTH}" height="${HEIGHT}" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#0D1117"/>
-      <stop offset="50%" style="stop-color:#161B22"/>
-      <stop offset="100%" style="stop-color:#0D1117"/>
+      <stop offset="0%" style="stop-color:#16140f"/>
+      <stop offset="55%" style="stop-color:#100f0d"/>
+      <stop offset="100%" style="stop-color:#0a0908"/>
     </linearGradient>
-    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="4" result="blur"/>
-      <feMerge>
-        <feMergeNode in="blur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
-    <filter id="glowStrong" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="8" result="blur"/>
-      <feMerge>
-        <feMergeNode in="blur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
+    <radialGradient id="vignette" cx="50%" cy="40%" r="78%">
+      <stop offset="52%" style="stop-color:#000000" stop-opacity="0"/>
+      <stop offset="100%" style="stop-color:#000000" stop-opacity="0.55"/>
+    </radialGradient>
   </defs>
 
   <!-- 배경 -->
   <rect width="${WIDTH}" height="${HEIGHT}" fill="url(#bg)"/>
 
-  <!-- 배경 글로우 효과 -->
-  <circle cx="200" cy="150" r="200" fill="#00FF88" opacity="0.08"/>
-  <circle cx="1000" cy="500" r="250" fill="#FF3366" opacity="0.06"/>
-  <circle cx="600" cy="600" r="180" fill="#22d3ee" opacity="0.05"/>
+  <!-- 마크 뒤 은은한 골드 글로우 -->
+  <circle cx="600" cy="210" r="240" fill="#c9a86a" opacity="0.05"/>
 
-  <!-- 스캔라인 효과 -->
-  <pattern id="scanlines" patternUnits="userSpaceOnUse" width="4" height="4">
-    <line x1="0" y1="0" x2="4" y2="0" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
-  </pattern>
-  <rect width="${WIDTH}" height="${HEIGHT}" fill="url(#scanlines)"/>
-
-  <!-- 자물쇠 아이콘 -->
-  <g transform="translate(540, 140)" filter="url(#glowStrong)">
-    <rect x="0" y="40" width="120" height="100" rx="15" fill="none" stroke="#00FF88" stroke-width="6"/>
-    <path d="M25 40V25a35 35 0 0 1 70 0v15" fill="none" stroke="#00FF88" stroke-width="6" stroke-linecap="round"/>
-    <circle cx="60" cy="85" r="12" fill="#00FF88"/>
-    <rect x="52" y="85" width="16" height="30" fill="#00FF88"/>
+  <!-- 자물쇠 아이콘 (골드 아웃라인) -->
+  <g transform="translate(540, 118)">
+    <rect x="0" y="42" width="120" height="98" rx="16" fill="none" stroke="#c9a86a" stroke-width="5"/>
+    <path d="M25 42V26a35 35 0 0 1 70 0v16" fill="none" stroke="#c9a86a" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="60" cy="86" r="11" fill="#c9a86a"/>
+    <rect x="53.5" y="86" width="13" height="30" rx="5" fill="#c9a86a"/>
   </g>
 
   <!-- 타이틀 -->
-  <text x="600" y="340" text-anchor="middle" font-family="monospace" font-size="72" font-weight="bold" fill="#00FF88" filter="url(#glow)">STORY HACKER</text>
+  <text x="600" y="352" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="86" fill="#cfc7b8" letter-spacing="5">STORY HACKER</text>
 
   <!-- 서브타이틀 -->
-  <text x="600" y="400" text-anchor="middle" font-family="sans-serif" font-size="32" fill="#888888">추리 퍼즐 게임</text>
+  <text x="600" y="412" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="29" fill="#837c6e">어둠 속 단서로 잠긴 비밀번호를 풀어내는 추리 미스터리</text>
 
-  <!-- 설명 -->
-  <text x="600" y="480" text-anchor="middle" font-family="sans-serif" font-size="24" fill="#666666">스토리 속 단서를 읽고 비밀번호를 추리하세요</text>
+  <!-- 하단 장식 — 텍스트 양옆을 비켜선 헤어라인 -->
+  <line x1="250" y1="481" x2="385" y2="481" stroke="#8f7a4e" stroke-width="1.5" opacity="0.65"/>
+  <line x1="815" y1="481" x2="950" y2="481" stroke="#8f7a4e" stroke-width="1.5" opacity="0.65"/>
+  <text x="600" y="487" text-anchor="middle" font-family="monospace" font-size="17" fill="#c9a86a" letter-spacing="5" opacity="0.9">A MYSTERY IN TWENTY ACTS</text>
 
-  <!-- 하단 장식 -->
-  <line x1="200" y1="540" x2="500" y2="540" stroke="#00FF88" stroke-width="2" opacity="0.5"/>
-  <line x1="700" y1="540" x2="1000" y2="540" stroke="#00FF88" stroke-width="2" opacity="0.5"/>
-  <text x="600" y="548" text-anchor="middle" font-family="monospace" font-size="18" fill="#00FF88" opacity="0.8">[ ACCESS GRANTED ]</text>
-
-  <!-- 코너 장식 -->
-  <path d="M30 30 L30 80 M30 30 L80 30" stroke="#00FF88" stroke-width="3" opacity="0.6"/>
-  <path d="M1170 30 L1170 80 M1170 30 L1120 30" stroke="#00FF88" stroke-width="3" opacity="0.6"/>
-  <path d="M30 600 L30 550 M30 600 L80 600" stroke="#00FF88" stroke-width="3" opacity="0.6"/>
-  <path d="M1170 600 L1170 550 M1170 600 L1120 600" stroke="#00FF88" stroke-width="3" opacity="0.6"/>
+  <!-- 비네팅 -->
+  <rect width="${WIDTH}" height="${HEIGHT}" fill="url(#vignette)"/>
 </svg>
 `;
 
