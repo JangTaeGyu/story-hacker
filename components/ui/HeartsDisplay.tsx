@@ -5,23 +5,25 @@ interface HeartsDisplayProps {
   remainingTurns: number;
 }
 
+/** 남은 시도 — NOCTURNE: 작은 점(채워짐=골드, 소진=희미한 외곽선) */
 export default function HeartsDisplay({ totalTurns, remainingTurns }: HeartsDisplayProps) {
   return (
-    <div className="flex gap-0.5">
+    <div className="flex gap-1.5 items-center">
       {Array(totalTurns)
         .fill(0)
-        .map((_, i) => (
-          <span
-            key={i}
-            className={`text-lg sm:text-xl transition-all duration-200 ${
-              i < remainingTurns
-                ? 'text-hacker-rose scale-100'
-                : 'text-gray-700 scale-75'
-            }`}
-          >
-            ♥
-          </span>
-        ))}
+        .map((_, i) => {
+          const remaining = i < remainingTurns;
+          return (
+            <span
+              key={i}
+              className={
+                remaining
+                  ? 'w-[7px] h-[7px] rounded-full bg-noct-gold border border-noct-gold transition-all duration-300'
+                  : 'w-[7px] h-[7px] rounded-full border border-noct-ink-faint opacity-50 transition-all duration-300'
+              }
+            />
+          );
+        })}
     </div>
   );
 }

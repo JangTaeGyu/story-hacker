@@ -8,6 +8,7 @@ interface InputAreaProps {
   onSubmit: () => void;
   canSubmit: boolean;
   disabled?: boolean;
+  /** 호환용 — NOCTURNE은 단일 팔레트 */
   accentColor?: 'emerald' | 'cyan';
 }
 
@@ -17,70 +18,60 @@ export default function InputArea({
   onSubmit,
   canSubmit,
   disabled = false,
-  accentColor = 'emerald',
 }: InputAreaProps) {
-  const buttonBaseClass = 'rounded-lg font-bold text-xl transition-all duration-150 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed';
-  const digitClass = 'bg-gray-800 text-white hover:bg-gray-700 border border-gray-700';
-
-  const accentBorderClass = accentColor === 'cyan'
-    ? 'border-hacker-cyan text-hacker-cyan hover:bg-hacker-cyan/10'
-    : 'border-hacker-emerald text-hacker-emerald hover:bg-hacker-emerald/10';
-
-  const submitActiveClass = accentColor === 'cyan'
-    ? 'bg-hacker-cyan text-hacker-dark hover:bg-hacker-cyan/90'
-    : 'bg-hacker-emerald text-hacker-dark hover:bg-hacker-emerald/90';
-
-  const handleKeyPress = (digit: string) => {
-    if (!disabled) {
-      onInput(digit);
-    }
-  };
+  const keyBase =
+    'h-16 rounded flex items-center justify-center transition-all duration-200 active:scale-[0.97] disabled:opacity-40 disabled:cursor-not-allowed [-webkit-tap-highlight-color:transparent]';
+  const digitClass =
+    'bg-noct-black-2 border border-noct-ink/[0.07] text-noct-ink font-display text-2xl active:bg-[#1f1c16]';
 
   return (
     <div className="w-full max-w-xs mx-auto">
-      {/* 숫자 패드 */}
-      <div className="grid grid-cols-3 gap-2">
+      <div className="grid grid-cols-3 gap-3">
         {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map((digit) => (
           <button
             key={digit}
-            onClick={() => handleKeyPress(digit)}
+            onClick={() => !disabled && onInput(digit)}
             disabled={disabled}
-            className={cn(buttonBaseClass, digitClass, 'h-14')}
+            className={cn(keyBase, digitClass)}
           >
             {digit}
           </button>
         ))}
 
-        {/* Clear 버튼 */}
+        {/* 지움 */}
         <button
           onClick={onClear}
           disabled={disabled}
-          className={cn(buttonBaseClass, 'bg-gray-900 text-gray-400 hover:bg-gray-800 border border-gray-700 h-14 text-sm')}
+          className={cn(
+            keyBase,
+            'bg-noct-black-2 border border-noct-ink/[0.07] text-noct-ink-dim font-mono text-xs tracking-[0.08em] active:bg-[#1f1c16]'
+          )}
         >
-          CLR
+          지움
         </button>
 
-        {/* 0 버튼 */}
+        {/* 0 */}
         <button
-          onClick={() => handleKeyPress('0')}
+          onClick={() => !disabled && onInput('0')}
           disabled={disabled}
-          className={cn(buttonBaseClass, digitClass, 'h-14')}
+          className={cn(keyBase, digitClass)}
         >
           0
         </button>
 
-        {/* Submit 버튼 */}
+        {/* 확인 */}
         <button
           onClick={onSubmit}
           disabled={disabled || !canSubmit}
           className={cn(
-            buttonBaseClass,
-            'h-14 border-2 text-sm',
-            canSubmit && !disabled ? submitActiveClass : accentBorderClass,
-            !canSubmit && 'opacity-50'
+            keyBase,
+            'font-mono text-xs tracking-[0.08em] border',
+            canSubmit && !disabled
+              ? 'bg-noct-gold/[0.07] border-noct-gold/30 text-noct-gold active:bg-noct-gold/15'
+              : 'bg-noct-black-2 border-noct-ink/[0.07] text-noct-ink-faint'
           )}
         >
-          OK
+          확인
         </button>
       </div>
     </div>

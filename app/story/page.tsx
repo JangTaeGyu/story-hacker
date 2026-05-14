@@ -13,9 +13,9 @@ interface GameProgress {
 
 const FILTERS = [
   { value: 0, label: 'ALL' },
-  { value: 1, label: 'EASY', color: 'text-green-400', activeClass: 'border-green-400 bg-green-400/10 text-green-400' },
-  { value: 2, label: 'NORMAL', color: 'text-yellow-400', activeClass: 'border-yellow-400 bg-yellow-400/10 text-yellow-400' },
-  { value: 3, label: 'HARD', color: 'text-red-400', activeClass: 'border-red-400 bg-red-400/10 text-red-400' },
+  { value: 1, label: 'EASY' },
+  { value: 2, label: 'NORMAL' },
+  { value: 3, label: 'HARD' },
 ] as const;
 
 export default function StoryEpisodeSelectPage() {
@@ -29,86 +29,111 @@ export default function StoryEpisodeSelectPage() {
     : storyEpisodes.filter((ep) => ep.difficulty === filter);
 
   return (
-    <div className="min-h-screen pb-20">
+    <div className="min-h-screen bg-noct-black pb-24">
       <Header backHref="/mode-select" />
 
-      <div className="p-4 sm:p-6 pt-16">
-      {/* 타이틀 + 필터 */}
-      <div className="flex items-start justify-between mb-4">
-        <div>
-          <h2 className="text-xl sm:text-2xl font-bold text-hacker-emerald font-mono tracking-wider">
-            STORY MODE
+      <div className="mx-auto max-w-md px-5 pt-24">
+        {/* 타이틀 */}
+        <div className="mb-8">
+          <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-noct-ink-faint">
+            Story Mode
+          </p>
+          <h2 className="mt-2 font-display text-3xl text-noct-ink">
+            사건 기록
           </h2>
-          <p className="text-gray-500 font-mono text-xs mt-1">
-            {filteredEpisodes.length} EPISODES
+          <p className="mt-2 font-mono text-[10px] tracking-[0.2em] uppercase text-noct-ink-faint">
+            {filteredEpisodes.length} Episodes
           </p>
         </div>
-        <div className="flex gap-1.5">
+
+        {/* 난이도 필터 */}
+        <div className="mb-8 flex gap-2">
           {FILTERS.map((f) => (
             <button
               key={f.value}
               onClick={() => setFilter(f.value)}
-              className={`px-2 py-1 text-xs font-mono rounded border transition-colors ${
+              className={`border px-3 py-1.5 font-mono text-[10px] tracking-[0.2em] uppercase transition-colors ${
                 filter === f.value
-                  ? f.value === 0
-                    ? 'border-hacker-emerald bg-hacker-emerald/10 text-hacker-emerald'
-                    : f.activeClass
-                  : 'border-gray-700 text-gray-500 hover:border-gray-500'
+                  ? 'border-noct-gold/60 text-noct-gold'
+                  : 'border-noct-ink/10 text-noct-ink-faint hover:text-noct-ink-dim hover:border-noct-ink/20'
               }`}
             >
               {f.label}
             </button>
           ))}
         </div>
-      </div>
 
-      {/* 에피소드 목록 */}
-      <div className="space-y-3">
-        {filteredEpisodes.map((episode) => {
-          const diffInfo = getDifficultyInfo(episode.difficulty);
-          const completedInfo = progress.completedEpisodes[episode.id];
-          const isCompleted = completedInfo?.completed;
-          return (
-            <Link
-              key={episode.id}
-              href={`/story/${episode.id}`}
-              className={`block w-full p-4 bg-gray-800/50 border text-left transition-all duration-200 active:scale-[0.98] group rounded hover:border-hacker-emerald hover:bg-gray-800 relative overflow-hidden ${
-                isCompleted ? 'border-yellow-500/50' : 'border-gray-700'
-              }`}
-            >
-              {/* 에피소드 카드 배경 이미지 */}
-              <div className="absolute inset-0 opacity-10 pointer-events-none">
-                <img src={`/images/story/ep-${episode.id}.png`} alt="" className="w-full h-full object-cover" onError={(e) => { e.currentTarget.style.display = 'none' }} />
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-hacker-emerald font-mono text-xs">
-                      EP.{episode.id}
+        {/* 에피소드 목록 */}
+        <div className="space-y-10">
+          {filteredEpisodes.map((episode) => {
+            const diffInfo = getDifficultyInfo(episode.difficulty);
+            const completedInfo = progress.completedEpisodes[episode.id];
+            const isCompleted = completedInfo?.completed;
+            return (
+              <Link
+                key={episode.id}
+                href={`/story/${episode.id}`}
+                className="group block transition-opacity duration-300 active:opacity-80"
+              >
+                {/* 에피소드 이미지 — 와이드 스트립, 가장자리 페이드 */}
+                <div className="relative h-44 overflow-hidden">
+                  <img
+                    src={`/images/story/ep-${episode.id}.png`}
+                    alt=""
+                    className={`h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03] ${
+                      isCompleted ? 'noct-img' : 'noct-img'
+                    }`}
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                    }}
+                  />
+                  {/* 사방 그라데이션 페이드 */}
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-noct-black via-noct-black/20 to-noct-black/60" />
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-noct-black/80 via-transparent to-noct-black/80" />
+
+                  {/* EP 메타 — 좌상단 */}
+                  <div className="absolute left-0 top-3 flex items-center gap-2">
+                    <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-noct-gold-dim">
+                      EP.{String(episode.id).padStart(2, '0')}
                     </span>
-                    <span className={`text-xs ${diffInfo.color}`}>{diffInfo.text}</span>
+                    <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-noct-ink-faint">
+                      {diffInfo.text}
+                    </span>
                   </div>
-                  <h3 className="text-white font-bold text-base">{episode.title}</h3>
-                  <p className="text-gray-500 text-xs font-mono mt-1">
-                    {episode.stages.length} STAGES
+
+                  {/* 상태 — 우상단 */}
+                  <div className="absolute right-0 top-3 text-right">
+                    {isCompleted ? (
+                      <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-noct-gold">
+                        {'★'.repeat(completedInfo.stars)}
+                        {'☆'.repeat(3 - completedInfo.stars)} 해결
+                      </span>
+                    ) : (
+                      <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-noct-ink-faint">
+                        미해결
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* 텍스트 — 이미지 아래 */}
+                <div className="relative z-10 -mt-2">
+                  <h3 className="font-display text-2xl leading-snug text-noct-ink transition-colors group-hover:text-noct-gold">
+                    {episode.title}
+                  </h3>
+                  {episode.subtitle && (
+                    <p className="mt-1 font-serif text-sm leading-relaxed text-noct-ink-dim">
+                      {episode.subtitle}
+                    </p>
+                  )}
+                  <p className="mt-2 font-mono text-[10px] tracking-[0.2em] uppercase text-noct-ink-faint">
+                    {episode.stages.length} Stages
                   </p>
                 </div>
-                {isCompleted ? (
-                  <div className="w-12 h-12 rounded-full border-2 border-yellow-400 flex items-center justify-center rotate-[-12deg]">
-                    <span className="text-yellow-400 font-mono text-[10px] font-bold leading-tight text-center">
-                      CLEAR
-                    </span>
-                  </div>
-                ) : (
-                  <span className="text-hacker-emerald text-xl opacity-0 group-hover:opacity-100 transition-opacity">
-                    ›
-                  </span>
-                )}
-              </div>
-            </Link>
-          );
-        })}
-      </div>
+              </Link>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

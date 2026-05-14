@@ -8,43 +8,44 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        'hacker-emerald': '#00FF88',
-        'hacker-rose': '#FF3366',
-        'hacker-cyan': '#22d3ee',
-        'hacker-gold': '#ffd700',
-        'hacker-dark': '#0D1117',
-        'hacker-card': '#161B22',
+        // NOCTURNE — dark literary mystery palette
+        'noct-black': '#100f0d',
+        'noct-black-2': '#15130f',
+        'noct-ink': '#cfc7b8',
+        'noct-ink-dim': '#837c6e',
+        'noct-ink-faint': '#565045',
+        'noct-gold': '#c9a86a',
+        'noct-gold-dim': '#8f7a4e',
       },
       fontFamily: {
-        mono: ['JetBrains Mono', 'SF Mono', 'Fira Code', 'Consolas', 'monospace'],
+        display: ['Song Myung', 'serif'],
+        serif: ['Nanum Myeongjo', 'serif'],
+        mono: ['Space Mono', 'SF Mono', 'monospace'],
       },
       animation: {
-        'glitch': 'glitch 400ms infinite',
-        'shake': 'shake 0.3s ease-in-out',
-        'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
-        'fade-in': 'fadeIn 0.3s ease-out',
+        'shake': 'shake 0.4s ease-in-out',
+        'fade-in': 'fadeIn 0.6s ease-out both',
+        'fade-up': 'fadeUp 0.7s cubic-bezier(0.2,0.7,0.2,1) both',
+        'reveal': 'reveal 1.4s ease-out both',
       },
       keyframes: {
-        glitch: {
-          '0%, 100%': { transform: 'translate(0)' },
-          '20%': { transform: 'translate(-2px, 2px)' },
-          '40%': { transform: 'translate(-2px, -2px)' },
-          '60%': { transform: 'translate(2px, 2px)' },
-          '80%': { transform: 'translate(2px, -2px)' },
-        },
         shake: {
           '0%, 100%': { transform: 'translateX(0)' },
-          '20%': { transform: 'translateX(-8px)' },
-          '40%': { transform: 'translateX(8px)' },
+          '20%': { transform: 'translateX(-7px)' },
+          '40%': { transform: 'translateX(6px)' },
           '60%': { transform: 'translateX(-4px)' },
-          '80%': { transform: 'translateX(4px)' },
-        },
-        'pulse-glow': {
-          '0%, 100%': { opacity: '0.1' },
-          '50%': { opacity: '0.2' },
+          '80%': { transform: 'translateX(3px)' },
         },
         fadeIn: {
-          from: { opacity: '0', transform: 'translateY(-10px)' },
+          from: { opacity: '0' },
+          to: { opacity: '1' },
+        },
+        fadeUp: {
+          from: { opacity: '0', transform: 'translateY(14px)' },
+          to: { opacity: '1', transform: 'translateY(0)' },
+        },
+        reveal: {
+          from: { opacity: '0', transform: 'translateY(20px)' },
           to: { opacity: '1', transform: 'translateY(0)' },
         },
       },

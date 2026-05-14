@@ -5,7 +5,7 @@ import Image from 'next/image';
 // 배경 이미지 컴포넌트 (세로 이미지, DALL-E 3 1024x1792 기반 리사이즈)
 const BgImage = ({ src, alt }: { src: string; alt: string }) => (
   <div className="w-full h-full relative">
-    <Image src={src} alt={alt} fill className="object-cover" priority />
+    <Image src={src} alt={alt} fill className="object-cover noct-img" priority />
   </div>
 );
 

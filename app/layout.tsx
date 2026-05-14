@@ -48,7 +48,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  themeColor: '#0D1117',
+  themeColor: '#0a0908',
 };
 
 export default function RootLayout({
@@ -58,13 +58,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko">
-      <body className="min-h-screen text-white antialiased scanline">
-        {/* 배경 글로우 효과 */}
-        <div className="bg-glow-emerald" />
-        <div className="bg-glow-rose" />
-
+      <body className="min-h-screen bg-noct-black text-noct-ink antialiased">
         {/* 메인 컨텐츠 */}
-        <main className="relative z-10 mx-auto max-w-md min-h-screen">
+        <main className="relative z-10 mx-auto max-w-md min-h-screen bg-noct-black">
           {children}
         </main>
 

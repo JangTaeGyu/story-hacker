@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Story Hacker — Nocturne</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Song+Myung&family=Nanum+Myeongjo:wght@400;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --black: #100f0d;
+    --black-2: #15130f;
+    --ink: #cfc7b8;
+    --ink-dim: #837c6e;
+    --ink-faint: #565045;
+    --gold: #c9a86a;
+    --gold-dim: #8f7a4e;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: #0a0908;
+    color: var(--ink);
+    font-family: 'Nanum Myeongjo', serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 56px;
+    padding: 56px 16px 96px;
+  }
+
+  /* ---------- caption above each frame ---------- */
+  .frame-block { width: 100%; max-width: 430px; }
+
+  .caption {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin: 0 0 14px 4px;
+  }
+
+  /* ---------- mobile frame ---------- */
+  .frame {
+    width: 100%;
+    max-width: 430px;
+    background: var(--black);
+    position: relative;
+    overflow: hidden;
+    border-radius: 2px;
+    box-shadow: 0 30px 80px -20px rgba(0,0,0,0.9);
+  }
+
+  /* ===================================================== */
+  /* ① TITLE                                               */
+  /* ===================================================== */
+  .screen-title {
+    height: 820px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  .title-image-wrap {
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 62%;
+    overflow: hidden;
+  }
+  .title-image-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 38%;
+    filter: brightness(0.62) sepia(0.18) saturate(0.85) contrast(1.02);
+  }
+  /* gradient fade of image into the black */
+  .title-image-wrap::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(16,15,13,0.35) 0%,
+      rgba(16,15,13,0.05) 30%,
+      rgba(16,15,13,0.15) 55%,
+      rgba(16,15,13,0.7) 80%,
+      var(--black) 100%
+    );
+  }
+  .title-topmeta {
+    position: relative;
+    z-index: 2;
+    padding: 26px 28px 0;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.32em;
+    color: rgba(207,199,184,0.55);
+    text-transform: uppercase;
+  }
+  .title-lower {
+    position: relative;
+    z-index: 2;
+    margin-top: auto;
+    padding: 0 28px 52px;
+  }
+  .wordmark {
+    font-family: 'Song Myung', serif;
+    font-size: 52px;
+    line-height: 1.05;
+    color: var(--ink);
+    letter-spacing: 0.01em;
+  }
+  .wordmark .l2 { display: block; color: var(--ink-dim); }
+  .title-tagline {
+    margin-top: 22px;
+    font-size: 15px;
+    line-height: 1.85;
+    color: var(--ink-dim);
+    max-width: 300px;
+  }
+  .title-enter {
+    margin-top: 40px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 15px;
+    color: var(--ink);
+    padding: 6px 0;
+    letter-spacing: 0.04em;
+  }
+  .title-enter .line {
+    display: block;
+    width: 38px;
+    height: 1px;
+    background: var(--gold-dim);
+    transition: width 0.5s ease;
+  }
+  .title-enter:hover .line, .title-enter:focus-visible .line { width: 58px; }
+  .title-enter .arrow { color: var(--gold); font-size: 12px; }
+
+  /* ===================================================== */
+  /* ② EPISODE SELECT                                      */
+  /* ===================================================== */
+  .screen-eps { padding: 0 0 40px; }
+  .eps-head {
+    padding: 32px 28px 8px;
+  }
+  .eps-head .kicker {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+  .eps-head h2 {
+    font-family: 'Song Myung', serif;
+    font-size: 28px;
+    color: var(--ink);
+    margin-top: 12px;
+    font-weight: 400;
+  }
+  .eps-head p {
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--ink-dim);
+    line-height: 1.7;
+  }
+
+  .ep {
+    position: relative;
+    display: block;
+    width: 100%;
+    background: none;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    padding: 26px 28px 30px;
+    color: inherit;
+    font-family: inherit;
+  }
+  .ep-strip {
+    position: relative;
+    height: 168px;
+    overflow: hidden;
+  }
+  .ep-strip img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.58) sepia(0.16) saturate(0.82) contrast(1.02);
+  }
+  /* fade strip edges into black on all sides */
+  .ep-strip::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to bottom, var(--black) 0%, rgba(16,15,13,0) 26%, rgba(16,15,13,0) 58%, rgba(16,15,13,0.92) 92%, var(--black) 100%),
+      linear-gradient(to right, var(--black) 0%, rgba(16,15,13,0) 16%, rgba(16,15,13,0) 84%, var(--black) 100%);
+  }
+  /* locked: image fades almost entirely to black */
+  .ep.locked .ep-strip img {
+    filter: brightness(0.2) saturate(0.4) contrast(1.05) blur(1px);
+  }
+  .ep.locked .ep-strip::after {
+    background:
+      linear-gradient(to bottom, var(--black) 0%, rgba(16,15,13,0.55) 40%, rgba(16,15,13,0.8) 70%, var(--black) 100%),
+      linear-gradient(to right, var(--black) 0%, rgba(16,15,13,0.4) 30%, rgba(16,15,13,0.4) 70%, var(--black) 100%);
+  }
+
+  .ep-meta {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-top: 18px;
+  }
+  .ep-title {
+    font-family: 'Song Myung', serif;
+    font-size: 24px;
+    color: var(--ink);
+    margin-top: 9px;
+    line-height: 1.3;
+  }
+  .ep.locked .ep-title { color: var(--ink-faint); }
+  .ep-sub {
+    font-size: 13.5px;
+    color: var(--ink-dim);
+    margin-top: 7px;
+    line-height: 1.6;
+  }
+  .ep.locked .ep-sub { color: var(--ink-faint); }
+  .ep-status {
+    margin-top: 13px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .ep-stars { color: var(--gold); letter-spacing: 0.18em; font-size: 12px; }
+  .ep-stars .off { color: var(--ink-faint); }
+  .status-word {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .status-solved { color: var(--ink-dim); }
+  .status-progress { color: var(--gold-dim); }
+  .status-locked { color: var(--ink-faint); }
+  .lock-glyph {
+    position: absolute;
+    top: 26px; right: 28px;
+    z-index: 3;
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 12px;
+    color: var(--ink-faint);
+    letter-spacing: 0.1em;
+  }
+
+  /* ===================================================== */
+  /* ③ GAMEPLAY                                            */
+  /* ===================================================== */
+  .screen-game { position: relative; }
+  .game-image-wrap {
+    position: relative;
+    height: 340px;
+    overflow: hidden;
+  }
+  .game-image-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 42%;
+    filter: brightness(0.6) sepia(0.16) saturate(0.84) contrast(1.03);
+  }
+  .game-image-wrap::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(16,15,13,0.55) 0%,
+      rgba(16,15,13,0.1) 28%,
+      rgba(16,15,13,0.2) 52%,
+      rgba(16,15,13,0.78) 82%,
+      var(--black) 100%
+    );
+  }
+  .game-header {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    z-index: 3;
+    padding: 24px 28px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .game-header .gh-id {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    color: rgba(207,199,184,0.7);
+    text-transform: uppercase;
+  }
+  .gh-turns {
+    text-align: right;
+  }
+  .gh-turns .lbl {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: rgba(207,199,184,0.5);
+    text-transform: uppercase;
+  }
+  .gh-turns .dots {
+    margin-top: 6px;
+    display: flex;
+    gap: 6px;
+    justify-content: flex-end;
+  }
+  .gh-turns .dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    border: 1px solid var(--gold-dim);
+  }
+  .gh-turns .dot.on { background: var(--gold); border-color: var(--gold); }
+  .gh-turns .dot.used { border-color: var(--ink-faint); opacity: 0.5; }
+
+  .stage-title {
+    position: absolute;
+    bottom: 18px; left: 28px; right: 28px;
+    z-index: 3;
+  }
+  .stage-title .st-kicker {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+  }
+  .stage-title h3 {
+    font-family: 'Song Myung', serif;
+    font-size: 30px;
+    font-weight: 400;
+    color: var(--ink);
+    margin-top: 8px;
+  }
+
+  .game-body {
+    padding: 4px 28px 36px;
+  }
+  .story-prose p {
+    font-size: 15.5px;
+    line-height: 2.05;
+    color: var(--ink);
+    margin-top: 18px;
+  }
+  .story-prose p:first-child { margin-top: 8px; }
+
+  .clue {
+    margin-top: 30px;
+    padding-left: 18px;
+    border-left: 1px solid var(--gold-dim);
+  }
+  .clue .clue-lbl {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.24em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+  .clue p {
+    margin-top: 9px;
+    font-size: 14.5px;
+    line-height: 1.95;
+    color: var(--ink-dim);
+  }
+  .clue .quote { color: var(--ink); }
+
+  /* hint toggle */
+  .hint { margin-top: 26px; }
+  .hint-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 13px;
+    color: var(--ink-dim);
+    padding: 4px 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: 0.03em;
+  }
+  .hint-toggle .tri {
+    font-size: 9px;
+    color: var(--ink-faint);
+    transition: transform 0.4s ease;
+  }
+  .hint-toggle[aria-expanded="true"] .tri { transform: rotate(90deg); }
+  .hint-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease, opacity 0.5s ease, margin 0.5s ease;
+    opacity: 0;
+  }
+  .hint-body.open {
+    max-height: 160px;
+    opacity: 1;
+    margin-top: 12px;
+  }
+  .hint-body p {
+    font-size: 14px;
+    line-height: 1.95;
+    color: var(--ink-dim);
+    padding-left: 18px;
+    border-left: 1px solid var(--ink-faint);
+  }
+
+  /* PIN */
+  .pin-area { margin-top: 38px; }
+  .pin-lbl {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.26em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    text-align: center;
+  }
+  .pin-slots {
+    margin-top: 16px;
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+  }
+  .pin-slot {
+    width: 38px;
+    height: 52px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    border-bottom: 1px solid var(--ink-faint);
+    font-family: 'Song Myung', serif;
+    font-size: 30px;
+    color: var(--ink);
+    padding-bottom: 4px;
+    transition: border-color 0.4s ease;
+  }
+  .pin-slot.filled { border-color: var(--gold-dim); }
+  .pin-slot.active { border-color: var(--gold); }
+
+  /* keypad */
+  .keypad {
+    margin-top: 34px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    justify-items: center;
+  }
+  .key {
+    width: 84px;
+    height: 64px;
+    border-radius: 4px;
+    background: var(--black-2);
+    border: 1px solid rgba(207,199,184,0.07);
+    color: var(--ink);
+    font-family: 'Song Myung', serif;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.45s ease, border-color 0.45s ease, color 0.45s ease, transform 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .key:active {
+    background: #1f1c16;
+    transition: background 0.05s ease;
+  }
+  .key.fade {
+    background: #211d15;
+    border-color: rgba(201,168,106,0.25);
+  }
+  .key-util {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--ink-dim);
+  }
+  .key-confirm {
+    background: rgba(201,168,106,0.07);
+    border-color: rgba(201,168,106,0.32);
+    color: var(--gold);
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+  }
+  .key-confirm:active { background: rgba(201,168,106,0.16); }
+
+  /* success overlay */
+  .success {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    background: radial-gradient(ellipse at center, #1a160d 0%, #0c0b09 70%, #080706 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1.3s ease;
+  }
+  .success.show { opacity: 1; pointer-events: auto; }
+  .success .s-inner {
+    text-align: center;
+    transform: translateY(16px);
+    opacity: 0;
+    transition: transform 1.6s cubic-bezier(0.2,0.7,0.2,1) 0.3s, opacity 1.6s ease 0.3s;
+  }
+  .success.show .s-inner { transform: translateY(0); opacity: 1; }
+  .success .s-glyph {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.34em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+  }
+  .success .s-ko {
+    font-family: 'Song Myung', serif;
+    font-size: 40px;
+    color: var(--gold);
+    margin-top: 18px;
+    letter-spacing: 0.06em;
+  }
+  .success .s-en {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.3em;
+    color: var(--ink-dim);
+    margin-top: 16px;
+    text-transform: uppercase;
+  }
+  .success .s-line {
+    width: 1px;
+    height: 46px;
+    background: linear-gradient(to bottom, var(--gold-dim), transparent);
+    margin: 26px auto 0;
+  }
+
+  @media (max-width: 480px) {
+    body { padding: 32px 0 64px; gap: 44px; }
+    .frame-block { max-width: 100%; }
+    .caption { margin-left: 18px; }
+    .frame { border-radius: 0; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ====================== ① TITLE ====================== -->
+  <div class="frame-block">
+    <p class="caption">① 타이틀</p>
+    <div class="frame">
+      <div class="screen-title">
+        <div class="title-image-wrap">
+          <img src="../public/images/story/ep-1.png" alt="" />
+        </div>
+        <div class="title-topmeta">A Mystery In Four Acts</div>
+        <div class="title-lower">
+          <h1 class="wordmark">STORY<span class="l2">HACKER</span></h1>
+          <p class="title-tagline">새벽 3시, 풀리지 않은 사건 하나가<br />당신을 기다린다.</p>
+          <button class="title-enter" type="button">
+            <span class="line"></span>
+            <span>사건 파일 열기</span>
+            <span class="arrow">▸</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================== ② EPISODE SELECT ================== -->
+  <div class="frame-block">
+    <p class="caption">② 에피소드 선택</p>
+    <div class="frame">
+      <div class="screen-eps">
+        <div class="eps-head">
+          <div class="kicker">Case Files · 20</div>
+          <h2>미해결 사건</h2>
+          <p>하나씩, 천천히. 어둠 속에서 단서가 떠오른다.</p>
+        </div>
+
+        <!-- EP.01 -->
+        <button class="ep" type="button">
+          <div class="ep-strip"><img src="../public/images/story/ep-1.png" alt="" /></div>
+          <div class="ep-meta">EP.01 · EASY · 4 STAGES</div>
+          <div class="ep-title">「수상한 이웃」</div>
+          <div class="ep-sub">어느 새벽의 미행</div>
+          <div class="ep-status">
+            <span class="ep-stars">★★★</span>
+            <span class="status-word status-solved">해결</span>
+          </div>
+        </button>
+
+        <!-- EP.02 -->
+        <button class="ep" type="button">
+          <div class="ep-strip"><img src="../public/images/story/ep-2.png" alt="" /></div>
+          <div class="ep-meta">EP.02 · EASY · 2 STAGES</div>
+          <div class="ep-title">「사라진 보물」</div>
+          <div class="ep-sub">할아버지의 마지막 수수께끼</div>
+          <div class="ep-status">
+            <span class="ep-stars">★★<span class="off">★</span></span>
+            <span class="status-word status-solved">해결</span>
+          </div>
+        </button>
+
+        <!-- EP.03 -->
+        <button class="ep" type="button">
+          <div class="ep-strip"><img src="../public/images/story/ep-3.png" alt="" /></div>
+          <div class="ep-meta">EP.03 · EASY · 3 STAGES</div>
+          <div class="ep-title">「학교의 미스터리」</div>
+          <div class="ep-sub">아직 답을 찾지 못한 복도</div>
+          <div class="ep-status">
+            <span class="status-word status-progress">수사 중</span>
+          </div>
+        </button>
+
+        <!-- EP.04 (locked) -->
+        <button class="ep locked" type="button" aria-disabled="true">
+          <span class="lock-glyph">잠김</span>
+          <div class="ep-strip"><img src="../public/images/story/ep-4.png" alt="" /></div>
+          <div class="ep-meta">EP.04 · NORMAL · 4 STAGES</div>
+          <div class="ep-title">「탐정 사무소」</div>
+          <div class="ep-sub">불 꺼진 사무실에 남겨진 것</div>
+          <div class="ep-status">
+            <span class="status-word status-locked">— — —</span>
+          </div>
+        </button>
+
+        <!-- EP.11 (locked) -->
+        <button class="ep locked" type="button" aria-disabled="true">
+          <span class="lock-glyph">잠김</span>
+          <div class="ep-strip"><img src="../public/images/story/ep-11.png" alt="" /></div>
+          <div class="ep-meta">EP.11 · EASY · 3 STAGES</div>
+          <div class="ep-title">「첫 번째 임무」</div>
+          <div class="ep-sub">Chapter 1 — 시작되지 않은 이야기</div>
+          <div class="ep-status">
+            <span class="status-word status-locked">— — —</span>
+          </div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== ③ GAMEPLAY ==================== -->
+  <div class="frame-block">
+    <p class="caption">③ 게임플레이</p>
+    <div class="frame">
+      <div class="screen-game">
+        <div class="game-image-wrap">
+          <img src="../public/images/story/1-1.png" alt="" />
+          <div class="game-header">
+            <div class="gh-id">EP.01 · STAGE 1 / 4</div>
+            <div class="gh-turns">
+              <div class="lbl">남은 시도</div>
+              <div class="dots">
+                <span class="dot used"></span>
+                <span class="dot on"></span>
+                <span class="dot on"></span>
+              </div>
+            </div>
+          </div>
+          <div class="stage-title">
+            <div class="st-kicker">Stage 1</div>
+            <h3>「흘리고 간 수첩」</h3>
+          </div>
+        </div>
+
+        <div class="game-body">
+          <div class="story-prose">
+            <p>새벽 3시. 또 그 소리에 잠이 깼다.</p>
+            <p>303호 남자가 계단을 내려간다. 늘 그렇듯 무거운 가방, 푹 눌러쓴 모자. 반년째 같은 시간, 같은 모습이다.</p>
+            <p>복도에 무언가 떨어져 있다. 손바닥만 한 낡은 수첩. 표지엔 작은 다이얼 잠금장치가 달려 있다.</p>
+          </div>
+
+          <div class="clue">
+            <div class="clue-lbl">단서</div>
+            <p>표지 안쪽에 눌러쓴 메모:<br />
+            <span class="quote">"비밀번호는 'HOPE'. 낡은 폴더폰을 쓰던 시절처럼 눌러라."</span></p>
+          </div>
+
+          <div class="hint">
+            <button class="hint-toggle" type="button" aria-expanded="false" id="hintToggle">
+              <span class="tri">▸</span>
+              <span>힌트 · 별 1 소모</span>
+            </button>
+            <div class="hint-body" id="hintBody">
+              <p>스마트폰이 없던 시절, 문자를 보내려면 숫자 키를 눌러 글자를 찾았다.</p>
+            </div>
+          </div>
+
+          <div class="pin-area">
+            <div class="pin-lbl">Enter Code</div>
+            <div class="pin-slots" id="pinSlots">
+              <div class="pin-slot active"></div>
+              <div class="pin-slot"></div>
+              <div class="pin-slot"></div>
+              <div class="pin-slot"></div>
+            </div>
+
+            <div class="keypad" id="keypad">
+              <button class="key" type="button" data-d="1">1</button>
+              <button class="key" type="button" data-d="2">2</button>
+              <button class="key" type="button" data-d="3">3</button>
+              <button class="key" type="button" data-d="4">4</button>
+              <button class="key" type="button" data-d="5">5</button>
+              <button class="key" type="button" data-d="6">6</button>
+              <button class="key" type="button" data-d="7">7</button>
+              <button class="key" type="button" data-d="8">8</button>
+              <button class="key" type="button" data-d="9">9</button>
+              <button class="key key-util" type="button" data-act="del">지움</button>
+              <button class="key" type="button" data-d="0">0</button>
+              <button class="key key-confirm" type="button" data-act="ok">확인</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="success" id="success">
+          <div class="s-inner">
+            <div class="s-glyph">Lock Released</div>
+            <div class="s-ko">잠금 해제</div>
+            <div class="s-en">Access Granted</div>
+            <div class="s-line"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  (function () {
+    var pin = "";
+    var MAX = 4;
+    var slots = document.querySelectorAll("#pinSlots .pin-slot");
+    var keypad = document.getElementById("keypad");
+    var success = document.getElementById("success");
+
+    function render() {
+      for (var i = 0; i < slots.length; i++) {
+        var s = slots[i];
+        s.textContent = pin[i] ? pin[i] : "";
+        s.classList.toggle("filled", !!pin[i]);
+        s.classList.toggle("active", i === pin.length && pin.length < MAX);
+      }
+    }
+
+    keypad.addEventListener("click", function (e) {
+      var btn = e.target.closest(".key");
+      if (!btn) return;
+
+      // soft gentle fade feedback
+      btn.classList.add("fade");
+      setTimeout(function () { btn.classList.remove("fade"); }, 320);
+
+      var d = btn.getAttribute("data-d");
+      var act = btn.getAttribute("data-act");
+
+      if (d != null) {
+        if (pin.length < MAX) { pin += d; render(); }
+      } else if (act === "del") {
+        pin = pin.slice(0, -1);
+        render();
+      } else if (act === "ok") {
+        success.classList.add("show");
+      }
+    });
+
+    // hint toggle
+    var ht = document.getElementById("hintToggle");
+    var hb = document.getElementById("hintBody");
+    ht.addEventListener("click", function () {
+      var open = hb.classList.toggle("open");
+      ht.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+
+    // dismiss success on tap
+    success.addEventListener("click", function () {
+      success.classList.remove("show");
+      pin = "";
+      render();
+    });
+
+    render();
+  })();
+</script>
+</body>
+</html>

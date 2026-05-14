@@ -2,98 +2,31 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Song+Myung&family=Nanum+Myeongjo:wght@400;700;800&family=Space+Mono:wght@400;700&display=swap');
+
+/* ============================================
+   NOCTURNE — 다크 문학 미스터리 테마
+   ============================================ */
 
 :root {
-  --emerald: #00FF88;
-  --rose: #FF3366;
-  --cyan: #22d3ee;
-  --gold: #ffd700;
-  --bg-dark: #0D1117;
-  --bg-card: #161B22;
+  --noct-black: #100f0d;
+  --noct-black-2: #15130f;
+  --noct-page: #0a0908;
+  --noct-ink: #cfc7b8;
+  --noct-ink-dim: #837c6e;
+  --noct-ink-faint: #565045;
+  --noct-gold: #c9a86a;
+  --noct-gold-dim: #8f7a4e;
 }
 
+html,
 body {
-  background: linear-gradient(180deg, #0D1117 0%, #161B22 50%, #0D1117 100%);
-  font-family: 'JetBrains Mono', monospace;
+  background: var(--noct-page);
+  color: var(--noct-ink);
+  font-family: 'Nanum Myeongjo', serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
   min-height: 100vh;
-}
-
-/* Scanline 효과 */
-.scanline::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(0, 0, 0, 0.15) 2px,
-    rgba(0, 0, 0, 0.15) 4px
-  );
-  pointer-events: none;
-  z-index: 40;
-  opacity: 0.3;
-}
-
-/* 배경 글로우 효과 */
-.bg-glow-emerald {
-  position: fixed;
-  top: -12rem;
-  left: -12rem;
-  width: 24rem;
-  height: 24rem;
-  background: rgba(0, 255, 136, 0.08);
-  border-radius: 50%;
-  filter: blur(48px);
-  pointer-events: none;
-}
-
-.bg-glow-rose {
-  position: fixed;
-  bottom: -12rem;
-  right: -12rem;
-  width: 24rem;
-  height: 24rem;
-  background: rgba(255, 51, 102, 0.08);
-  border-radius: 50%;
-  filter: blur(48px);
-  pointer-events: none;
-}
-
-.bg-glow-cyan {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 24rem;
-  height: 24rem;
-  background: rgba(34, 211, 238, 0.05);
-  border-radius: 50%;
-  filter: blur(48px);
-  pointer-events: none;
-}
-
-/* 텍스트 글로우 효과 */
-.text-glow-emerald {
-  text-shadow: 0 0 10px #00FF88, 0 0 20px #00FF88;
-}
-
-.text-glow-rose {
-  text-shadow: 0 0 10px #FF3366, 0 0 20px #FF3366;
-}
-
-.text-glow-cyan {
-  text-shadow: 0 0 10px #22d3ee, 0 0 20px #22d3ee;
-}
-
-/* 버튼 호버 효과 */
-.btn-hacker {
-  @apply transition-all duration-300 active:scale-95;
-}
-
-.btn-hacker:hover {
-  @apply bg-opacity-100;
 }
 
 /* 스크롤바 숨기기 (모바일 최적화) */
@@ -101,127 +34,66 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
-
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
 
-/* Shake 애니메이션 (오답 시) */
+/* 생성 이미지 공통 톤 — 어둠으로 가라앉히는 필터 */
+.noct-img {
+  filter: brightness(0.6) sepia(0.16) saturate(0.84) contrast(1.03);
+}
+.noct-img-locked {
+  filter: brightness(0.2) saturate(0.4) contrast(1.05) blur(1px);
+}
+
+/* ============================================
+   애니메이션 — 느리고 절제된 모션
+   ============================================ */
+
+/* Shake (오답 시) */
 @keyframes shake {
   0%, 100% { transform: translateX(0); }
-  10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
-  20%, 40%, 60%, 80% { transform: translateX(4px); }
+  20% { transform: translateX(-7px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(3px); }
 }
-
 .animate-shake {
-  animation: shake 0.5s ease-in-out;
+  animation: shake 0.4s ease-in-out;
 }
 
-/* Pulse 애니메이션 */
-@keyframes pulse-glow {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
-
-.animate-pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
-}
-
-/* Typing 커서 효과 */
-.typing-cursor::after {
-  content: '█';
-  animation: blink 1s step-end infinite;
-}
-
-@keyframes blink {
-  0%, 50% { opacity: 1; }
-  51%, 100% { opacity: 0; }
-}
-
-/* 카드 호버 효과 */
-.card-hover {
-  @apply transition-all duration-200;
-}
-
-.card-hover:hover {
-  @apply border-hacker-emerald bg-gray-800/80;
-  box-shadow: 0 0 20px rgba(0, 255, 136, 0.1);
-}
-
-/* FadeIn 애니메이션 */
+/* FadeIn — 잔잔한 등장 */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
-
 .animate-fadeIn {
-  animation: fadeIn 0.3s ease-out forwards;
+  animation: fadeIn 0.6s ease-out both;
 }
 
-/* FadeInUp 애니메이션 */
+/* FadeInUp — 아래에서 떠오름 */
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-
 .animate-fadeInUp {
-  animation: fadeInUp 0.5s ease-out forwards;
+  animation: fadeInUp 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
 
-/* 글리치 효과 */
-@keyframes glitch {
-  0% { transform: translate(0); }
-  20% { transform: translate(-2px, 2px); }
-  40% { transform: translate(-2px, -2px); }
-  60% { transform: translate(2px, 2px); }
-  80% { transform: translate(2px, -2px); }
-  100% { transform: translate(0); }
-}
-
-.animate-glitch {
-  animation: glitch 0.1s ease-in-out;
-}
-
-/* 성공 시 확대 효과 */
+/* ScaleIn — 성공 오버레이 (느린 페이드) */
 @keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.8);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
 }
-
 .animate-scaleIn {
-  animation: scaleIn 0.3s ease-out forwards;
+  animation: scaleIn 1.2s ease-out both;
 }
 
-/* 단서 공개 애니메이션 */
+/* SlideIn — 단서 공개 */
 @keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateX(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-
 .animate-slideIn {
-  animation: slideIn 0.3s ease-out forwards;
+  animation: slideIn 0.5s ease-out both;
 }

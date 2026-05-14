@@ -23,58 +23,64 @@ export default function DeductionGameOverPage() {
 
   if (!episode) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-gray-500">에피소드를 찾을 수 없습니다.</p>
+      <div className="min-h-screen flex items-center justify-center bg-noct-black">
+        <p className="font-serif text-noct-ink-dim">에피소드를 찾을 수 없습니다.</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen flex flex-col items-center justify-center p-8 bg-noct-black">
       <div
-        className={`text-center transition-all duration-500 ${
-          showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+        className={`w-full max-w-xs text-center ${
+          showContent ? 'animate-fadeIn' : 'opacity-0'
         }`}
       >
-        {/* 실패 아이콘 */}
-        <div className="text-6xl mb-4">🔒</div>
-
-        {/* 타이틀 */}
-        <h1 className="text-3xl font-bold text-hacker-rose mb-2">
-          DECODE FAILED
-        </h1>
-        <p className="text-gray-400 font-mono text-sm mb-6">
-          EP.{episode.id - 100} - {episode.title}
+        {/* 서브라인 */}
+        <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-noct-ink-faint mb-5">
+          Decode Failed
         </p>
 
+        {/* 타이틀 */}
+        <h1 className="font-display text-4xl text-noct-ink mb-4">
+          미해결
+        </h1>
+
+        {/* 에피소드 */}
+        <p className="font-mono text-[11px] tracking-[0.2em] uppercase text-noct-ink-dim mb-8">
+          EP.{episode.id - 100} — {episode.title}
+        </p>
+
+        {/* 디바이더 */}
+        <div className="h-px w-24 mx-auto mb-8 bg-noct-ink/10" />
+
         {/* 메시지 */}
-        <div className="bg-hacker-rose/10 border border-hacker-rose/30 rounded-lg p-6 mb-6 max-w-sm">
-          <p className="text-hacker-rose text-sm">
-            모든 단서를 사용했지만 해독에 실패했습니다.
+        <p className="font-serif text-sm text-noct-ink-dim leading-relaxed mb-2">
+          모든 단서를 사용했지만 해독에 실패했습니다.
+        </p>
+        <p className="font-serif text-xs text-noct-ink-faint leading-relaxed mb-6">
+          다시 도전하여 더 빨리 정답을 찾아보세요.
+        </p>
+        {stage && (
+          <p className="font-mono text-[11px] tracking-[0.2em] uppercase text-noct-ink-faint mb-10">
+            Answer{' '}
+            <span className="text-noct-gold-dim">{stage.answer}</span>
           </p>
-          <p className="text-gray-500 text-xs mt-2">
-            다시 도전하여 더 빨리 정답을 찾아보세요!
-          </p>
-          {stage && (
-            <p className="text-gray-600 text-xs mt-4 font-mono">
-              정답: <span className="text-hacker-cyan">{stage.answer}</span>
-            </p>
-          )}
-        </div>
+        )}
 
         {/* 버튼들 */}
-        <div className="space-y-3 max-w-xs mx-auto">
+        <div className="space-y-4">
           <Link
             href={`/deduction/${episode.id}`}
-            className="block w-full py-3 bg-hacker-cyan text-hacker-dark font-bold rounded-lg hover:bg-hacker-cyan/90 transition-colors"
+            className="block w-full py-3.5 border border-noct-ink/15 text-noct-ink font-mono text-[11px] tracking-[0.3em] uppercase hover:border-noct-ink/30 transition-colors"
           >
-            TRY AGAIN
+            Try Again
           </Link>
           <Link
             href="/deduction"
-            className="block w-full py-3 border border-gray-700 text-gray-400 rounded-lg hover:bg-gray-800 transition-colors"
+            className="block font-mono text-[11px] tracking-[0.3em] uppercase text-noct-ink-dim hover:text-noct-ink transition-colors"
           >
-            EPISODE SELECT
+            <span className="border-b border-noct-ink/20 pb-1">Episode Select</span>
           </Link>
         </div>
       </div>

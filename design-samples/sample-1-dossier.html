@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Story Hacker — Dossier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@400;500;600;700&family=Gowun+Batang:wght@400;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --base:        #141312;
+    --base-2:      #1a1917;
+    --panel:       #222020;
+    --panel-2:     #2a2724;
+    --ink:         #d8d3c8;
+    --ink-dim:     #8b857a;
+    --ink-faint:   #5f5a52;
+    --hair:        #3a3631;
+    --hair-soft:   #2e2b27;
+    --ember:       #b9742e;
+    --oxblood:     #8a3a36;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: #0c0b0a;
+    color: var(--ink);
+    font-family: 'JetBrains Mono', monospace;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 56px;
+    padding: 48px 16px 96px;
+  }
+
+  /* subtle page grain */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .screen-label {
+    width: 430px;
+    max-width: 100%;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--ink-dim);
+    text-transform: uppercase;
+    margin-bottom: -40px;
+    padding-left: 2px;
+  }
+
+  .frame {
+    width: 430px;
+    max-width: 100%;
+    background: var(--base);
+    border: 1px solid var(--hair);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* ---- shared image-as-evidence treatment ---- */
+  .evidence {
+    position: relative;
+    border: 1px solid var(--hair);
+    background: #000;
+  }
+  .evidence img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.72) contrast(1.02) brightness(0.82);
+  }
+  /* gentle vignette + warm unifying tint */
+  .evidence::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(120% 90% at 50% 35%, transparent 40%, rgba(8,7,6,0.55) 100%),
+      linear-gradient(to bottom, rgba(20,19,18,0.10), rgba(20,19,18,0.34));
+    mix-blend-mode: multiply;
+  }
+  /* faint grain inside the photo */
+  .evidence::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0.06;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='n2'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n2)'/%3E%3C/svg%3E");
+  }
+  .evidence.locked img {
+    filter: saturate(0.35) brightness(0.42) contrast(1.0);
+  }
+  .cap {
+    position: absolute;
+    left: 0; bottom: 0;
+    z-index: 3;
+    font-size: 9.5px;
+    letter-spacing: 0.16em;
+    color: var(--ink-dim);
+    background: rgba(12,11,10,0.82);
+    border-top: 1px solid var(--hair);
+    border-right: 1px solid var(--hair);
+    padding: 4px 9px;
+    text-transform: uppercase;
+  }
+  .classified {
+    position: absolute;
+    z-index: 3;
+    top: 10px; left: 10px;
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    color: #b9b2a4;
+    border: 1px solid #635c52;
+    background: rgba(12,11,10,0.7);
+    padding: 3px 8px;
+  }
+
+  /* =========================================================
+     SCREEN ① — TITLE / FILE COVER
+     ========================================================= */
+  .cover {
+    padding: 26px 26px 30px;
+  }
+  .cover-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--ink-faint);
+    border-bottom: 1px solid var(--hair-soft);
+    padding-bottom: 12px;
+    margin-bottom: 22px;
+  }
+  .cover .evidence {
+    aspect-ratio: 3 / 4;
+    margin-bottom: 26px;
+  }
+  .wordmark {
+    font-family: 'Hahmlet', serif;
+    font-weight: 600;
+    font-size: 33px;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+    line-height: 1.05;
+  }
+  .wordmark .l2 { display: block; color: var(--ink-dim); font-weight: 400; }
+  .tagline {
+    font-family: 'Gowun Batang', serif;
+    font-size: 13px;
+    color: var(--ink-dim);
+    margin-top: 14px;
+    line-height: 1.7;
+  }
+  .cover-rule {
+    height: 1px;
+    background: var(--hair-soft);
+    margin: 24px 0 20px;
+  }
+  .cover-action {
+    display: inline-block;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--ember);
+    padding-bottom: 5px;
+    text-transform: uppercase;
+  }
+  .cover-action span { color: var(--ember); }
+  .cover-foot {
+    margin-top: 26px;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--ink-faint);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* =========================================================
+     SCREEN ② — EPISODE LIST
+     ========================================================= */
+  .list-head {
+    padding: 22px 22px 16px;
+    border-bottom: 1px solid var(--hair);
+  }
+  .list-head h2 {
+    font-family: 'Hahmlet', serif;
+    font-weight: 600;
+    font-size: 19px;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+  }
+  .list-head .sub {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--ink-faint);
+    margin-top: 7px;
+    text-transform: uppercase;
+  }
+  .ep-row {
+    display: flex;
+    gap: 14px;
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--hair-soft);
+  }
+  .ep-row:last-child { border-bottom: none; }
+  .ep-row .evidence {
+    flex: 0 0 132px;
+    width: 132px;
+    aspect-ratio: 16 / 9;
+    align-self: flex-start;
+  }
+  .ep-row .cap { font-size: 8px; padding: 3px 6px; letter-spacing: 0.12em; }
+  .ep-meta { flex: 1; min-width: 0; }
+  .ep-caseno {
+    font-size: 9.5px;
+    letter-spacing: 0.18em;
+    color: var(--ink-faint);
+  }
+  .ep-title {
+    font-family: 'Hahmlet', serif;
+    font-weight: 600;
+    font-size: 15.5px;
+    color: var(--ink);
+    margin-top: 4px;
+    letter-spacing: 0.01em;
+  }
+  .ep-subtitle {
+    font-family: 'Gowun Batang', serif;
+    font-size: 11.5px;
+    color: var(--ink-dim);
+    margin-top: 3px;
+    line-height: 1.5;
+  }
+  .ep-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 9px;
+  }
+  .chip {
+    font-size: 8.5px;
+    letter-spacing: 0.1em;
+    color: var(--ink-dim);
+    border: 1px solid var(--hair);
+    padding: 3px 6px;
+  }
+  .ep-status {
+    margin-top: 9px;
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    color: var(--ink-faint);
+  }
+  .ep-status.solved { color: var(--ink-dim); }
+  .ep-status.solved .stars { color: var(--ink); letter-spacing: 0.05em; }
+  .ep-status.progress { color: var(--ember); }
+  .ep-status.locked { color: var(--ink-faint); }
+  .ep-row.is-locked .ep-title,
+  .ep-row.is-locked .ep-caseno { color: var(--ink-faint); }
+
+  /* =========================================================
+     SCREEN ③ — GAMEPLAY
+     ========================================================= */
+  .gp-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--hair);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--ink-dim);
+  }
+  .gp-head .turns { color: var(--ink-faint); }
+  .gp-head .turns b { color: var(--ember); font-weight: 500; }
+  .gp-scene {
+    margin: 0;
+  }
+  .gp-scene .evidence {
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    aspect-ratio: 16 / 10;
+  }
+  .gp-body { padding: 20px; }
+  .gp-stage-no {
+    font-size: 9.5px;
+    letter-spacing: 0.18em;
+    color: var(--ink-faint);
+  }
+  .gp-stage-title {
+    font-family: 'Hahmlet', serif;
+    font-weight: 600;
+    font-size: 18px;
+    color: var(--ink);
+    margin-top: 5px;
+    margin-bottom: 16px;
+    letter-spacing: 0.01em;
+  }
+  .gp-story {
+    font-family: 'Gowun Batang', serif;
+    font-size: 13.5px;
+    line-height: 1.95;
+    color: var(--ink);
+  }
+  .gp-story p + p { margin-top: 12px; }
+  .clue {
+    margin-top: 18px;
+    background: var(--base-2);
+    border: 1px solid var(--hair);
+    border-left: 2px solid var(--oxblood);
+    padding: 13px 14px;
+  }
+  .clue .clue-label {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--ink-faint);
+    margin-bottom: 7px;
+  }
+  .clue .clue-text {
+    font-family: 'Gowun Batang', serif;
+    font-size: 12.5px;
+    line-height: 1.8;
+    color: var(--ink-dim);
+  }
+  .clue .clue-text q {
+    color: var(--ink);
+    quotes: '"' '"';
+  }
+
+  .hint {
+    margin-top: 12px;
+    border: 1px solid var(--hair-soft);
+  }
+  .hint-toggle {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: var(--ink-dim);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    padding: 11px 13px;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .hint-toggle .sign { color: var(--ink-faint); }
+  .hint-body {
+    display: none;
+    padding: 0 13px 12px;
+    font-family: 'Gowun Batang', serif;
+    font-size: 12px;
+    line-height: 1.8;
+    color: var(--ink-dim);
+    border-top: 1px solid var(--hair-soft);
+    padding-top: 11px;
+  }
+  .hint.open .hint-body { display: block; }
+  .hint.open .hint-toggle .sign { color: var(--ember); }
+
+  /* PIN */
+  .pin-section { margin-top: 22px; }
+  .pin-label {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--ink-faint);
+    text-align: center;
+    margin-bottom: 11px;
+  }
+  .pin-slots {
+    display: flex;
+    justify-content: center;
+    gap: 11px;
+  }
+  .pin-slot {
+    width: 52px;
+    height: 62px;
+    background: var(--base-2);
+    border: 1px solid var(--hair);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 26px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .pin-slot.active {
+    border-color: var(--ember);
+  }
+  .pin-slot.filled {
+    background: var(--panel);
+  }
+
+  /* Keypad */
+  .keypad {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 9px;
+  }
+  .key {
+    height: 56px;
+    background: var(--panel);
+    border: 1px solid var(--hair);
+    color: var(--ink);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 19px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    transition: background 0.08s ease, transform 0.05s ease;
+  }
+  .key:active {
+    background: var(--panel-2);
+    transform: translateY(1px);
+  }
+  .key.aux {
+    color: var(--ink-dim);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    background: var(--base-2);
+  }
+  .key.confirm {
+    color: var(--ember);
+    border-color: var(--ember);
+    background: #241a10;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+  }
+  .key.confirm:active {
+    background: #2f2113;
+  }
+
+  /* Success overlay */
+  .overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 50;
+    background: rgba(10,9,8,0.94);
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 40px;
+    text-align: center;
+  }
+  .overlay.show { display: flex; }
+  .overlay .ov-line {
+    width: 36px;
+    height: 1px;
+    background: var(--ember);
+  }
+  .overlay .ov-grant {
+    font-size: 13px;
+    letter-spacing: 0.32em;
+    color: var(--ember);
+  }
+  .overlay .ov-ko {
+    font-family: 'Hahmlet', serif;
+    font-weight: 600;
+    font-size: 22px;
+    color: var(--ink);
+    letter-spacing: 0.05em;
+  }
+  .overlay .ov-sub {
+    font-size: 9.5px;
+    letter-spacing: 0.18em;
+    color: var(--ink-faint);
+    margin-top: 2px;
+  }
+  .overlay .ov-close {
+    margin-top: 10px;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--hair);
+    color: var(--ink-dim);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    padding: 6px 2px;
+    cursor: pointer;
+  }
+
+  @media (max-width: 480px) {
+    body { padding: 28px 0 64px; gap: 44px; }
+    .screen-label { padding-left: 16px; }
+    .frame { border-left: none; border-right: none; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ============ ① TITLE ============ -->
+  <div class="screen-label">① 타이틀</div>
+  <section class="frame">
+    <div class="cover">
+      <div class="cover-top">
+        <span>CASE FILE</span>
+        <span>CONFIDENTIAL</span>
+      </div>
+
+      <div class="evidence">
+        <img src="../public/images/story/ep-1.png" alt="사건 파일 표지 사진" />
+        <div class="cap">증거 · 표지</div>
+      </div>
+
+      <div class="wordmark">
+        STORY
+        <span class="l2">HACKER</span>
+      </div>
+      <p class="tagline">어둠 속에 묻힌 스무 개의 사건.<br />단서를 모아, 잠긴 비밀번호를 풀어라.</p>
+
+      <div class="cover-rule"></div>
+
+      <a href="#" class="cover-action">사건 파일 열기 <span>▸</span></a>
+
+      <div class="cover-foot">
+        <span>FILE No. SH-0001</span>
+        <span>EST. 03:00 AM</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ② EPISODE SELECT ============ -->
+  <div class="screen-label">② 에피소드 선택</div>
+  <section class="frame">
+    <div class="list-head">
+      <h2>사건 목록</h2>
+      <div class="sub">20 Cases · Archived</div>
+    </div>
+
+    <!-- EP.01 -->
+    <div class="ep-row">
+      <div class="evidence">
+        <img src="../public/images/story/ep-1.png" alt="EP.01 증거 사진" />
+        <div class="cap">증거 · EP.01</div>
+      </div>
+      <div class="ep-meta">
+        <div class="ep-caseno">CASE No. 01</div>
+        <div class="ep-title">「수상한 이웃」</div>
+        <div class="ep-subtitle">어느 새벽의 미행</div>
+        <div class="ep-chips">
+          <span class="chip">EASY</span>
+          <span class="chip">4 STAGES</span>
+        </div>
+        <div class="ep-status solved">해결 · <span class="stars">★★★</span></div>
+      </div>
+    </div>
+
+    <!-- EP.02 -->
+    <div class="ep-row">
+      <div class="evidence">
+        <img src="../public/images/story/ep-2.png" alt="EP.02 증거 사진" />
+        <div class="cap">증거 · EP.02</div>
+      </div>
+      <div class="ep-meta">
+        <div class="ep-caseno">CASE No. 02</div>
+        <div class="ep-title">「사라진 보물」</div>
+        <div class="ep-subtitle">할아버지의 마지막 수수께끼</div>
+        <div class="ep-chips">
+          <span class="chip">EASY</span>
+          <span class="chip">2 STAGES</span>
+        </div>
+        <div class="ep-status solved">해결 · <span class="stars">★★☆</span></div>
+      </div>
+    </div>
+
+    <!-- EP.03 -->
+    <div class="ep-row">
+      <div class="evidence">
+        <img src="../public/images/story/ep-3.png" alt="EP.03 증거 사진" />
+        <div class="cap">증거 · EP.03</div>
+      </div>
+      <div class="ep-meta">
+        <div class="ep-caseno">CASE No. 03</div>
+        <div class="ep-title">「학교의 미스터리」</div>
+        <div class="ep-subtitle">교실에 남겨진 흔적</div>
+        <div class="ep-chips">
+          <span class="chip">EASY</span>
+          <span class="chip">3 STAGES</span>
+        </div>
+        <div class="ep-status progress">수사 중</div>
+      </div>
+    </div>
+
+    <!-- EP.04 (locked) -->
+    <div class="ep-row is-locked">
+      <div class="evidence locked">
+        <img src="../public/images/story/ep-4.png" alt="EP.04 기밀 증거" />
+        <div class="classified">기밀</div>
+        <div class="cap">증거 · EP.04</div>
+      </div>
+      <div class="ep-meta">
+        <div class="ep-caseno">CASE No. 04</div>
+        <div class="ep-title">「탐정 사무소」</div>
+        <div class="ep-subtitle">접근 권한 없음</div>
+        <div class="ep-chips">
+          <span class="chip">NORMAL</span>
+          <span class="chip">4 STAGES</span>
+        </div>
+        <div class="ep-status locked">기밀 · 잠김</div>
+      </div>
+    </div>
+
+    <!-- EP.11 (locked) -->
+    <div class="ep-row is-locked">
+      <div class="evidence locked">
+        <img src="../public/images/story/ep-11.png" alt="EP.11 기밀 증거" />
+        <div class="classified">기밀</div>
+        <div class="cap">증거 · EP.11</div>
+      </div>
+      <div class="ep-meta">
+        <div class="ep-caseno">CASE No. 11</div>
+        <div class="ep-title">「첫 번째 임무」</div>
+        <div class="ep-subtitle">Chapter 1</div>
+        <div class="ep-chips">
+          <span class="chip">EASY</span>
+          <span class="chip">3 STAGES</span>
+        </div>
+        <div class="ep-status locked">기밀 · 잠김</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ③ GAMEPLAY ============ -->
+  <div class="screen-label">③ 게임플레이</div>
+  <section class="frame" id="gameplay">
+    <div class="gp-head">
+      <span>EP.01 · STAGE 1 / 4</span>
+      <span class="turns">남은 시도 <b>2</b> / 3</span>
+    </div>
+
+    <div class="gp-scene">
+      <div class="evidence">
+        <img src="../public/images/story/1-1.png" alt="현장 사진 — 흘리고 간 수첩" />
+        <div class="cap">현장 사진 · 03:00 AM</div>
+      </div>
+    </div>
+
+    <div class="gp-body">
+      <div class="gp-stage-no">STAGE 1 / 4</div>
+      <h3 class="gp-stage-title">「흘리고 간 수첩」</h3>
+
+      <div class="gp-story">
+        <p>새벽 3시. 또 그 소리에 잠이 깼다.</p>
+        <p>303호 남자가 계단을 내려간다. 늘 그렇듯 무거운 가방, 푹 눌러쓴 모자. 반년째 같은 시간, 같은 모습이다.</p>
+        <p>복도에 무언가 떨어져 있다. 손바닥만 한 낡은 수첩. 표지엔 작은 다이얼 잠금장치가 달려 있다.</p>
+      </div>
+
+      <div class="clue">
+        <div class="clue-label">단서 · CLUE</div>
+        <div class="clue-text">
+          표지 안쪽에 눌러쓴 메모:<br />
+          <q>비밀번호는 'HOPE'. 낡은 폴더폰을 쓰던 시절처럼 눌러라.</q>
+        </div>
+      </div>
+
+      <div class="hint" id="hint">
+        <button class="hint-toggle" id="hintToggle" aria-expanded="false">
+          <span>힌트 · 별 1 소모</span>
+          <span class="sign">[ + ]</span>
+        </button>
+        <div class="hint-body">
+          스마트폰이 없던 시절, 문자를 보내려면 숫자 키를 눌러 글자를 찾았다.
+        </div>
+      </div>
+
+      <div class="pin-section">
+        <div class="pin-label">잠금 해제 · 4자리</div>
+        <div class="pin-slots" id="pinSlots">
+          <div class="pin-slot active"></div>
+          <div class="pin-slot"></div>
+          <div class="pin-slot"></div>
+          <div class="pin-slot"></div>
+        </div>
+
+        <div class="keypad" id="keypad">
+          <button class="key" data-d="1">1</button>
+          <button class="key" data-d="2">2</button>
+          <button class="key" data-d="3">3</button>
+          <button class="key" data-d="4">4</button>
+          <button class="key" data-d="5">5</button>
+          <button class="key" data-d="6">6</button>
+          <button class="key" data-d="7">7</button>
+          <button class="key" data-d="8">8</button>
+          <button class="key" data-d="9">9</button>
+          <button class="key aux" data-act="del">지움</button>
+          <button class="key" data-d="0">0</button>
+          <button class="key confirm" data-act="ok">확인</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="overlay" id="overlay">
+      <div class="ov-line"></div>
+      <div class="ov-grant">ACCESS GRANTED</div>
+      <div class="ov-ko">잠금 해제</div>
+      <div class="ov-sub">EP.01 · STAGE 1 CLEARED</div>
+      <button class="ov-close" id="ovClose">다음 단계 ▸</button>
+    </div>
+  </section>
+
+<script>
+  (function () {
+    var pin = [];
+    var slots = document.querySelectorAll('#pinSlots .pin-slot');
+    var overlay = document.getElementById('overlay');
+
+    function render() {
+      slots.forEach(function (s, i) {
+        s.textContent = pin[i] != null ? pin[i] : '';
+        s.classList.toggle('filled', pin[i] != null);
+        s.classList.toggle('active', i === pin.length);
+      });
+    }
+
+    document.getElementById('keypad').addEventListener('click', function (e) {
+      var btn = e.target.closest('.key');
+      if (!btn) return;
+
+      if (btn.dataset.d != null) {
+        if (pin.length < 4) pin.push(btn.dataset.d);
+        render();
+      } else if (btn.dataset.act === 'del') {
+        pin.pop();
+        render();
+      } else if (btn.dataset.act === 'ok') {
+        overlay.classList.add('show');
+      }
+    });
+
+    document.getElementById('ovClose').addEventListener('click', function () {
+      overlay.classList.remove('show');
+      pin = [];
+      render();
+    });
+
+    var hint = document.getElementById('hint');
+    var hintToggle = document.getElementById('hintToggle');
+    hintToggle.addEventListener('click', function () {
+      var open = hint.classList.toggle('open');
+      hintToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      hintToggle.querySelector('.sign').textContent = open ? '[ − ]' : '[ + ]';
+    });
+
+    render();
+  })();
+</script>
+</body>
+</html>

@@ -4,8 +4,8 @@
   "description": "스토리 속 단서를 읽고 비밀번호를 추리하는 퍼즐 게임",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0D1117",
-  "theme_color": "#00FF88",
+  "background_color": "#0a0908",
+  "theme_color": "#c9a86a",
   "orientation": "portrait",
   "icons": [
     {

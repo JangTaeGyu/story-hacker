@@ -6,6 +6,7 @@ interface PinDisplayProps {
   pin: string;
   pinLength: number;
   isWrong?: boolean;
+  /** 호환용 — NOCTURNE은 단일 팔레트 */
   accentColor?: 'emerald' | 'cyan';
 }
 
@@ -13,31 +14,33 @@ export default function PinDisplay({
   pin,
   pinLength,
   isWrong = false,
-  accentColor = 'emerald',
 }: PinDisplayProps) {
-  const colorClass = accentColor === 'cyan' ? 'border-hacker-cyan' : 'border-hacker-emerald';
-  const filledClass = accentColor === 'cyan' ? 'bg-hacker-cyan' : 'bg-hacker-emerald';
-  const wrongClass = 'border-hacker-rose bg-hacker-rose/20';
-
   return (
-    <div className="flex justify-center gap-2 sm:gap-3">
+    <div className="flex justify-center gap-3 sm:gap-4">
       {Array.from({ length: pinLength }).map((_, i) => {
         const isFilled = i < pin.length;
+        const isActive = i === pin.length;
         return (
           <div
             key={i}
             className={cn(
-              'w-10 h-12 sm:w-12 sm:h-14 rounded-lg border-2 flex items-center justify-center transition-all duration-200',
-              isWrong ? wrongClass : colorClass,
-              isFilled && !isWrong && filledClass,
-              isWrong && 'animate-shake'
+              'w-9 h-12 flex items-end justify-center pb-1 border-b transition-colors duration-300',
+              isWrong
+                ? 'border-noct-gold/30'
+                : isFilled
+                ? 'border-noct-gold-dim'
+                : isActive
+                ? 'border-noct-gold'
+                : 'border-noct-ink-faint'
             )}
           >
             {isFilled && (
-              <span className={cn(
-                'text-2xl font-bold',
-                isWrong ? 'text-hacker-rose' : 'text-hacker-dark'
-              )}>
+              <span
+                className={cn(
+                  'font-display text-[28px] leading-none',
+                  isWrong ? 'text-noct-ink-dim' : 'text-noct-ink'
+                )}
+              >
                 {pin[i]}
               </span>
             )}

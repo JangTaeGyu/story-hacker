@@ -1,72 +1,65 @@
-'use client';
-
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { storyEpisodes } from '@/data/storyEpisodes';
 import { deductionEpisodes } from '@/data/deductionEpisodes';
 
 export default function HomePage() {
-  const [glitch, setGlitch] = useState(false);
-
-  // 글리치 효과 (400ms 간격으로 3% 확률)
-  useEffect(() => {
-    const glitchInterval = setInterval(() => {
-      if (Math.random() > 0.97) {
-        setGlitch(true);
-        setTimeout(() => setGlitch(false), 80);
-      }
-    }, 400);
-    return () => clearInterval(glitchInterval);
-  }, []);
-
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-6 text-center">
-      {/* 타이틀 */}
-      <div className={`mb-8 transition-transform ${glitch ? 'animate-glitch' : ''}`}>
-        <h1
-          className="text-4xl sm:text-5xl font-bold mb-1 tracking-widest text-hacker-emerald text-glow-emerald"
-          style={{ fontFamily: 'monospace' }}
-        >
-          STORY
-        </h1>
-        <h1
-          className="text-4xl sm:text-5xl font-bold tracking-widest text-hacker-rose text-glow-rose"
-          style={{ fontFamily: 'monospace' }}
-        >
-          HACKER
-        </h1>
-      </div>
-
-      {/* 서브타이틀 */}
-      <p className="text-gray-500 mb-10 font-mono text-xs sm:text-sm tracking-wide">
-        [ 단서를 읽고, 추리하고, 잠금을 해제하라 ]
+    <div className="relative min-h-screen flex flex-col">
+      {/* 상단 마이크로 라벨 */}
+      <p className="absolute top-6 inset-x-0 z-20 text-center font-mono text-[10px] tracking-[0.3em] uppercase text-noct-ink-faint">
+        A Mystery In Twenty Acts
       </p>
 
-      {/* 시작 버튼 */}
-      <div className="space-y-3 w-full max-w-xs">
+      {/* 히어로 이미지 — 상단을 채우고 어둠으로 녹아든다 */}
+      <div className="relative w-full h-[58vh] min-h-[320px]">
+        <Image
+          src="/images/story/ep-1.png"
+          alt=""
+          fill
+          priority
+          sizes="448px"
+          className="noct-img object-cover object-center"
+        />
+        {/* noct-black 으로 그라데이션 페이드 */}
+        <div className="absolute inset-0 bg-gradient-to-b from-noct-black/50 via-noct-black/10 to-noct-black" />
+        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-b from-transparent to-noct-black" />
+      </div>
+
+      {/* 하단 어두운 영역 */}
+      <div className="relative z-10 flex-1 -mt-12 px-7 pb-12 flex flex-col">
+        {/* 워드마크 */}
+        <h1 className="font-display leading-[0.95]">
+          <span className="block text-5xl sm:text-6xl text-noct-ink">STORY</span>
+          <span className="block text-5xl sm:text-6xl text-noct-ink-dim">HACKER</span>
+        </h1>
+
+        {/* 태그라인 */}
+        <p className="mt-5 font-serif text-[15px] leading-relaxed text-noct-ink-dim">
+          새벽 3시, 풀리지 않은 사건 하나가 당신을 기다린다.
+        </p>
+
+        {/* 진입 액션 — 조용한 텍스트 링크 */}
         <Link
           href="/mode-select"
-          className="block w-full py-4 px-6 bg-hacker-emerald/10 border-2 border-hacker-emerald text-hacker-emerald font-mono text-base tracking-wider hover:bg-hacker-emerald hover:text-gray-900 transition-all duration-300 active:scale-95 text-center"
+          className="group mt-10 inline-flex items-center gap-3 self-start"
         >
-          {'>'} START GAME
+          <span className="font-serif text-lg text-noct-ink transition-colors group-hover:text-noct-gold">
+            사건 파일 열기
+          </span>
+          <span className="text-noct-gold text-sm transition-transform group-hover:translate-x-1">
+            ▸
+          </span>
         </Link>
-      </div>
+        <span className="mt-2 block h-px w-28 bg-noct-gold-dim/60" />
 
-      {/* 통계 */}
-      <div className="mt-8 grid grid-cols-2 gap-4 text-center">
-        <div className="bg-gray-800/50 p-3 rounded-lg">
-          <p className="text-hacker-emerald font-mono text-2xl font-bold">{storyEpisodes.length}</p>
-          <p className="text-gray-500 font-mono text-xs">STORY</p>
-        </div>
-        <div className="bg-gray-800/50 p-3 rounded-lg">
-          <p className="text-hacker-cyan font-mono text-2xl font-bold">{deductionEpisodes.length}</p>
-          <p className="text-gray-500 font-mono text-xs">DEDUCTION</p>
-        </div>
-      </div>
-
-      {/* 버전 */}
-      <div className="mt-12 font-mono text-xs text-gray-700">
-        <p>v3.0.0 // NEXT.JS</p>
+        {/* 에피소드 카운트 — 조용히 */}
+        <p className="mt-auto pt-12 font-mono text-[10px] tracking-[0.2em] uppercase text-noct-ink-faint">
+          Story {storyEpisodes.length} · Deduction {deductionEpisodes.length}
+        </p>
+        <p className="mt-2 font-mono text-[10px] tracking-[0.2em] uppercase text-noct-ink-faint/70">
+          v3.0.0 — Next.js
+        </p>
       </div>
     </div>
   );

@@ -13,9 +13,9 @@ interface GameProgress {
 
 const FILTERS = [
   { value: 0, label: 'ALL' },
-  { value: 1, label: 'EASY', activeClass: 'border-green-400 bg-green-400/10 text-green-400' },
-  { value: 2, label: 'NORMAL', activeClass: 'border-yellow-400 bg-yellow-400/10 text-yellow-400' },
-  { value: 3, label: 'HARD', activeClass: 'border-red-400 bg-red-400/10 text-red-400' },
+  { value: 1, label: 'EASY' },
+  { value: 2, label: 'NORMAL' },
+  { value: 3, label: 'HARD' },
 ] as const;
 
 export default function DeductionEpisodeSelectPage() {
@@ -29,82 +29,103 @@ export default function DeductionEpisodeSelectPage() {
     : deductionEpisodes.filter((ep) => ep.difficulty === filter);
 
   return (
-    <div className="min-h-screen pb-20">
-      <Header backHref="/mode-select" accentColor="cyan" />
+    <div className="min-h-screen pb-24">
+      <Header backHref="/mode-select" />
 
-      <div className="p-4 sm:p-6 pt-16">
-      {/* 타이틀 + 필터 */}
-      <div className="flex items-start justify-between mb-4">
-        <div>
-          <h2 className="text-xl sm:text-2xl font-bold text-hacker-cyan font-mono tracking-wider">
-            DEDUCTION MODE
-          </h2>
-          <p className="text-gray-500 font-mono text-xs mt-1">
-            {filteredEpisodes.length} EPISODES
+      <div className="mx-auto max-w-md px-5 pt-24">
+        {/* 타이틀 + 필터 */}
+        <div className="mb-8">
+          <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-noct-ink-faint mb-3">
+            Deduction Mode
           </p>
-        </div>
-        <div className="flex gap-1.5">
-          {FILTERS.map((f) => (
-            <button
-              key={f.value}
-              onClick={() => setFilter(f.value)}
-              className={`px-2 py-1 text-xs font-mono rounded border transition-colors ${
-                filter === f.value
-                  ? f.value === 0
-                    ? 'border-hacker-cyan bg-hacker-cyan/10 text-hacker-cyan'
-                    : f.activeClass
-                  : 'border-gray-700 text-gray-500 hover:border-gray-500'
-              }`}
-            >
-              {f.label}
-            </button>
-          ))}
-        </div>
-      </div>
+          <h2 className="font-display text-3xl text-noct-ink leading-tight">
+            추론의 방
+          </h2>
+          <p className="font-mono text-[11px] tracking-[0.15em] uppercase text-noct-ink-dim mt-2">
+            {filteredEpisodes.length} Episodes
+          </p>
 
-      {/* 에피소드 목록 */}
-      <div className="space-y-3">
-        {filteredEpisodes.map((episode) => {
-          const diffInfo = getDifficultyInfo(episode.difficulty);
-          const completedInfo = progress.completedEpisodes[episode.id];
-          const isCompleted = completedInfo?.completed;
-          return (
-            <Link
-              key={episode.id}
-              href={`/deduction/${episode.id}`}
-              className={`block w-full p-4 bg-gray-800/50 border text-left transition-all duration-200 active:scale-[0.98] group rounded hover:border-hacker-cyan hover:bg-gray-800 ${
-                isCompleted ? 'border-yellow-500/50' : 'border-gray-700'
-              }`}
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-hacker-cyan font-mono text-xs">
-                      EP.{episode.id - 100}
-                    </span>
-                    <span className={`text-xs ${diffInfo.color}`}>{diffInfo.text}</span>
-                  </div>
-                  <h3 className="text-white font-bold text-base">{episode.title}</h3>
-                  <p className="text-gray-500 text-xs font-mono mt-1">
-                    {episode.stages.length} STAGES
-                  </p>
+          <div className="flex gap-2 mt-5">
+            {FILTERS.map((f) => (
+              <button
+                key={f.value}
+                onClick={() => setFilter(f.value)}
+                className={`px-3 py-1.5 font-mono text-[10px] tracking-[0.18em] uppercase border transition-colors duration-300 ${
+                  filter === f.value
+                    ? 'border-noct-gold-dim text-noct-gold'
+                    : 'border-noct-ink/10 text-noct-ink-faint hover:text-noct-ink-dim hover:border-noct-ink/20'
+                }`}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* 에피소드 목록 */}
+        <div className="space-y-px">
+          {filteredEpisodes.map((episode) => {
+            const diffInfo = getDifficultyInfo(episode.difficulty);
+            const completedInfo = progress.completedEpisodes[episode.id];
+            const isCompleted = completedInfo?.completed;
+            const stars = completedInfo?.stars ?? 0;
+            return (
+              <Link
+                key={episode.id}
+                href={`/deduction/${episode.id}`}
+                className="group relative block overflow-hidden border-b border-noct-ink/10 transition-colors duration-300 hover:bg-noct-black-2/60"
+              >
+                {/* 에피소드 이미지 스트립 (검정으로 그라데이션 페이드) */}
+                <div className="absolute inset-y-0 right-0 w-2/5 pointer-events-none">
+                  <img
+                    src={`/images/deduction/ep-${episode.id}.png`}
+                    alt=""
+                    className="h-full w-full object-cover noct-img"
+                    onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-r from-noct-page via-noct-page/80 to-transparent" />
                 </div>
-                {isCompleted ? (
-                  <div className="w-12 h-12 rounded-full border-2 border-yellow-400 flex items-center justify-center rotate-[-12deg]">
-                    <span className="text-yellow-400 font-mono text-[10px] font-bold leading-tight text-center">
-                      CLEAR
-                    </span>
+
+                <div className="relative flex items-center justify-between gap-4 px-1 py-5">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-3 mb-1.5">
+                      <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-noct-gold-dim">
+                        EP.{episode.id - 100}
+                      </span>
+                      <span className="font-mono text-[10px] tracking-[0.18em] uppercase text-noct-ink-faint">
+                        {diffInfo.text}
+                      </span>
+                    </div>
+                    <h3 className="font-display text-xl text-noct-ink leading-snug truncate">
+                      {episode.title}
+                    </h3>
+                    <p className="font-mono text-[10px] tracking-[0.15em] uppercase text-noct-ink-faint mt-1.5">
+                      {episode.stages.length} Stages
+                    </p>
                   </div>
-                ) : (
-                  <span className="text-hacker-cyan text-xl opacity-0 group-hover:opacity-100 transition-opacity">
-                    ›
-                  </span>
-                )}
-              </div>
-            </Link>
-          );
-        })}
-      </div>
+
+                  <div className="shrink-0 text-right">
+                    {isCompleted ? (
+                      <div>
+                        <span className="text-noct-gold text-sm tracking-[0.15em]">
+                          {'★'.repeat(stars)}
+                          <span className="text-noct-ink-faint">{'☆'.repeat(3 - stars)}</span>
+                        </span>
+                        <p className="font-mono text-[9px] tracking-[0.2em] uppercase text-noct-ink-faint mt-1">
+                          Solved
+                        </p>
+                      </div>
+                    ) : (
+                      <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-noct-ink-faint group-hover:text-noct-ink-dim transition-colors">
+                        Locked
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
