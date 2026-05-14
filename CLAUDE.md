@@ -59,7 +59,9 @@ lib/
 └── utils.ts                    # 유틸리티 함수
 
 data/
-├── storyEpisodes.ts            # 스토리 에피소드 데이터 (10개)
+├── storyEpisodes.ts            # 배럴: story/ep-NN.ts 20개를 모아 storyEpisodes 배열로 export
+├── story/
+│   └── ep-01.ts ~ ep-20.ts     # 스토리 에피소드 1개당 1파일 (satisfies StoryEpisode)
 └── deductionEpisodes.ts        # 추론 에피소드 데이터 (8개)
 ```
 
@@ -201,30 +203,40 @@ E2E 테스트는 Playwright MCP agents를 사용합니다:
 
 ### 새 스토리 에피소드 추가
 
-1. `data/storyEpisodes.ts`에 에피소드 추가:
+스토리 에피소드는 1개당 1파일(`data/story/ep-NN.ts`)이며, `data/storyEpisodes.ts`는 이들을 모으는 배럴입니다.
+
+1. `data/story/ep-NN.ts` 파일 생성 (NN = 2자리 zero-pad, 예: `ep-21.ts`):
 
 ```typescript
-{
-  id: 11,  // 고유 ID
+import type { StoryEpisode } from '@/lib/types';
+
+const episode = {
+  id: 21,                   // 고유 ID
   title: "에피소드 제목",
-  difficulty: 2,  // 1-3
-  mode: 'story' as const,
+  subtitle: "부제 (선택)",
+  difficulty: 2,            // 1-3
+  mode: "story",
+  synopsis: "한 줄 시놉시스 (선택)",
   stages: [
     {
       id: 1,
       title: "스테이지 제목",
-      story: "스토리 텍스트...",
-      clue: "📎 단서 텍스트",
-      hint: "힌트 텍스트",
+      story: `스토리 텍스트...`,   // 템플릿 리터럴 + 실제 줄바꿈 권장
+      clue: `단서 텍스트`,
+      hint: "힌트 텍스트",          // 답을 직접 주지 말 것 — 방향만 제시
       lockType: "pin4",
-      answers: ["1234", "4321"],  // 복수 정답 가능
-      maxTurns: 5
-    }
-  ]
-}
+      answers: ["1234"],          // 각 정답 길이 = PIN 자릿수와 일치 필수
+      maxTurns: 3,
+    },
+  ],
+} satisfies StoryEpisode;        // as const 불필요
+
+export default episode;
 ```
 
-2. `components/illustrations/StoryIllustrations.tsx`에 일러스트 추가:
+2. `data/storyEpisodes.ts` 배럴에 `import`와 배열 등록 추가.
+
+3. `components/illustrations/StoryIllustrations.tsx`에 일러스트 추가:
 
 ```typescript
 // 키: "episodeId-stageId"
@@ -279,6 +291,8 @@ E2E 테스트는 Playwright MCP agents를 사용합니다:
 - 모든 페이지는 `'use client'` 지시어 사용
 - `generateStaticParams()`로 정적 생성 지원
 - 로컬스토리지 키: `'story-hacker-progress'`
-- 에피소드 ID: 스토리 1-10, 추론 101-108
-- PIN 길이: `pin4` (4자리) 또는 `pin6` (6자리)
+- 에피소드 ID: 스토리 1-20, 추론 101-108
+- 스토리 에피소드 데이터는 `data/story/ep-NN.ts` 1파일 1에피소드, `data/storyEpisodes.ts`는 배럴
+- 스토리 EP.11-20은 "네오 시티의 그림자" 연작 (정답이 에피소드 간 상호 참조됨 — 정답 변경 시 연쇄 주의)
+- PIN 길이: `pin1`~`pin6` (`getPinLength`로 변환). 각 `answers` 항목 길이는 PIN 자릿수와 정확히 일치해야 함
 - 별점은 기존보다 높을 때만 업데이트됨 (하향 방지)
