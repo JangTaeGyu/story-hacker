@@ -6,6 +6,7 @@ import { deductionEpisodes } from '@/data/deductionEpisodes';
 import { getDifficultyInfo } from '@/lib/utils';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import Header from '@/components/ui/Header';
+import SolvedStamp from '@/components/ui/SolvedStamp';
 
 interface GameProgress {
   completedEpisodes: Record<number, { stars: number; completed: boolean }>;
@@ -104,16 +105,14 @@ export default function DeductionEpisodeSelectPage() {
                     </p>
                   </div>
 
-                  <div className="shrink-0 text-right">
+                  <div className="shrink-0 self-end text-right">
                     {isCompleted ? (
-                      <div>
-                        <span className="text-noct-gold text-sm tracking-[0.15em]">
+                      <div className="flex flex-col items-end gap-1.5">
+                        <span className="text-noct-gold-dim text-xs tracking-[0.15em]">
                           {'★'.repeat(stars)}
-                          <span className="text-noct-ink-faint">{'☆'.repeat(3 - stars)}</span>
+                          {'☆'.repeat(3 - stars)}
                         </span>
-                        <p className="font-mono text-[9px] tracking-[0.2em] uppercase text-noct-ink-faint mt-1">
-                          Solved
-                        </p>
+                        <SolvedStamp />
                       </div>
                     ) : (
                       <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-noct-ink-faint group-hover:text-noct-ink-dim transition-colors">

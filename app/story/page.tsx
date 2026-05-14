@@ -6,6 +6,7 @@ import { storyEpisodes } from '@/data/storyEpisodes';
 import { getDifficultyInfo } from '@/lib/utils';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import Header from '@/components/ui/Header';
+import SolvedStamp from '@/components/ui/SolvedStamp';
 
 interface GameProgress {
   completedEpisodes: Record<number, { stars: number; completed: boolean }>;
@@ -101,13 +102,16 @@ export default function StoryEpisodeSelectPage() {
                     </span>
                   </div>
 
-                  {/* 상태 — 우상단 */}
-                  <div className="absolute right-0 top-3 text-right">
+                  {/* 상태 — 우하단 */}
+                  <div className="absolute right-2 bottom-3 text-right">
                     {isCompleted ? (
-                      <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-noct-gold">
-                        {'★'.repeat(completedInfo.stars)}
-                        {'☆'.repeat(3 - completedInfo.stars)} 해결
-                      </span>
+                      <div className="flex flex-col items-end gap-1.5">
+                        <span className="font-mono text-[10px] tracking-[0.15em] text-noct-gold-dim">
+                          {'★'.repeat(completedInfo.stars)}
+                          {'☆'.repeat(3 - completedInfo.stars)}
+                        </span>
+                        <SolvedStamp />
+                      </div>
                     ) : (
                       <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-noct-ink-faint">
                         미해결
