@@ -4,6 +4,11 @@ import './globals.css';
 
 const SITE_URL = 'https://story-hacker.vercel.app';
 
+// 로컬스토리지 데이터 버전.
+// 대규모 업데이트로 기존 진행 데이터를 일회성 초기화해야 할 때 이 값을 올린다.
+// (값이 바뀐 클라이언트에서 최초 1회만 localStorage.clear() 실행)
+const STORAGE_VERSION = '2';
+
 export const metadata: Metadata = {
   title: 'Story Hacker — 추리 미스터리 퍼즐',
   description: '어둠 속 단서를 읽고, 잠긴 비밀번호를 풀어내는 추리 미스터리 게임',
@@ -59,6 +64,13 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className="min-h-screen bg-noct-black text-noct-ink antialiased">
+        {/* 대규모 업데이트 시 기존 로컬스토리지 일회성 초기화 — 하이드레이션 전에 동기 실행 */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var V='${STORAGE_VERSION}';if(localStorage.getItem('story-hacker-version')!==V){localStorage.clear();localStorage.setItem('story-hacker-version',V);}}catch(e){}})();`,
+          }}
+        />
+
         {/* 메인 컨텐츠 */}
         <main className="relative z-10 mx-auto max-w-md min-h-screen bg-noct-black">
           {children}
