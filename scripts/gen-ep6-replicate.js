@@ -4,19 +4,19 @@ const { buildPrompts } = require("./lib/prompt");
 const prompts = buildPrompts([
   {
     id: "ep-6",
-    prompt: "Dark mysterious illustration of a moody cafe at night, neon coffee cup sign glowing with emerald green light, rain-wet window reflections, empty tables with dim candles, a mysterious atmosphere suggesting hidden secrets, cyberpunk hacker aesthetic",
+    prompt: "A dim cozy cafe after closing hours, chairs stacked on tables, one window seat still lit, a barista's hidden note tucked under the counter, the faint silhouette of a missing barista lingering by the espresso machine, quiet unease, cyberpunk hacker aesthetic",
   },
   {
     id: "6-1",
-    prompt: "inside a dark atmospheric cafe, a glowing poster on the wall with WiFi symbol, coffee cups on tables, warm ambient lighting mixed with green neon accents, cozy but mysterious cafe interior, cyberpunk hacker aesthetic",
+    prompt: "a window-side cafe table with an open laptop showing a disconnected wifi prompt, a wall poster nearby displaying the cafe name with numbers, warm dim cafe lighting after hours, empty quiet seats, cyberpunk hacker aesthetic",
   },
   {
     id: "6-2",
-    prompt: "a staff-only door in a cafe hallway with a glowing digital keypad lock, dim corridor lighting, caution sign on the door, mysterious green light seeping from under the door, cyberpunk hacker aesthetic",
+    prompt: "a staff-only door at the end of a narrow cafe hallway, a glowing number keypad mounted beside it, a small taped instruction note showing business hours, shadowy corridor, secretive tense mood, cyberpunk hacker aesthetic",
   },
   {
     id: "6-3",
-    prompt: "a small metal safe on a shelf in a cafe back room, coffee bean bags stacked nearby, the safe keypad glowing with emerald light, steam rising from a nearby coffee machine, dim storage room atmosphere, cyberpunk hacker aesthetic",
+    prompt: "a cramped dark staff storage room, stacked coffee bean sacks in the corner, a small locked six-digit safe resting on top with a handwritten note left beside it, faint light leaking through, forbidden discovery atmosphere, cyberpunk hacker aesthetic",
   },
 ]);
 

@@ -4,19 +4,19 @@ const { buildPrompts } = require("./lib/prompt");
 const prompts = buildPrompts([
   {
     id: "ep-11",
-    prompt: "Dark cyberpunk illustration of a neon-lit back alley in a futuristic city at night, holographic signs flickering, a shadowy figure standing at the end of the alley with green glowing eyes, recruitment and mystery atmosphere, rain-wet streets reflecting neon lights, cyberpunk hacker aesthetic",
+    prompt: "A lone hooded silhouette sitting before an old monitor in a cramped apartment, framed by a rain-streaked window glowing with the neon signs of a sprawling 2087 megacity, holographic glyphs cascading down the screen, sense of a rookie hacker being recruited into the shadows, cyberpunk noir cityscape, cyberpunk hacker aesthetic",
   },
   {
     id: "11-1",
-    prompt: "a dark cramped apartment room with an old CRT monitor displaying green blinking text, messy desk with cables and electronics, dim green glow illuminating the room, futuristic cyberpunk slum aesthetic, rain visible through dirty window",
+    prompt: "an old worn CRT monitor on a battered desk displaying slow-scrolling green code from an anonymous sender, tangled cables and salvaged electronics around it, a rain-soaked window behind reflecting a flickering neon sign that reads as a convenience store marquee, dim humming glow filling a tiny slum apartment, cyberpunk hacker aesthetic",
   },
   {
     id: "11-2",
-    prompt: "a convenience store back door in a cyberpunk alley, a glowing digital lock panel on the metal door, neon store sign partially visible above, trash and cables on the ground, dim streetlight, futuristic urban night setting",
+    prompt: "a convenience store back door in a narrow neon-lit cyberpunk alley, an aging electronic keypad lock buzzing faintly on the rusted metal door, a small holographic date readout glowing in a corner, scattered crates cables and steam rising from a grate, wet pavement reflecting overhead neon, tense midnight stillness, cyberpunk noir",
   },
   {
     id: "11-3",
-    prompt: "a mysterious hooded figure in a dark cyberpunk alley, holding a small glowing green microchip in their outstretched hand, neon reflections on wet ground, dramatic lighting from above, futuristic secret meeting atmosphere, neon emerald green and dark navy palette, dark moody atmosphere, no text",
+    prompt: "an open back doorway with cold mist drifting in, a small encrypted communication microchip resting on a gloved palm catching a faint glow, holographic letters hovering above it as if being converted into numbers, dim alley neon spilling across the threshold, atmosphere of a first ally and a secret handoff, cyberpunk hacker aesthetic",
   },
 ]);
 

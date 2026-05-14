@@ -4,23 +4,23 @@ const { buildPrompts } = require("./lib/prompt");
 const prompts = buildPrompts([
   {
     id: "ep-7",
-    prompt: "Dark mysterious illustration of a hospital corridor during a blackout, emergency red lights casting eerie shadows, wheelchair abandoned in the hallway, exit sign glowing faintly at the end, escape tension atmosphere, cyberpunk hacker aesthetic",
+    prompt: "A lone hospital-gowned figure in silhouette standing in a pitch-black hospital corridor at dawn, only red emergency lights pulsing along the ceiling, rows of locked patient room doors stretching into darkness, an empty wheeled bed abandoned mid-hallway, distant approaching footsteps implied, claustrophobic dread of being trapped and erased, cyberpunk hacker aesthetic",
   },
   {
     id: "7-1",
-    prompt: "a hospital bed with a tablet device on the bedside table, the tablet screen glowing with a patient authentication lock screen, IV drip stand nearby, dim hospital room at night, window showing city lights outside, cyberpunk hacker aesthetic",
+    prompt: "a glowing medical tablet propped on a bedside table demanding patient authentication, beside it a metal headboard nameplate scratched and gouged with the faint engraved outline of four digits still visible, a blank patient wristband discarded on the sheets, red emergency light flickering across a dark hospital room, cyberpunk hacker aesthetic",
   },
   {
     id: "7-2",
-    prompt: "a doctor's laptop open on an office desk, screen showing a password prompt with green glow, medical charts and stethoscope nearby, dim desk lamp lighting, hospital office at night, cyberpunk hacker aesthetic",
+    prompt: "a doctor's chart terminal pulled close through a door gap, its lock screen lit cold blue showing a near-empty patient chart with a single death-date line, a yellow post-it note stuck to its back, a corridor cabinet and a locked-from-outside hospital room door beyond, tense oppressive shadows, cyberpunk hacker aesthetic",
   },
   {
     id: "7-3",
-    prompt: "a medicine storage cabinet with a glowing digital keypad lock, glass doors showing bottles and medical supplies inside, clinical white and green lighting, hospital storage room, cyberpunk hacker aesthetic",
+    prompt: "a half-open medication storage cabinet beside a dim nurse station, a syringe tray with a printed patient label waiting inside, sterile vials and ampoules glinting in faint light, a deserted hospital corridor stretching away, the cold horror of a prepared lethal dose, cyberpunk hacker aesthetic",
   },
   {
     id: "7-4",
-    prompt: "an emergency exit door in a dark hospital corridor during a power outage, a glowing green code panel next to the door, emergency lights casting red glow, dramatic escape atmosphere, cyberpunk hacker aesthetic",
+    prompt: "an emergency exit door at the end of a hospital corridor with a glowing blue numeric lock panel, a hospital safety-rules notice posted beside it, a doctor's open work notebook on the floor listing room numbers in a column, far-off siren glow and looming shadows of approaching footsteps, last-chance escape tension, cyberpunk hacker aesthetic",
   },
 ]);
 

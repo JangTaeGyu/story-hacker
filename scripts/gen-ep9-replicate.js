@@ -4,23 +4,23 @@ const { buildPrompts } = require("./lib/prompt");
 const prompts = buildPrompts([
   {
     id: "ep-9",
-    prompt: "Dark mysterious illustration of a tall ancient wizard tower rising into a stormy night sky, glowing emerald magical runes spiraling around the tower, lightning in the background, dark enchanted forest at the base, fantasy magic atmosphere, cyberpunk hacker aesthetic",
+    prompt: "A towering ancient wizard's tower at night, arcane seals glowing across its walls, the faint silhouette of a lone apprentice climbing the spiral, a cold potion goblet abandoned at the summit window, ominous magical mystery, cyberpunk hacker aesthetic",
   },
   {
     id: "9-1",
-    prompt: "a massive stone tower entrance door with a glowing magical lock in the center, fire and water elemental symbols carved on either side, ancient stone archway with mystical vines, dark enchanted forest behind, fantasy magic atmosphere, cyberpunk hacker aesthetic",
+    prompt: "an ancient tower entrance with a glowing magical lock, an inscription carved in the master's handwriting referencing fire and water elements, flickering runes, cold night air, first-trial tension, cyberpunk hacker aesthetic",
   },
   {
     id: "9-2",
-    prompt: "a ornate medieval door inside a tower stairwell, glowing riddle inscriptions carved into the stone frame, magical numbers floating in the air around the door, torchlight flickering on stone walls, spiral staircase visible, fantasy magic atmosphere, cyberpunk hacker aesthetic",
+    prompt: "a dark spiral staircase inside a wizard's tower with mostly dead magic lamps, a sealed door at the top glowing with a hovering number-sequence riddle, cold stone walls, eerie quiet, cyberpunk hacker aesthetic",
   },
   {
     id: "9-3",
-    prompt: "a vast magical library inside a tower with towering bookshelves reaching to the ceiling, floating books with glowing pages, a stone golem guardian standing near a restricted section gate, magical particles in the air, fantasy magic atmosphere, cyberpunk hacker aesthetic",
+    prompt: "a vast dim magical library with towering bookshelves, a stalled librarian golem standing between the rows with faint light leaking from its chest, an open book fallen at its feet with a slip of paper tucked inside, mysterious arcane glow, cyberpunk hacker aesthetic",
   },
   {
     id: "9-4",
-    prompt: "a wizard's secret chamber at the top of a tower, a large glowing crystal ball on a pedestal in the center, mystical symbols and star charts on the walls, ancient scrolls and potions on shelves, ethereal green and purple light emanating from the crystal, fantasy magic atmosphere, cyberpunk hacker aesthetic",
+    prompt: "a hidden secret chamber revealed behind a cracked wall, the master's true study with an open diary on the desk, a locked truth box underneath, a glowing crystal orb hovering nearby reciting a final riddle, dramatic revelation mood, cyberpunk hacker aesthetic",
   },
 ]);
 

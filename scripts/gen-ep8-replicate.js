@@ -4,23 +4,23 @@ const { buildPrompts } = require("./lib/prompt");
 const prompts = buildPrompts([
   {
     id: "ep-8",
-    prompt: "Dark mysterious illustration of a space station in crisis floating in orbit above Earth, warning lights flashing, debris floating around, dramatic view of Earth below with emerald aurora, sci-fi emergency atmosphere, cyberpunk hacker aesthetic",
+    prompt: "A lone astronaut figure in silhouette drifting through the dim interior of a derelict space station, five empty hibernation capsules thick with frost lining the wall behind, one capsule open, the black void of space pressing against the viewport, crushing isolation and the slow dread of a terrible truth, cyberpunk hacker aesthetic",
   },
   {
     id: "8-1",
-    prompt: "an escape pod console inside a space station, glowing green holographic display showing authentication code input, cramped pod interior with buckled seats, stars visible through small window, sci-fi emergency atmosphere, cyberpunk hacker aesthetic",
+    prompt: "a frost-rimmed hibernation capsule with its lid just opened, a main console nearby demanding authentication, a blinking mission-log entry glowing in one corner of the screen, five other capsules behind it caked with thick ice, cold blue emergency lighting in a silent station module, cyberpunk hacker aesthetic",
   },
   {
     id: "8-2",
-    prompt: "oxygen supply tanks in a space station corridor, one tank highlighted with a glowing digital lock panel, warning indicators flashing, pipes and mechanical details on walls, sci-fi industrial atmosphere, cyberpunk hacker aesthetic",
+    prompt: "a life-support console displaying a long oxygen-consumption graph that drops sharply then flatlines low, a reserve oxygen valve with a worn faded label wrapped around its handle, frost creeping across the metal walls of a quiet station module, the chill of dwindling air, cyberpunk hacker aesthetic",
   },
   {
     id: "8-3",
-    prompt: "a communication equipment panel inside a space station, multiple screens and radio transmitters, a main screen showing signal waves and a code input field glowing green, headset hanging nearby, sci-fi control room atmosphere, cyberpunk hacker aesthetic",
+    prompt: "a communications module transmitter with an unfinished distress message frozen on its screen, an emergency-channel manual taped to the casing, cables and antenna controls in dim instrument glow, the lonely hum of a station broadcasting into empty space, cyberpunk hacker aesthetic",
   },
   {
     id: "8-4",
-    prompt: "a navigation computer terminal in a space station cockpit, holographic display showing Earth orbit path and trajectory lines, code input panel glowing in the center, stars and Earth visible through the large cockpit window, sci-fi piloting atmosphere, cyberpunk hacker aesthetic",
+    prompt: "the interior wall of an open hibernation capsule covered in five names and a single date scratched in with fingernails, this capsule alone free of frost while the others stay iced over, a lock screen glowing faintly with a final personal memo, the heavy quiet of an accepted sacrifice, cyberpunk hacker aesthetic",
   },
 ]);
 

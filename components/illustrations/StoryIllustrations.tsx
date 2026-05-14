@@ -81,4 +81,30 @@ export const storyIllustrations: Record<string, React.ComponentType> = {
   "15-3": () => <BgImage src="/images/story/15-3.png" alt="옴니코프의 심장 스테이지 3" />,
   "15-4": () => <BgImage src="/images/story/15-4.png" alt="옴니코프의 심장 스테이지 4" />,
   "15-5": () => <BgImage src="/images/story/15-5.png" alt="옴니코프의 심장 스테이지 5" />,
+  // EP.16 진실의 무게
+  "16-1": () => <BgImage src="/images/story/16-1.png" alt="진실의 무게 스테이지 1" />,
+  "16-2": () => <BgImage src="/images/story/16-2.png" alt="진실의 무게 스테이지 2" />,
+  "16-3": () => <BgImage src="/images/story/16-3.png" alt="진실의 무게 스테이지 3" />,
+  "16-4": () => <BgImage src="/images/story/16-4.png" alt="진실의 무게 스테이지 4" />,
+  // EP.17 저항군
+  "17-1": () => <BgImage src="/images/story/17-1.png" alt="저항군 스테이지 1" />,
+  "17-2": () => <BgImage src="/images/story/17-2.png" alt="저항군 스테이지 2" />,
+  "17-3": () => <BgImage src="/images/story/17-3.png" alt="저항군 스테이지 3" />,
+  "17-4": () => <BgImage src="/images/story/17-4.png" alt="저항군 스테이지 4" />,
+  // EP.18 삼중 공격
+  "18-1": () => <BgImage src="/images/story/18-1.png" alt="삼중 공격 스테이지 1" />,
+  "18-2": () => <BgImage src="/images/story/18-2.png" alt="삼중 공격 스테이지 2" />,
+  "18-3": () => <BgImage src="/images/story/18-3.png" alt="삼중 공격 스테이지 3" />,
+  "18-4": () => <BgImage src="/images/story/18-4.png" alt="삼중 공격 스테이지 4" />,
+  "18-5": () => <BgImage src="/images/story/18-5.png" alt="삼중 공격 스테이지 5" />,
+  // EP.19 팬텀의 역습
+  "19-1": () => <BgImage src="/images/story/19-1.png" alt="팬텀의 역습 스테이지 1" />,
+  "19-2": () => <BgImage src="/images/story/19-2.png" alt="팬텀의 역습 스테이지 2" />,
+  "19-3": () => <BgImage src="/images/story/19-3.png" alt="팬텀의 역습 스테이지 3" />,
+  "19-4": () => <BgImage src="/images/story/19-4.png" alt="팬텀의 역습 스테이지 4" />,
+  // EP.20 새로운 여명
+  "20-1": () => <BgImage src="/images/story/20-1.png" alt="새로운 여명 스테이지 1" />,
+  "20-2": () => <BgImage src="/images/story/20-2.png" alt="새로운 여명 스테이지 2" />,
+  "20-3": () => <BgImage src="/images/story/20-3.png" alt="새로운 여명 스테이지 3" />,
+  "20-4": () => <BgImage src="/images/story/20-4.png" alt="새로운 여명 스테이지 4" />,
 };

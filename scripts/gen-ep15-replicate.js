@@ -4,27 +4,27 @@ const { buildPrompts } = require("./lib/prompt");
 const prompts = buildPrompts([
   {
     id: "ep-15",
-    prompt: "Dark cyberpunk illustration of a massive futuristic corporate skyscraper with glowing green circuit patterns on its surface like a beating heart, a tiny silhouette figure rappelling down the side of the building, spotlight beams sweeping the night sky, infiltration and heist atmosphere",
+    prompt: "Dark cyberpunk noir illustration of a massive 52-floor OmniCorp corporate tower glowing with circuit patterns like a beating heart, a tiny silhouette figure infiltrating through a lower service entrance, security spotlight beams sweeping the rainy night sky, heist and infiltration tension, cyberpunk hacker aesthetic",
   },
   {
     id: "15-1",
-    prompt: "a holographic blueprint of a 52-floor corporate building floating above a dark table, floor plans and security patrol routes highlighted in green, night shift schedule data on side screens, mission planning war room atmosphere, cyberpunk aesthetic",
+    prompt: "a holographic blueprint of a 52-floor corporate tower floating above a dark planning table, underground server level highlighted, night guard shift schedule glowing on side screens, war room infiltration planning atmosphere, cyberpunk hacker aesthetic",
   },
   {
     id: "15-2",
-    prompt: "a high-tech ID card fabrication machine with a half-finished fake employee badge under a scanning laser, holographic barcode being generated, cleaning uniform hanging nearby, counterfeiting workshop setup, cyberpunk aesthetic",
+    prompt: "a high-tech ID forgery machine producing a fake cleaning-staff employee badge under a scanning laser, holographic barcode and employee code being generated on screen, a janitor uniform hanging beside it, counterfeiting workshop glow, cyberpunk noir aesthetic",
   },
   {
     id: "15-3",
-    prompt: "a large industrial cargo elevator with heavy metal doors and a glowing green security keypad panel, underground parking garage visible through gaps, dim emergency lighting, industrial pipes and cables on walls, cyberpunk basement aesthetic",
+    prompt: "a large industrial cargo elevator with heavy metal doors and a glowing security keypad panel showing voice recognition disabled, basement floor signs for P1 parking S2 warehouse R3 restricted area, a scrawled maintenance memo near the panel, dim industrial emergency lighting, cyberpunk basement aesthetic",
   },
   {
     id: "15-4",
-    prompt: "a massive server room door with a biometric scanner glowing red, override keypad panel beside it, rows of blinking server racks visible through reinforced glass window, cold blue fog from cooling system, underground bunker aesthetic, cyberpunk aesthetic",
+    prompt: "a massive server room door on a cold underground floor with a biometric scanner glowing blue, an override keypad panel beside it, a scrawled numeric sequence 2-4-8-16-?-64 graffiti revealed on the wall, cold heavy fog drifting from cooling vents, cyberpunk bunker aesthetic",
   },
   {
     id: "15-5",
-    prompt: "a main server terminal displaying PROJECT-X files with AES-256 encryption unlock animation, cascading green data streams, multiple holographic screens showing decoded classified documents, revelation and discovery atmosphere, cyberpunk aesthetic",
+    prompt: "an open server room filled with hundreds of humming server racks, a main terminal displaying a PROJECT-X folder with AES-256 encryption and an administrator decryption key hint, cascading data streams, tense revelation atmosphere, cyberpunk hacker aesthetic",
   },
 ]);
 

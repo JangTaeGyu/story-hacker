@@ -4,23 +4,23 @@ const { buildPrompts } = require("./lib/prompt");
 const prompts = buildPrompts([
   {
     id: "ep-4",
-    prompt: "Dark mysterious illustration of a noir detective office at night, cluttered desk with case files and magnifying glass, venetian blinds casting green-tinted shadows, smoke trails in the air, investigation board with pinned photos and string connections on the wall, cyberpunk hacker aesthetic",
+    prompt: "Dark detective office at night, an empty client chair and a lone smartphone left abandoned on a worn wooden desk, the faint silhouette of a missing woman fading away in a doorway, venetian blind shadows, swirling cigarette haze, noir investigation mood, cyberpunk hacker aesthetic",
   },
   {
     id: "4-1",
-    prompt: "a smartphone left on a detective desk next to a business card, the phone screen showing a lock icon with green glow, scattered papers and coffee cup nearby, dim office lamp lighting, noir detective atmosphere, cyberpunk hacker aesthetic",
+    prompt: "an abandoned smartphone resting on a cluttered detective desk, three unread message notifications glowing on its locked screen, a handwritten client request form beside it with a tiny scribbled corner note, dim desk lamp pool of light, tense quiet atmosphere, cyberpunk hacker aesthetic",
   },
   {
     id: "4-2",
-    prompt: "a glowing digital folder icon labeled with a lock symbol on a computer screen, confidential stamp effect, date numbers floating faintly around the screen, dark detective office background with dim monitors, cyberpunk hacker aesthetic",
+    prompt: "a phone screen showing a locked folder labeled top-secret with a six-digit passcode prompt, threatening text-message bubbles stacked behind it, a notes app with a date hint glowing faintly, layered digital interface, ominous mood, cyberpunk hacker aesthetic",
   },
   {
     id: "4-3",
-    prompt: "three suspect profile cards pinned to a dark investigation board, each card showing a silhouette figure with question marks, red string connecting the cards, dim spotlight on the board, noir detective aesthetic, cyberpunk hacker aesthetic",
+    prompt: "an opened secret folder spilling out grainy surveillance photos and a transcript page from an old company-gathering accident, three blurred suspect profile cards each marked with an age number, another locked file overlay glowing, pre-dawn tension, cyberpunk hacker aesthetic",
   },
   {
     id: "4-4",
-    prompt: "a final evidence folder opening with golden light bursting out, alphabet letters floating in the air transforming into numbers, dramatic reveal moment, dark detective office setting, spotlight effect, cyberpunk hacker aesthetic",
+    prompt: "a final locked suspect file with one profile circled in dripping red ink, three initial letters L E E etched beside a handwritten cipher rule, an alphabet-to-number code chart floating faintly, dramatic reveal moment, cyberpunk hacker aesthetic",
   },
 ]);
 
