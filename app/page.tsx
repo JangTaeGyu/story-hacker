@@ -57,9 +57,6 @@ export default function HomePage() {
         <p className="mt-auto pt-12 font-mono text-[10px] tracking-[0.2em] uppercase text-noct-ink-faint">
           Story {storyEpisodes.length} · Deduction {deductionEpisodes.length}
         </p>
-        <p className="mt-2 font-mono text-[10px] tracking-[0.2em] uppercase text-noct-ink-faint/70">
-          v3.0.0 — Next.js
-        </p>
       </div>
     </div>
   );
