@@ -60,10 +60,12 @@ components/
 hooks/
 ├── useGameState.ts             # useStoryGameState, useDeductionGameState
 ├── useLocalStorage.ts          # SSR-safe 로컬스토리지 훅 (isInitialized 반환)
+├── usePinKeyboard.ts           # 물리 키보드로 PIN 입력 (데스크톱)
 └── useTypingEffect.ts          # 타이핑 애니메이션 + 스킵
 
 lib/
 ├── types.ts                    # 모든 TypeScript 타입/인터페이스
+├── clearToken.ts               # 클리어 증표 발급/소비 (진행도 위조 방지)
 └── utils.ts                    # 유틸리티 함수
 
 data/
@@ -183,6 +185,8 @@ interface GameProgress {
 - localStorage 키: `'story-hacker-progress'` (스토리·추리 모드 공용, 에피소드 ID로 구분)
 - 저장 시점: **complete 페이지의 `useEffect`** (`isInitialized` 가드 뒤). 게임플레이 중에는 저장하지 않습니다.
 - 기존 기록보다 별점이 높을 때만 갱신됩니다(하향 방지).
+- **클리어 증표가 있어야 저장됩니다.** 게임 화면이 완료 직전 `issueClearToken(mode, episodeId, stars)`으로 sessionStorage에 1회용 토큰을 넣고, complete 페이지가 `consumeClearToken`으로 소비합니다. 토큰이 없으면(= URL로 직접 진입, 북마크, 뒤로가기 재방문) 화면은 보이되 **기록하지 않습니다.** 저장에 쓰는 별점도 쿼리스트링이 아니라 토큰 값입니다 — `?stars=`는 표시용입니다.
+- 완료 화면으로 가는 경로를 새로 만들면 `issueClearToken` 호출을 빠뜨리지 마세요. 빠뜨리면 정상 플레이인데도 기록이 남지 않습니다. `specs/progress-guard.spec.ts`가 양쪽(정상 플레이는 기록, 직접 진입은 미기록)을 검증합니다.
 - `app/layout.tsx`의 `STORAGE_VERSION` 상수 + 인라인 `<script>`가 하이드레이션 전에 동기 실행되어, 값이 바뀐 클라이언트에서 최초 1회 `localStorage.clear()`를 수행합니다. 데이터 구조나 정답을 대규모로 바꿨을 때 이 값을 올리세요. 버전은 `'story-hacker-version'` 키에 저장됩니다.
 
 ## 스타일링 (NOCTURNE)
@@ -282,9 +286,14 @@ scripts/resize-images.js, gen-icons.js, gen-og-image.js
 
 ```
 specs/
-├── seed.spec.ts          # MCP generator용 시드 (비어 있음, 지우지 말 것)
-└── typing-skip.spec.ts   # 타이핑 스킵 · noct-page 토큰 회귀 테스트
+├── helpers.ts             # 하이드레이션 대기, PIN 자리수 카운트
+├── seed.spec.ts           # MCP generator용 시드 (비어 있음, 지우지 말 것)
+├── typing-skip.spec.ts    # 타이핑 스킵 · noct-page 토큰
+├── pin-input.spec.ts      # 키패드 삭제 · 물리 키보드 입력
+└── progress-guard.spec.ts # 클리어 증표 기반 진행도 기록 가드
 ```
+
+키보드로 입력하는 테스트는 **하이드레이션 이후**에 눌러야 합니다(`waitForStoryReady`). 그 전에 누른 키는 리스너가 붙기 전이라 사라집니다. PIN 자리수는 키패드 숫자 버튼과 섞이지 않도록 `[data-testid="pin-display"]` 안에서만 셉니다.
 
 Playwright MCP agents도 같은 설정을 사용합니다 (`.mcp.json`의 `playwright-test` 서버).
 - **playwright-test-planner**: 테스트 계획 작성 → `specs/`
@@ -363,7 +372,8 @@ export default episode;
 - 에피소드 ID: 스토리 1–20, 추리 101–108. 추리 모드 UI는 `episode.id - 100`으로 번호를 표시합니다.
 - 스토리 EP.11–20은 "네오 시티의 그림자" 연작 — 정답이 에피소드 간 상호 참조되므로 정답 변경 시 연쇄 영향을 확인하세요.
 - 각 `answers` 항목과 `answer`의 길이는 `lockType` 자릿수와 정확히 일치해야 합니다 (불일치 시 제출 자체가 막힘).
-- 키패드에는 숫자·지움·확인만 있습니다. PIN은 숫자 전용이며, 한 자리 삭제(`handlePinDelete`)는 훅에 있으나 UI에 연결되어 있지 않습니다.
+- PIN은 숫자 전용입니다. 키패드는 숫자 · 한 자리 삭제(⌫) · 확인으로 구성되고, 전체 삭제는 키패드 위 "전체 지움" 텍스트 버튼입니다(입력이 없으면 숨김). 물리 키보드는 `usePinKeyboard`가 처리합니다 — 숫자 입력, `Backspace` 한 자리 삭제, `Escape` 전체 삭제, `Enter` 제출.
+- 키패드를 여닫는 푸터 높이는 약 440px입니다. 키패드가 열렸을 때 본문의 `pb-[30rem]`(480px)이 이보다 작아지면 내용이 가려집니다 — 키패드에 행을 추가하면 함께 조정하세요.
 - `PinDisplay` / `InputArea` / `Header`의 `accentColor` prop은 단일 팔레트 전환 이후 **동작하지 않는 호환용 잔재**입니다.
 - `next.config.js`는 사실상 비어 있습니다. `output: 'export'`는 주석 처리된 상태입니다.
 - `reference/`, `design-samples/`, `tasks/`는 앱 번들에 포함되지 않는 참고 자료입니다. `tasks/004-features-and-fixes.md`의 효과음 시스템 등은 아직 미구현입니다.
