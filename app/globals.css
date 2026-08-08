@@ -2,7 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Song+Myung&family=Nanum+Myeongjo:wght@400;700;800&family=Space+Mono:wght@400;700&display=swap');
+/* 웹폰트는 app/layout.tsx의 <link>로 불러온다.
+   여기서 @import 하면 globals.css를 받아 파싱한 뒤에야 폰트 CSS를 요청하게 되어
+   요청이 한 단계 더 직렬화된다.
+   next/font는 쓰지 않는다 — Song Myung은 korean 서브셋을 지원하지 않고,
+   한글 폰트를 self-host하면 산출물이 370개 5.2MB까지 늘어난다. */
 
 /* ============================================
    NOCTURNE — 다크 문학 미스터리 테마

@@ -63,6 +63,18 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko">
+      <head>
+        {/* 폰트 CDN 핸드셰이크를 미리 열어 둔다 */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* no-page-custom-font는 Pages Router의 pages/_document를 기준으로 하는 규칙이다.
+            App Router에서는 루트 레이아웃이 그 역할을 하므로 여기가 올바른 위치다. */}
+        {/* eslint-disable-next-line @next/next/no-page-custom-font */}
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Song+Myung&family=Nanum+Myeongjo:wght@400;700;800&family=Space+Mono:wght@400;700&display=swap"
+        />
+      </head>
       <body className="min-h-screen bg-noct-black text-noct-ink antialiased">
         {/* 대규모 업데이트 시 기존 로컬스토리지 일회성 초기화 — 하이드레이션 전에 동기 실행 */}
         <script
