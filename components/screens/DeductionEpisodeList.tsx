@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import type { EpisodeSummary } from '@/lib/types';
 import { getDifficultyInfo } from '@/lib/utils';
 import { readAllRuns, useProgress, type RunState } from '@/lib/progress';
@@ -71,7 +72,7 @@ export default function DeductionEpisodeList({ episodes }: DeductionEpisodeListP
 
         {/* 에피소드 목록 */}
         <div className="space-y-px">
-          {filteredEpisodes.map((episode) => {
+          {filteredEpisodes.map((episode, index) => {
             const diffInfo = getDifficultyInfo(episode.difficulty);
             const completedInfo = progress.completedEpisodes[episode.id];
             const isCompleted = completedInfo?.completed;
@@ -83,9 +84,23 @@ export default function DeductionEpisodeList({ episodes }: DeductionEpisodeListP
                 href={`/deduction/${episode.id}`}
                 className="group relative block overflow-hidden border-b border-noct-ink/10 transition-colors duration-300 hover:bg-noct-black-2/60"
               >
-                {/* 추리 모드는 아직 에피소드 이미지가 없다.
-                    (public/images/deduction/ 비어 있음 — 준비되면 스토리 모드처럼
-                     next/image 스트립을 여기 넣는다) */}
+                {/* 에피소드 이미지 스트립 — 오른쪽에서 검정으로 사라진다 */}
+                <div className="pointer-events-none absolute inset-y-0 right-0 w-2/5">
+                  <Image
+                    src={`/images/deduction/ep-${episode.id}.png`}
+                    alt=""
+                    fill
+                    sizes="180px"
+                    // 첫 화면에 보이는 세 장만 우선 로드한다
+                    priority={index < 3}
+                    className="noct-img object-cover"
+                  />
+                  {/* 텍스트 쪽으로 사라지는 가로 페이드 */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-noct-black via-noct-black/80 to-transparent" />
+                  {/* 행 경계가 하드 컷으로 보이지 않도록 세로로도 흐린다 */}
+                  <div className="absolute inset-0 bg-gradient-to-b from-noct-black/70 via-transparent to-noct-black/70" />
+                </div>
+
                 <div className="relative flex items-stretch justify-between gap-4 px-1 py-5">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 mb-1.5">
