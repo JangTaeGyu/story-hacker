@@ -1,169 +1,43 @@
-# 배경 일러스트 이미지 작업
+# 003 - 배경 일러스트 (대체됨)
 
-## 개요
+> **생성 절차는 루트 [REPLICATE.md](../REPLICATE.md)를 보세요.**
+> 이 문서는 DALL-E 3로 이미지를 만들고 `opacity-10 / opacity-15` 오버레이로
+> 깔던 시절의 계획입니다. 실제 구현은 그 뒤로 두 번 바뀌었습니다.
 
-두 가지 종류의 배경 이미지를 사용:
-1. **에피소드 목록 카드 배경** — 에피소드당 1개, 가로 이미지 (opacity-10)
-2. **게임 플레이 스테이지 배경** — 스테이지별 1개, 세로 이미지 (opacity-15)
+*원본 작성일: 2025-01 / 대체 표시: 2026-08*
 
-## 이미지 생성
+---
 
-### DALL-E 3 설정
+## 계획과 실제의 차이
 
-| 용도 | 사이즈 | 방향 |
-|------|--------|------|
-| 에피소드 카드 배경 | 1792x1024 | 가로 (landscape) |
-| 스테이지 플레이 배경 | 1024x1792 | 세로 (portrait) |
+| 항목 | 이 문서의 계획 | 실제 구현 |
+|---|---|---|
+| 생성 도구 | DALL-E 3 (1792×1024 / 1024×1792) | Replicate **FLUX Schnell** (16:9 / 9:16) |
+| 실행 방법 | 수동 생성 후 배치 | `scripts/gen-epN-replicate.js`, `scripts/gen-deduction-replicate.js` |
+| 표현 방식 | `opacity-10` / `opacity-15` 오버레이 | `.noct-img` 필터 + 그라데이션 페이드 |
+| 렌더링 | `<img>` | `next/image` (`fill` + `sizes`) |
+| 스테이지 이미지 | 96개 예정 | 실제 96개 (스토리 75 + 추리 21) |
+| 추리 모드 | 프롬프트 키워드만 있고 미생성 | 29장 생성 완료 |
 
-### 1. 에피소드 카드 배경 (가로) — 총 28개
+에피소드 제목도 상당수 달라졌습니다(예: 이 문서의 "EP.2 할아버지의 금고" → 실제 "사라진 보물"). 파일명 규칙만 그대로입니다.
 
-#### 스토리 모드 (20개)
-| 파일명 | 에피소드 | 프롬프트 키워드 |
-|--------|----------|-----------------|
-| ep-1.png | EP.1 수상한 이웃 | 스마트폰, 미스터리, 어두운 골목 |
-| ep-2.png | EP.2 할아버지의 금고 | 오래된 금고, 추억, 빈티지 |
-| ep-3.png | EP.3 학교의 비밀 | 학교 건물, 밤, 미스터리 |
-| ep-4.png | EP.4 탐정 사무소 | 돋보기, 서류, 탐정 분위기 |
-| ep-5.png | EP.5 게임 속 게임 | 게임 컨트롤러, 네온, 사이버펑크 |
-| ep-6.png | EP.6 카페의 비밀 | 카페, 커피, 은밀한 분위기 |
-| ep-7.png | EP.7 병원의 미스터리 | 병원, 복도, 긴장감 |
-| ep-8.png | EP.8 우주 정거장 | 우주, 정거장, SF |
-| ep-9.png | EP.9 마법의 탑 | 마법, 탑, 판타지 |
-| ep-10.png | EP.10 타임캡슐 | 타임캡슐, 과거와 현재 |
-| ep-11.png | EP.11 | TBD |
-| ep-12.png | EP.12 | TBD |
-| ep-13.png | EP.13 | TBD |
-| ep-14.png | EP.14 | TBD |
-| ep-15.png | EP.15 | TBD |
-| ep-16.png | EP.16 | TBD |
-| ep-17.png | EP.17 | TBD |
-| ep-18.png | EP.18 | TBD |
-| ep-19.png | EP.19 | TBD |
-| ep-20.png | EP.20 | TBD |
+---
 
-#### 추론 모드 (8개)
-| 파일명 | 에피소드 | 프롬프트 키워드 |
-|--------|----------|-----------------|
-| ep-101.png | EP.1 숫자 추리 | 숫자, 코드, 해킹 분위기 |
-| ep-102.png | EP.2 논리 게이트 | 논리 회로, 디지털 |
-| ep-103.png | EP.3 수학 퍼즐 | 수학 기호, 칠판 |
-| ep-104.png | EP.4 시간 퍼즐 | 시계, 시간 |
-| ep-105.png | EP.5 색상 코드 | 무지개, RGB, 색상 |
-| ep-106.png | EP.6 음악 퍼즐 | 음표, 오선지, 악기 |
-| ep-107.png | EP.7 지리 퍼즐 | 지구, 지도, 좌표 |
-| ep-108.png | EP.8 과학 퍼즐 | 원자, 주기율표 |
-
-### 2. 스테이지 플레이 배경 (세로) — 총 96개
-
-#### 스토리 모드 (75개)
-| EP | 스테이지 수 | 파일명 |
-|----|------------|--------|
-| 1 | 4 | 1-1.png, 1-2.png, 1-3.png, 1-4.png |
-| 2 | 2 | 2-1.png, 2-2.png |
-| 3 | 3 | 3-1.png, 3-2.png, 3-3.png |
-| 4 | 4 | 4-1.png, 4-2.png, 4-3.png, 4-4.png |
-| 5 | 4 | 5-1.png, 5-2.png, 5-3.png, 5-4.png |
-| 6 | 3 | 6-1.png, 6-2.png, 6-3.png |
-| 7 | 4 | 7-1.png, 7-2.png, 7-3.png, 7-4.png |
-| 8 | 4 | 8-1.png, 8-2.png, 8-3.png, 8-4.png |
-| 9 | 4 | 9-1.png, 9-2.png, 9-3.png, 9-4.png |
-| 10 | 3 | 10-1.png, 10-2.png, 10-3.png |
-| 11 | 3 | 11-1.png, 11-2.png, 11-3.png |
-| 12 | 4 | 12-1.png, 12-2.png, 12-3.png, 12-4.png |
-| 13 | 3 | 13-1.png, 13-2.png, 13-3.png |
-| 14 | 4 | 14-1.png, 14-2.png, 14-3.png, 14-4.png |
-| 15 | 5 | 15-1.png, 15-2.png, 15-3.png, 15-4.png, 15-5.png |
-| 16 | 4 | 16-1.png, 16-2.png, 16-3.png, 16-4.png |
-| 17 | 4 | 17-1.png, 17-2.png, 17-3.png, 17-4.png |
-| 18 | 5 | 18-1.png, 18-2.png, 18-3.png, 18-4.png, 18-5.png |
-| 19 | 4 | 19-1.png, 19-2.png, 19-3.png, 19-4.png |
-| 20 | 4 | 20-1.png, 20-2.png, 20-3.png, 20-4.png |
-
-#### 추론 모드 (21개)
-| EP | 스테이지 수 | 파일명 |
-|----|------------|--------|
-| 101 | 3 | 101-1.png, 101-2.png, 101-3.png |
-| 102 | 3 | 102-1.png, 102-2.png, 102-3.png |
-| 103 | 3 | 103-1.png, 103-2.png, 103-3.png |
-| 104 | 3 | 104-1.png, 104-2.png, 104-3.png |
-| 105 | 2 | 105-1.png, 105-2.png |
-| 106 | 2 | 106-1.png, 106-2.png |
-| 107 | 2 | 107-1.png, 107-2.png |
-| 108 | 3 | 108-1.png, 108-2.png, 108-3.png |
-
-## 리사이즈
-
-| 용도 | 원본 | 리사이즈 추천 |
-|------|------|---------------|
-| 에피소드 카드 | 1792x1024 | 896x512 |
-| 스테이지 배경 | 1024x1792 | 512x896 |
-
-포맷: PNG
-
-## 파일 경로
+## 현재 자산
 
 ```
-public/images/
-├── story/
-│   ├── ep-1.png ~ ep-20.png      (에피소드 카드 배경, 가로)
-│   ├── 1-1.png ~ 1-4.png         (스테이지 배경, 세로)
-│   ├── 2-1.png ~ 2-2.png
-│   ├── ...
-│   └── 20-1.png ~ 20-4.png
-└── deduction/
-    ├── ep-101.png ~ ep-108.png   (에피소드 카드 배경, 가로)
-    ├── 101-1.png ~ 101-3.png     (스테이지 배경, 세로)
-    ├── ...
-    └── 108-1.png ~ 108-3.png
+public/images/story/       ep-1 ~ ep-20.png (카드 16:9)
+                           1-1 … 20-4.png  (스테이지 9:16, 75장)
+public/images/deduction/   ep-101 ~ ep-108.png (카드)
+                           101-1 … 108-3.png  (스테이지, 21장)
 ```
 
-## 코드 구조
+매핑은 `components/illustrations/StoryIllustrations.tsx`, `DeductionIllustrations.tsx`의 `"에피소드ID-스테이지ID"` 키입니다.
 
-### 스테이지 배경 (GamePlay 컴포넌트)
+---
 
-일러스트 키: `episode.id-stage.id` (예: "1-1", "101-2")
+## 새 이미지를 만들 때
 
-```tsx
-// components/illustrations/StoryIllustrations.tsx
-export const storyIllustrations: Record<string, React.ComponentType> = {
-  "1-1": () => <BgImage src="/images/story/1-1.png" alt="..." />,
-  ...
-};
-
-// GamePlay 렌더링
-const illustrationKey = `${episode.id}-${currentStage.id}`;
-const IllustrationComponent = storyIllustrations[illustrationKey];
-
-{IllustrationComponent && (
-  <div className="absolute inset-0 z-0 opacity-15 pointer-events-none overflow-hidden">
-    <div className="absolute inset-0 flex items-center justify-center">
-      <IllustrationComponent />
-    </div>
-  </div>
-)}
-```
-
-### 에피소드 카드 배경 (목록 페이지)
-
-```tsx
-// app/story/page.tsx, app/deduction/page.tsx
-<Link className="... relative overflow-hidden">
-  <div className="absolute inset-0 opacity-10 pointer-events-none">
-    <img src={`/images/story/ep-${episode.id}.png`} alt="" className="w-full h-full object-cover" />
-  </div>
-  ...
-</Link>
-```
-
-## 체크리스트
-
-- [x] 코드 구조 변경 (SVG → PNG 이미지 기반)
-- [x] 배경 렌더링 방식 적용
-- [x] 파일 경로 설정
-- [ ] DALL-E 3로 에피소드 카드 이미지 생성 (가로 28개)
-- [ ] DALL-E 3로 스테이지 배경 이미지 생성 (세로 96개)
-- [ ] 이미지 리사이즈
-- [ ] public/images/ 경로에 파일 배치
-- [ ] 일러스트 컴포넌트에 스테이지별 매핑 추가
-- [ ] 에피소드 목록에 카드 배경 적용
-- [ ] 개발 서버에서 확인
+1. [REPLICATE.md](../REPLICATE.md)의 절차를 따릅니다.
+2. 프롬프트에 `glowing`·`neon` 같은 표현을 쓰지 마세요. 발광하는 추상 화면이 나와 기존 이미지와 톤이 어긋납니다. **어둡게 조명된 실제 장면**(단일 광원, 깊은 그림자)으로 묘사하고, 색 그레이딩은 `scripts/lib/prompt.js`의 공통 접미사에 맡깁니다.
+3. 생성 후 일러스트 매핑에 키를 추가합니다.

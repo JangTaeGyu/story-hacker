@@ -458,4 +458,4 @@ export default episode;
 - 배포 도메인은 `lib/site.ts`의 `SITE_URL` 한 곳에만 둡니다. 루트 메타데이터·에피소드별 OG·사이트맵·SNS 공유 버튼이 모두 이 값을 씁니다 — 하드코딩하면 한쪽만 낡아 어긋납니다(실제로 `layout.tsx`가 옛 vercel.app 주소로 남아 있었습니다).
 - 에피소드 페이지는 `generateMetadata`로 제목·설명·OG 이미지를 따로 냅니다. 스토리는 `synopsis`를 설명으로, `ep-{id}.png`(1344×768)를 OG 이미지로 씁니다. 루트 레이아웃의 `title.template`이 뒤에 사이트명을 붙입니다.
 - `next.config.js`는 사실상 비어 있습니다. `output: 'export'`는 주석 처리된 상태입니다.
-- `reference/`, `design-samples/`, `tasks/`는 앱 번들에 포함되지 않는 참고 자료입니다. `tasks/004-features-and-fixes.md`의 효과음 시스템 등은 아직 미구현입니다.
+- `reference/`, `design-samples/`, `tasks/`는 앱 번들에 포함되지 않는 참고 자료입니다. **현재 상태의 기준은 이 문서(CLAUDE.md)이고, `tasks/`는 "그때 무엇을 하려 했는가"의 기록입니다.** `tasks/README.md`에 문서별 상태(완료·폐기·진행 중)가 정리되어 있으며, 살아 있는 백로그는 `tasks/004-features-and-fixes.md` 하나뿐입니다. 001·003은 구 디자인 기준이라 그대로 따르면 안 됩니다.

@@ -1,8 +1,21 @@
-# 004: 새 기능 및 버그 개선
+# 004: 새 기능 및 버그 개선 (진행 중)
 
-## 개요
+> **`tasks/` 중 유일하게 살아 있는 백로그입니다.** 001·002·003은 완료·폐기 처리됐습니다.
+> 여기 적힌 것 외의 개선(접근성, 번들 축소, 이어하기, 난이도 재배치 등)은
+> 이미 처리되어 `CLAUDE.md`와 git 히스토리에 반영돼 있습니다.
 
-`001-remaining-tasks.md`에서 미구현된 기능과 개선 사항을 구현합니다.
+*원본 작성일: 2025-01-23 / 최종 갱신: 2026-08*
+
+---
+
+## 0. 착수 전 확인
+
+효과음은 **음원 파일이 먼저 필요합니다.** `public/sounds/`가 비어 있는 상태에서
+훅만 만들면 소리가 나지 않는 코드만 남습니다.
+
+에피소드 잠금 해제는 **이어하기와 상호작용**합니다. 진행도 저장소는
+`lib/progress.ts`로 통합되어 있으니(`useProgress`, `readRun`/`saveRun`)
+`useLocalStorage`를 새로 부르지 말고 그쪽을 확장하세요.
 
 ---
 
@@ -51,10 +64,10 @@ export function useSound(): {
 이전 에피소드를 클리어해야 다음 에피소드가 해제되는 순차 해제 구조
 
 ### 작업 항목
-- [ ] `lib/types.ts` — 잠금 상태 타입 추가
-- [ ] `hooks/useGameProgress.ts` — 잠금 해제 로직 (or 기존 useLocalStorage 확장)
-- [ ] `app/story/page.tsx` — 잠금된 에피소드 UI (자물쇠 아이콘, 클릭 불가)
-- [ ] `app/deduction/page.tsx` — 잠금된 에피소드 UI
+- [ ] `lib/progress.ts` — 잠금 해제 판정 추가 (`useProgress` 확장)
+- [ ] `components/screens/StoryEpisodeList.tsx` — 잠긴 에피소드 UI (클릭 불가)
+- [ ] `components/screens/DeductionEpisodeList.tsx` — 잠긴 에피소드 UI
+- [ ] 잠긴 에피소드는 `.noct-img-locked` 같은 별도 톤이 필요할 수 있음 (현재 미정의)
 - [ ] 첫 번째 에피소드는 기본 해제
 - [ ] 챕터 간 전환도 고려 (EP.10 클리어 → EP.11 해제 등)
 
@@ -122,26 +135,31 @@ export function useSound(): {
   - 영향 파일:
     - `app/story/[episodeId]/complete/page.tsx:28-40`
     - `app/deduction/[episodeId]/complete/page.tsx:29-41`
-  - 해결 방안: `useLocalStorage`에서 `isInitialized` 반환 → 초기화 완료 후에만 저장 실행
+  - 해결: `useLocalStorage`가 `isInitialized`를 반환하도록 변경.
+    이후 저장 로직은 `lib/progress.ts`의 `useProgress().recordClear`로 옮겨졌고,
+    URL 직접 진입으로 기록이 남지 않도록 `lib/clearToken.ts` 증표 검사가 추가됨
 
 ### 확인 완료 항목
-- [x] `pin2`, `pin3` lockType에 대한 PinDisplay/InputArea 대응 확인 — 문제 없음 (pin1~pin6 모두 지원)
-- [x] 모바일 키패드 레이아웃 터치 영역 최적화 — 문제 없음 (h-14=56px, 최소 48px 충족)
+- [x] `pin2`, `pin3` lockType에 대한 PinDisplay/InputArea 대응 확인 — pin1~pin6 모두 지원
+- [x] 모바일 키패드 터치 영역 — `h-16`(64px)으로 최소 48px 충족
 - [ ] 페이지 전환 시 로딩 상태 표시 — 경미 (게임오버 시 즉시 이동, 체감 이슈 적음)
-- [x] 에피소드 카드 이미지 로딩 실패 시 fallback 처리 — `onError`로 이미지 숨김 처리 완료
+- [x] 에피소드 카드 이미지 fallback — 전 에피소드 이미지가 채워져 `onError` 처리 불필요해짐.
+      `next/image` 전환과 함께 제거됨
+- [x] 한 자리 PIN 스테이지의 찍기 취약점 (3회 시도로 30%) — pin2 + 제로패딩으로 전환
 
 ---
 
 ## 6. 작업 우선순위
 
-| 순위 | 기능 | 이유 |
-|------|------|------|
-| 1 | 클리어 진행 데이터 버그 수정 | 핵심 기능 장애 — localStorage 초기화 타이밍 |
-| 2 | 에피소드 잠금 해제 | 게임 진행 흐름 개선 |
-| 3 | 효과음 시스템 | 게임 몰입감 향상 |
-| 4 | 튜토리얼 모드 | 신규 유저 온보딩 |
-| 5 | 업적 시스템 | 리플레이 동기 부여 |
+| 순위 | 기능 | 상태 | 이유 |
+|------|------|------|------|
+| — | 클리어 진행 데이터 버그 수정 | **완료** | 핵심 기능 장애였음 |
+| 1 | 효과음 시스템 | 대기 | 음원 파일 확보 후 착수 |
+| 2 | 에피소드 잠금 해제 | 미착수 | 게임 진행 흐름 개선 |
+| 3 | 튜토리얼 모드 | 미착수 | 신규 유저 온보딩 |
+| 4 | 업적 시스템 | 미착수 | 리플레이 동기 부여 |
 
----
+## 7. 장기 아이디어 (001에서 이관)
 
-*작성일: 2025-01-23*
+다국어 지원(next-intl) · 패턴 잠금 UI · 알파벳 비밀번호 · 유저 생성 스테이지 · 리더보드
+

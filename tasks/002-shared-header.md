@@ -1,4 +1,11 @@
-# 002: 공용 헤더 컴포넌트 정의
+# 002: 공용 헤더 컴포넌트 정의 (완료)
+
+> **완료된 작업 기록입니다.** `components/ui/Header.tsx`가 도입되어 지금도 쓰입니다.
+> 다만 아래 Props 설계 중 `accentColor`는 NOCTURNE 단일 팔레트 전환 이후
+> 무시되다가 제거되었고, `bg-hacker-dark` 토큰도 `noct-black`으로 바뀌었습니다.
+> 현재 시그니처는 `components/ui/Header.tsx`를 직접 보세요.
+
+*원본 작성일: 2025-01 / 완료 표시: 2026-08*
 
 ## 개요
 
@@ -27,10 +34,10 @@
   - Props 설계:
     - `backHref: string` - 뒤로가기 링크
     - `backText?: string` - 버튼 텍스트 (기본값: "BACK")
-    - `accentColor?: 'emerald' | 'cyan'` - 테마 색상
+    - ~~`accentColor?: 'emerald' | 'cyan'`~~ - 단일 팔레트 전환으로 제거됨
     - `center?: React.ReactNode` - 중앙 영역 (진행 정보 등)
     - `right?: React.ReactNode` - 우측 영역 (별점 등)
-  - 추가: `fixed top-0 z-40 bg-hacker-dark/95 backdrop-blur` 적용
+  - 추가: `fixed top-0 z-40 backdrop-blur` 적용 (배경은 현재 `bg-noct-black/95`)
 
 - [x] 2. `app/mode-select/page.tsx` 헤더 교체
 
