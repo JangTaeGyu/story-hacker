@@ -1,92 +1,34 @@
-'use client';
-
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { useParams, useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
+import { notFound } from 'next/navigation';
 import { deductionEpisodes } from '@/data/deductionEpisodes';
+import DeductionGameOver from '@/components/screens/DeductionGameOver';
 
-export default function DeductionGameOverPage() {
-  const params = useParams();
-  const searchParams = useSearchParams();
-  const episodeId = parseInt(params.episodeId as string, 10);
-  const stageIndex = parseInt(searchParams.get('stage') || '0', 10);
+interface PageProps {
+  params: Promise<{ episodeId: string }>;
+}
 
-  const episode = deductionEpisodes.find((ep) => ep.id === episodeId);
-  const stage = episode?.stages[stageIndex];
+export function generateStaticParams() {
+  return deductionEpisodes.map((episode) => ({
+    episodeId: episode.id.toString(),
+  }));
+}
 
-  const [showContent, setShowContent] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setShowContent(true), 300);
-    return () => clearTimeout(timer);
-  }, []);
+export default async function DeductionGameOverPage({ params }: PageProps) {
+  const { episodeId } = await params;
+  const episode = deductionEpisodes.find((ep) => ep.id === parseInt(episodeId, 10));
 
   if (!episode) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-noct-black">
-        <p className="font-serif text-noct-ink-dim">에피소드를 찾을 수 없습니다.</p>
-      </div>
-    );
+    notFound();
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-8 bg-noct-black">
-      <div
-        className={`w-full max-w-xs text-center ${
-          showContent ? 'animate-fadeIn' : 'opacity-0'
-        }`}
-      >
-        {/* 서브라인 */}
-        <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-noct-ink-faint mb-5">
-          Decode Failed
-        </p>
-
-        {/* 타이틀 */}
-        <h1 className="font-display text-4xl text-noct-ink mb-4">
-          미해결
-        </h1>
-
-        {/* 에피소드 */}
-        <p className="font-mono text-[11px] tracking-[0.2em] uppercase text-noct-ink-dim mb-8">
-          EP.{episode.id - 100} — {episode.title}
-        </p>
-
-        {/* 디바이더 */}
-        <div className="h-px w-24 mx-auto mb-8 bg-noct-ink/10" />
-
-        {/* 메시지 */}
-        <p className="font-serif text-sm text-noct-ink-dim leading-relaxed mb-2">
-          모든 단서를 사용했지만 해독에 실패했습니다.
-        </p>
-        <p className="font-serif text-xs text-noct-ink-faint leading-relaxed mb-6">
-          다시 도전하여 더 빨리 정답을 찾아보세요.
-        </p>
-        {stage && (
-          <p className="font-mono text-[11px] tracking-[0.2em] uppercase text-noct-ink-faint mb-10">
-            Stage {stageIndex + 1}
-            <span className="mx-2 text-noct-ink-faint/50">·</span>
-            <span className="text-noct-ink-dim normal-case tracking-normal font-serif">
-              {stage.title}
-            </span>
-          </p>
-        )}
-
-        {/* 버튼들 */}
-        <div className="space-y-4">
-          <Link
-            href={`/deduction/${episode.id}`}
-            className="block w-full py-3.5 border border-noct-ink/15 text-noct-ink font-mono text-[11px] tracking-[0.3em] uppercase hover:border-noct-ink/30 transition-colors"
-          >
-            Try Again
-          </Link>
-          <Link
-            href="/deduction"
-            className="block font-mono text-[11px] tracking-[0.3em] uppercase text-noct-ink-dim hover:text-noct-ink transition-colors"
-          >
-            <span className="border-b border-noct-ink/20 pb-1">Episode Select</span>
-          </Link>
-        </div>
-      </div>
-    </div>
+    // useSearchParams를 쓰는 클라이언트 컴포넌트라 Suspense가 필요하다.
+    <Suspense>
+      <DeductionGameOver
+        episodeId={episode.id}
+        episodeTitle={episode.title}
+        stageTitles={episode.stages.map((stage) => stage.title)}
+      />
+    </Suspense>
   );
 }
