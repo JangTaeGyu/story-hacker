@@ -44,14 +44,21 @@ app/                              # Next.js App Router
 └── deduction/                   # 추리 모드 (동일 구조 + layout.tsx)
 
 components/
-├── screens/
-│   ├── StoryGamePlay.tsx       # 스토리 모드 화면 전체
-│   └── DeductionGamePlay.tsx   # 추리 모드 화면 전체
+├── screens/                    # 각 라우트의 클라이언트 컴포넌트
+│   ├── StoryGamePlay.tsx       # 스토리 모드 게임 화면
+│   ├── DeductionGamePlay.tsx   # 추리 모드 게임 화면
+│   ├── StoryEpisodeList.tsx    # 스토리 에피소드 선택 (요약만 받음)
+│   ├── DeductionEpisodeList.tsx
+│   ├── StoryComplete.tsx       # 클리어 화면
+│   ├── DeductionComplete.tsx
+│   ├── StoryGameOver.tsx       # 게임오버 화면
+│   └── DeductionGameOver.tsx
 ├── ui/
 │   ├── Header.tsx              # 고정 헤더 (뒤로가기 / 중앙 / 우측 슬롯)
 │   ├── PinDisplay.tsx          # PIN 자릿수 표시 (밑줄 + 숫자)
-│   ├── InputArea.tsx           # 숫자 키패드 + 지움/확인
-│   └── SolvedStamp.tsx         # "해결" 도장 직인 (완료 에피소드 표시)
+│   ├── InputArea.tsx           # 숫자 키패드 + 백스페이스/확인
+│   ├── ResumePrompt.tsx        # 이어하기 확인 오버레이
+│   ├── SolvedStamp.tsx         # "해결" 도장 직인 (완료 에피소드 표시)
 │   └── HeartsDisplay.tsx       # 남은 시도 — 하트가 아닌 작은 점(dot)
 └── illustrations/
     ├── StoryIllustrations.tsx  # "epId-stageId" → PNG 배경 매핑
@@ -84,12 +91,20 @@ reference/, design-samples/, tasks/   # 원본 소스·디자인 시안·작업 
 
 "모든 페이지가 클라이언트 컴포넌트"가 **아닙니다.** 현재 경계는 다음과 같습니다.
 
-| 파일 | 종류 | 이유 |
-|---|---|---|
-| `app/page.tsx`, `app/mode-select/page.tsx` | 서버 | 정적 렌더 |
-| `app/story/[episodeId]/page.tsx`, `app/deduction/[episodeId]/page.tsx` | 서버 | `generateStaticParams()` + `notFound()`, `params`는 `Promise`라 `await` 필요 |
-| `components/screens/*GamePlay.tsx` | 클라이언트 | 게임 상태·라우팅의 실제 경계 |
-| 에피소드 선택 / complete / gameover 페이지 | 클라이언트 | localStorage, `useSearchParams` 사용 |
+**`app/` 아래 page.tsx는 전부 서버 컴포넌트입니다.** 상호작용은 `components/screens/`의 클라이언트 컴포넌트가 맡습니다.
+
+| 페이지 (서버) | 렌더 | 넘기는 것 | 클라이언트 컴포넌트 |
+|---|---|---|---|
+| `app/page.tsx`, `mode-select` | ○ 정적 | — | 없음 |
+| `story/page.tsx`, `deduction/page.tsx` | ○ 정적 | `EpisodeSummary[]` | `*EpisodeList` |
+| `*/[episodeId]/page.tsx` | ● SSG | 에피소드 1개 전체 | `*GamePlay` |
+| `*/[episodeId]/complete/page.tsx` | ● SSG | id·제목·다음 화 id | `*Complete` |
+| `*/[episodeId]/gameover/page.tsx` | ● SSG | id·제목·스테이지 제목 배열 | `*GameOver` |
+
+두 가지 규칙이 있습니다.
+
+1. **클라이언트 컴포넌트에서 `data/`를 직접 import하지 마세요.** 에피소드 배열을 import하면 본문·단서·정답이 통째로 클라이언트 번들에 실립니다(스토리 모드 약 25~30kB). 서버 페이지에서 필요한 필드만 추려 props로 넘기세요. `specs/payload.spec.ts`가 이를 검증합니다.
+2. **`useSearchParams`를 쓰는 클라이언트 컴포넌트는 `<Suspense>`로 감싸세요.** 감싸지 않으면 그 라우트 전체가 동적 렌더(ƒ)로 떨어집니다.
 
 게임 진행 상태는 화면 컴포넌트가 아니라 `hooks/useGameState.ts`에 격리되어 있고, 클리어·게임오버는 상태 전환이 아니라 **별도 라우트로 `router.push`** 하여 처리합니다.
 
@@ -228,10 +243,13 @@ readAllRuns(mode)   // 에피소드 선택 화면의 "진행 중" 배지용
 
 ### 폰트
 
-`globals.css`에서 Google Fonts를 `@import` 합니다.
 - `font-display` — Song Myung (타이틀, PIN 숫자)
 - `font-serif` — Nanum Myeongjo (본문·단서, body 기본값)
 - `font-mono` — Space Mono (대문자 트래킹 라벨)
+
+`app/layout.tsx`의 `<head>`에서 preconnect 2개 + Google Fonts `<link>`로 불러옵니다. `globals.css`에서 `@import` 하면 CSS를 받아 파싱한 뒤에야 폰트 CSS를 요청하게 되어 한 단계 더 직렬화되므로 그렇게 하지 마세요.
+
+**`next/font`는 쓰지 않습니다.** `Song_Myung`은 `korean` 서브셋을 아예 지원하지 않고(타입 오류), 한글 폰트를 self-host하면 유니코드 범위별로 쪼개진 파일이 370개·5.2MB까지 늘어납니다. 이 결정을 되돌리려면 먼저 그 비용부터 확인하세요.
 
 ### 애니메이션
 
@@ -309,6 +327,7 @@ specs/
 ├── typing-skip.spec.ts    # 타이핑 스킵 · noct-page 토큰
 ├── pin-input.spec.ts      # 키패드 삭제 · 물리 키보드 입력
 ├── progress-guard.spec.ts # 클리어 증표 기반 진행도 기록 가드
+├── payload.spec.ts        # 에피소드 데이터가 클라이언트로 새지 않는지
 └── resume.spec.ts         # 이어하기 · 게임오버 정답 비노출
 ```
 
