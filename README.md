@@ -82,6 +82,8 @@ npm run dev     # 개발 서버 실행 (localhost:3000)
 npm run build   # 프로덕션 빌드
 npm run start   # 프로덕션 서버 실행
 npm run lint    # ESLint 코드 검사
+npm test        # Playwright E2E 실행 (개발 서버 자동 기동)
+npm run test:ui # Playwright UI 모드
 ```
 
 ## 프로젝트 구조
@@ -218,7 +220,14 @@ node scripts/resize-images.js      # public/images/story/original → 가로 420
 
 ## 테스트
 
-E2E 테스트는 Playwright MCP agents(`.mcp.json`의 `playwright-test` 서버)를 사용하며, 테스트 계획은 `specs/` 디렉토리에 저장합니다.
+E2E 테스트는 Playwright로 실행합니다. 설정은 `playwright.config.ts`, 테스트 파일은 `specs/`에 있으며, `npm test`가 개발 서버를 자동으로 띄웁니다. 모바일 우선 레이아웃이라 기본 뷰포트는 Pixel 7입니다.
+
+```bash
+npx playwright install chromium   # 최초 1회 브라우저 설치
+npm test
+```
+
+테스트 계획 작성·코드 생성·디버깅에는 Playwright MCP agents(`.mcp.json`의 `playwright-test` 서버)를 사용합니다.
 
 ## 기여하기
 

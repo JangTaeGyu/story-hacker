@@ -17,11 +17,11 @@ Next.js 14 (App Router), React 18, TypeScript, Tailwind CSS로 구축되었습�
 ```bash
 npm run dev     # 개발 서버 시작 (localhost:3000)
 npm run build   # 프로덕션 빌드
-npm run lint    # ESLint 실행
+npm run lint    # ESLint 실행 (.eslintrc.json — next/core-web-vitals)
 npm start       # 프로덕션 서버 시작
+npm test        # Playwright E2E 실행 (dev 서버 자동 기동)
+npm run test:ui # Playwright UI 모드
 ```
-
-테스트 러너는 아직 package.json에 없습니다 (E2E는 아래 "테스트" 참고).
 
 ## 아키텍처
 
@@ -195,14 +195,14 @@ interface GameProgress {
 |---|---|---|
 | `noct-black` | `#100f0d` | 기본 배경 |
 | `noct-black-2` | `#15130f` | 카드·키패드 표면 |
-| `noct-page` | `#0a0908` | body 배경 (**CSS 변수에만 존재**) |
+| `noct-page` | `#0a0908` | body 배경 · 추리 모드 표면 |
 | `noct-ink` | `#cfc7b8` | 본문 텍스트 |
 | `noct-ink-dim` | `#837c6e` | 보조 텍스트 |
 | `noct-ink-faint` | `#565045` | 라벨·비활성 |
 | `noct-gold` | `#c9a86a` | 강조·별점·확인 버튼 |
 | `noct-gold-dim` | `#8f7a4e` | 은은한 강조·보더 |
 
-> `noct-page`는 `tailwind.config.ts`에 없어서 `bg-noct-page` / `from-noct-page` 같은 클래스는 CSS를 생성하지 않습니다. body 배경이 같은 색이라 눈에 띄지 않을 뿐이므로, 새로 쓸 때는 `noct-black`을 쓰거나 config에 토큰을 추가하세요.
+> 새 색을 추가할 때 한쪽만 정의하면 클래스가 조용히 생성되지 않습니다(`bg-*`가 아무 배경도 칠하지 않음). 반드시 양쪽에 함께 넣으세요. `specs/typing-skip.spec.ts`에 이를 잡는 회귀 테스트가 있습니다.
 
 ### 폰트
 
@@ -278,12 +278,20 @@ scripts/resize-images.js, gen-icons.js, gen-og-image.js
 
 ## 테스트
 
-E2E 테스트는 Playwright MCP agents를 사용합니다 (`.mcp.json`의 `playwright-test` 서버).
+설정은 `playwright.config.ts`, 테스트 파일은 `specs/`에 둡니다. `npm test`가 개발 서버를 자동으로 띄우고, 모바일 뷰포트(Pixel 7)를 기본 프로젝트로 사용합니다.
+
+```
+specs/
+├── seed.spec.ts          # MCP generator용 시드 (비어 있음, 지우지 말 것)
+└── typing-skip.spec.ts   # 타이핑 스킵 · noct-page 토큰 회귀 테스트
+```
+
+Playwright MCP agents도 같은 설정을 사용합니다 (`.mcp.json`의 `playwright-test` 서버).
 - **playwright-test-planner**: 테스트 계획 작성 → `specs/`
 - **playwright-test-generator**: 테스트 코드 생성
 - **playwright-test-healer**: 실패한 테스트 디버깅 및 수정
 
-현재 `specs/`에는 테스트 계획이 없고, 루트에 `seed.spec.ts`만 있습니다.
+브라우저가 없다는 오류가 나면 `npx playwright install chromium`을 먼저 실행하세요.
 
 ## 콘텐츠 추가 가이드
 
