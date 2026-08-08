@@ -1,9 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { DeductionEpisode } from '@/lib/types';
 import { useDeductionGameState } from '@/hooks/useGameState';
+import { usePinKeyboard } from '@/hooks/usePinKeyboard';
+import { issueClearToken } from '@/lib/clearToken';
 import PinDisplay from '@/components/ui/PinDisplay';
 import InputArea from '@/components/ui/InputArea';
 import HeartsDisplay from '@/components/ui/HeartsDisplay';
@@ -38,6 +40,17 @@ export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
     initializeStage,
   } = useDeductionGameState(episode.stages);
 
+  // 물리 키보드 입력 (데스크톱)
+  const openKeypad = useCallback(() => setShowKeypad(true), []);
+  usePinKeyboard({
+    onInput: handlePinInput,
+    onDelete: handlePinDelete,
+    onClear: handlePinClear,
+    onSubmit: handleSubmit,
+    onActivate: openKeypad,
+    enabled: !isComplete && !isGameOver,
+  });
+
   // 스테이지 변경 시 키패드 닫기
   useEffect(() => {
     setShowKeypad(false);
@@ -54,13 +67,15 @@ export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
       setShowKeypad(false);
       setShowSuccess(true);
       const timer = setTimeout(() => {
+        // 완료 화면이 진행도를 기록해도 되는지 판별할 1회용 증표
+        issueClearToken('deduction', episode.id, stars);
         router.push(`/deduction/${episode.id}/complete?stars=${stars}&turns=${turnsUsed}`);
       }, 1500);
       return () => clearTimeout(timer);
     } else if (isGameOver) {
       router.push(`/deduction/${episode.id}/gameover?stage=${currentStageIndex}`);
     }
-  }, [isComplete, isGameOver, router, episode.id, stars]);
+  }, [isComplete, isGameOver, router, episode.id, stars, turnsUsed, currentStageIndex]);
 
   if (!currentStage) return null;
 
@@ -96,7 +111,7 @@ export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
       />
 
       {/* 메인 컨텐츠 */}
-      <main className={`flex-1 overflow-y-auto ${showKeypad ? 'pb-96' : 'pb-28'}`}>
+      <main className={`flex-1 overflow-y-auto ${showKeypad ? 'pb-[30rem]' : 'pb-28'}`}>
         {/* 스테이지 전환 — currentStageIndex 변경 시 페이드업 재생 */}
         <div key={currentStageIndex} className="animate-fadeInUp">
         {/* 히어로 밴드 — 일러스트(있을 경우) + 검정 그라데이션 페이드 */}
@@ -239,9 +254,11 @@ export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
               {/* 키패드 */}
               <InputArea
                 onInput={handlePinInput}
+                onDelete={handlePinDelete}
                 onClear={handlePinClear}
                 onSubmit={handleSubmit}
                 canSubmit={pin.length === pinLength}
+                hasInput={pin.length > 0}
                 accentColor="cyan"
               />
             </div>

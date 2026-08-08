@@ -1,10 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { StoryEpisode } from '@/lib/types';
 import { useStoryGameState } from '@/hooks/useGameState';
 import { useTypingEffect } from '@/hooks/useTypingEffect';
+import { usePinKeyboard } from '@/hooks/usePinKeyboard';
+import { issueClearToken } from '@/lib/clearToken';
 import PinDisplay from '@/components/ui/PinDisplay';
 import InputArea from '@/components/ui/InputArea';
 import HeartsDisplay from '@/components/ui/HeartsDisplay';
@@ -48,6 +50,17 @@ export default function StoryGamePlay({ episode }: StoryGamePlayProps) {
     delay: 300,
   });
 
+  // 물리 키보드 입력 (데스크톱)
+  const openKeypad = useCallback(() => setShowKeypad(true), []);
+  usePinKeyboard({
+    onInput: handlePinInput,
+    onDelete: handlePinDelete,
+    onClear: handlePinClear,
+    onSubmit: handleSubmit,
+    onActivate: openKeypad,
+    enabled: !isComplete && !isGameOver,
+  });
+
   // 스테이지 변경 시 타이핑 리셋 및 키패드 닫기
   useEffect(() => {
     setStageKey((prev) => prev + 1);
@@ -60,13 +73,15 @@ export default function StoryGamePlay({ episode }: StoryGamePlayProps) {
       setShowKeypad(false);
       setShowSuccess(true);
       const timer = setTimeout(() => {
+        // 완료 화면이 진행도를 기록해도 되는지 판별할 1회용 증표
+        issueClearToken('story', episode.id, stars);
         router.push(`/story/${episode.id}/complete?stars=${stars}`);
       }, 1500);
       return () => clearTimeout(timer);
     } else if (isGameOver) {
       router.push(`/story/${episode.id}/gameover?stage=${currentStageIndex}`);
     }
-  }, [isComplete, isGameOver, router, episode.id, stars]);
+  }, [isComplete, isGameOver, router, episode.id, stars, currentStageIndex]);
 
   if (!currentStage) return null;
 
@@ -108,7 +123,7 @@ export default function StoryGamePlay({ episode }: StoryGamePlayProps) {
       />
 
       {/* 메인 컨텐츠 */}
-      <main className={`flex-1 overflow-y-auto ${showKeypad ? 'pb-96' : 'pb-24'}`}>
+      <main className={`flex-1 overflow-y-auto ${showKeypad ? 'pb-[30rem]' : 'pb-24'}`}>
         {/* 스테이지 전환 — currentStageIndex 변경 시 페이드업 재생 */}
         <div key={currentStageIndex} className="animate-fadeInUp">
         {/* 히어로 이미지 밴드 */}
@@ -250,9 +265,11 @@ export default function StoryGamePlay({ episode }: StoryGamePlayProps) {
               {/* 키패드 */}
               <InputArea
                 onInput={handlePinInput}
+                onDelete={handlePinDelete}
                 onClear={handlePinClear}
                 onSubmit={handleSubmit}
                 canSubmit={pin.length === pinLength}
+                hasInput={pin.length > 0}
                 accentColor="emerald"
               />
             </div>

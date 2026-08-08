@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useParams, useSearchParams } from 'next/navigation';
 import { storyEpisodes } from '@/data/storyEpisodes';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { consumeClearToken } from '@/lib/clearToken';
 
 interface GameProgress {
   completedEpisodes: Record<number, { stars: number; completed: boolean }>;
@@ -14,31 +15,43 @@ export default function StoryCompletePage() {
   const params = useParams();
   const searchParams = useSearchParams();
   const episodeId = parseInt(params.episodeId as string, 10);
-  const stars = parseInt(searchParams.get('stars') || '3', 10);
+  const queryStars = parseInt(searchParams.get('stars') || '3', 10);
 
   const episode = storyEpisodes.find((ep) => ep.id === episodeId);
   const nextEpisode = storyEpisodes.find((ep) => ep.id === episodeId + 1);
 
   const [showContent, setShowContent] = useState(false);
-  const [progress, setProgress, isInitialized] = useLocalStorage<GameProgress>('story-hacker-progress', {
+  // 실제로 기록된 별점. 직접 URL로 들어온 경우에는 null로 남는다.
+  const [awardedStars, setAwardedStars] = useState<number | null>(null);
+  const [, setProgress, isInitialized] = useLocalStorage<GameProgress>('story-hacker-progress', {
     completedEpisodes: {},
   });
 
   // 에피소드 완료 저장 (localStorage 초기화 완료 후 실행)
   useEffect(() => {
     if (!isInitialized) return;
-    const existingRecord = progress.completedEpisodes[episodeId];
-    // 더 높은 별점이거나 처음 완료한 경우에만 저장
-    if (!existingRecord || existingRecord.stars < stars) {
-      setProgress({
-        ...progress,
+
+    // 방금 끝낸 판이 발급한 토큰이 있을 때만 기록한다.
+    // 쿼리스트링의 stars는 표시에만 쓰고 신뢰하지 않는다.
+    const stars = consumeClearToken('story', episodeId);
+    if (stars === null) return;
+
+    setAwardedStars(stars);
+    setProgress((prev) => {
+      const existingRecord = prev.completedEpisodes[episodeId];
+      // 더 높은 별점이거나 처음 완료한 경우에만 저장
+      if (existingRecord && existingRecord.stars >= stars) return prev;
+      return {
+        ...prev,
         completedEpisodes: {
-          ...progress.completedEpisodes,
+          ...prev.completedEpisodes,
           [episodeId]: { stars, completed: true },
         },
-      });
-    }
-  }, [isInitialized, episodeId, stars]);
+      };
+    });
+  }, [isInitialized, episodeId, setProgress]);
+
+  const stars = awardedStars ?? queryStars;
 
   useEffect(() => {
     const timer = setTimeout(() => setShowContent(true), 300);

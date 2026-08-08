@@ -16,7 +16,7 @@ export default function PinDisplay({
   isWrong = false,
 }: PinDisplayProps) {
   return (
-    <div className="flex justify-center gap-3 sm:gap-4">
+    <div data-testid="pin-display" className="flex justify-center gap-3 sm:gap-4">
       {Array.from({ length: pinLength }).map((_, i) => {
         const isFilled = i < pin.length;
         const isActive = i === pin.length;
