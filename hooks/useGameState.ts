@@ -115,20 +115,6 @@ export function useStoryGameState(stages: StoryStage[]) {
     });
   }, []);
 
-  // 게임 리셋
-  const resetGame = useCallback(() => {
-    setState({
-      currentStageIndex: 0,
-      pin: '',
-      turnsUsed: 0,
-      hintUsed: false,
-      isWrong: false,
-      isComplete: false,
-      isGameOver: false,
-      stars: 3,
-    });
-  }, []);
-
   // 이어하기 — 저장된 스테이지·별점에서 다시 시작한다.
   const startFrom = useCallback((stageIndex: number, stars: number) => {
     setState({
@@ -153,7 +139,6 @@ export function useStoryGameState(stages: StoryStage[]) {
     handlePinClear,
     handleSubmit,
     handleUseHint,
-    resetGame,
     startFrom,
   };
 }
@@ -266,20 +251,6 @@ export function useDeductionGameState(stages: DeductionStage[]) {
     });
   }, [pinLength, stages, getInitialClues]);
 
-  // 게임 리셋
-  const resetGame = useCallback(() => {
-    const firstStage = stages[0];
-    setState({
-      currentStageIndex: 0,
-      pin: '',
-      turnsUsed: 1,
-      revealedClues: getInitialClues(firstStage),
-      isWrong: false,
-      isComplete: false,
-      isGameOver: false,
-    });
-  }, [stages, getInitialClues]);
-
   // 스테이지 시작 시 초기 단서 설정
   const initializeStage = useCallback(() => {
     if (currentStage && state.revealedClues.length === 0) {
@@ -320,7 +291,6 @@ export function useDeductionGameState(stages: DeductionStage[]) {
     handlePinDelete,
     handlePinClear,
     handleSubmit,
-    resetGame,
     initializeStage,
     startFrom,
   };

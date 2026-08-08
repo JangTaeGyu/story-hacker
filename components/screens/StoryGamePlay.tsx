@@ -42,7 +42,6 @@ export default function StoryGamePlay({ episode }: StoryGamePlayProps) {
     handlePinClear,
     handleSubmit,
     handleUseHint,
-    resetGame,
     startFrom,
   } = useStoryGameState(episode.stages);
 
@@ -302,7 +301,6 @@ export default function StoryGamePlay({ episode }: StoryGamePlayProps) {
                   pin={pin}
                   pinLength={pinLength}
                   isWrong={isWrong}
-                  accentColor="emerald"
                 />
               </div>
 
@@ -314,7 +312,6 @@ export default function StoryGamePlay({ episode }: StoryGamePlayProps) {
                 onSubmit={handleSubmit}
                 canSubmit={pin.length === pinLength}
                 hasInput={pin.length > 0}
-                accentColor="emerald"
               />
             </div>
           </div>

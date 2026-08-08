@@ -39,7 +39,6 @@ export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
     handlePinDelete,
     handlePinClear,
     handleSubmit,
-    resetGame,
     initializeStage,
     startFrom,
   } = useDeductionGameState(episode.stages);
@@ -288,7 +287,6 @@ export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
                   pin={pin}
                   pinLength={pinLength}
                   isWrong={isWrong}
-                  accentColor="cyan"
                 />
               </div>
 
@@ -300,7 +298,6 @@ export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
                 onSubmit={handleSubmit}
                 canSubmit={pin.length === pinLength}
                 hasInput={pin.length > 0}
-                accentColor="cyan"
               />
             </div>
           </div>

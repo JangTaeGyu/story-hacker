@@ -15,13 +15,6 @@ export function getDifficultyInfo(difficulty: DifficultyLevel): DifficultyInfo {
 }
 
 /**
- * 난이도 별 문자열 생성
- */
-export function getDifficultyStars(difficulty: DifficultyLevel): string {
-  return '★'.repeat(difficulty) + '☆'.repeat(3 - difficulty);
-}
-
-/**
  * 추리 모드 별점 계산
  */
 export function calculateDeductionStars(turnsUsed: number): number {

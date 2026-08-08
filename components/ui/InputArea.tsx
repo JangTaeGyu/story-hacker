@@ -13,8 +13,6 @@ interface InputAreaProps {
   /** 입력된 자리가 하나라도 있는지 — 삭제 버튼 활성화에 사용 */
   hasInput?: boolean;
   disabled?: boolean;
-  /** 호환용 — NOCTURNE은 단일 팔레트 */
-  accentColor?: 'emerald' | 'cyan';
 }
 
 export default function InputArea({

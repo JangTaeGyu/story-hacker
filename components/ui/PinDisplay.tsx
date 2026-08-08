@@ -6,8 +6,6 @@ interface PinDisplayProps {
   pin: string;
   pinLength: number;
   isWrong?: boolean;
-  /** 호환용 — NOCTURNE은 단일 팔레트 */
-  accentColor?: 'emerald' | 'cyan';
 }
 
 export default function PinDisplay({

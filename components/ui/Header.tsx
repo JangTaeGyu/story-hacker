@@ -5,8 +5,6 @@ import Link from 'next/link';
 interface HeaderProps {
   backHref: string;
   backText?: string;
-  /** 호환용 — NOCTURNE은 단일 팔레트라 시각엔 영향 없음 */
-  accentColor?: 'emerald' | 'cyan';
   center?: React.ReactNode;
   right?: React.ReactNode;
 }

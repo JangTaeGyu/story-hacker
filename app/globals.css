@@ -55,21 +55,9 @@ body {
   }
 }
 
-/* 스크롤바 숨기기 (모바일 최적화) */
-.hide-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-
 /* 생성 이미지 공통 톤 — 어둠으로 가라앉히는 필터 */
 .noct-img {
   filter: brightness(0.6) sepia(0.16) saturate(0.84) contrast(1.03);
-}
-.noct-img-locked {
-  filter: brightness(0.2) saturate(0.4) contrast(1.05) blur(1px);
 }
 
 /* ============================================
