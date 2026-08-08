@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { consumeClearToken } from '@/lib/clearToken';
 import { clearRun, useProgress } from '@/lib/progress';
+import { SITE_URL } from '@/lib/site';
 
 interface StoryCompleteProps {
   episodeId: number;
@@ -106,7 +107,7 @@ export default function StoryComplete({
             <button
               onClick={() => {
                 const text = `Story Hacker EP.${episodeId} "${episodeTitle}" 클리어! ${'★'.repeat(stars)}${'☆'.repeat(3 - stars)}`;
-                window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent('https://story-hacker.jubrolab.dev/')}&quote=${encodeURIComponent(text)}`, '_blank');
+                window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(SITE_URL)}&quote=${encodeURIComponent(text)}`, '_blank');
               }}
               className="w-11 h-11 bg-noct-black-2 border border-noct-ink/10 flex items-center justify-center hover:border-noct-ink/25 transition-colors"
               title="Facebook"
