@@ -34,6 +34,8 @@ app/                              # Next.js App Router
 ├── page.tsx                     # 홈 (히어로 이미지 + 워드마크)
 ├── globals.css                  # CSS 변수, 폰트, 애니메이션
 ├── icon.svg / manifest.json     # PWA 메타
+├── sitemap.ts / robots.ts       # 색인 대상 (결과 화면 제외)
+├── not-found.tsx / error.tsx    # 404 · 런타임 오류 화면
 ├── mode-select/page.tsx         # 모드 선택 (스토리/추리)
 ├── story/
 │   ├── page.tsx                # 스토리 에피소드 선택 (난이도 필터)
@@ -72,6 +74,7 @@ hooks/
 
 lib/
 ├── types.ts                    # 모든 TypeScript 타입/인터페이스
+├── site.ts                     # 배포 도메인·사이트명 (메타데이터·사이트맵·공유 링크 공용)
 ├── progress.ts                 # 진행도 저장소 — useProgress, 이어하기(run) 조회/저장
 ├── clearToken.ts               # 클리어 증표 발급/소비 (진행도 위조 방지)
 └── utils.ts                    # 유틸리티 함수
@@ -117,20 +120,20 @@ reference/, design-samples/, tasks/   # 원본 소스·디자인 시안·작업 
 const {
   currentStageIndex, pin, turnsUsed, hintUsed, isWrong, isComplete, isGameOver, stars,
   currentStage, pinLength, remainingTurns,
-  handlePinInput, handlePinDelete, handlePinClear, handleSubmit, handleUseHint, resetGame, startFrom,
+  handlePinInput, handlePinDelete, handlePinClear, handleSubmit, handleUseHint, startFrom,
 } = useStoryGameState(episode.stages);
 
 // 추리 모드
 const {
   currentStageIndex, pin, turnsUsed, revealedClues, isWrong, isComplete, isGameOver,
   currentStage, pinLength, stars, turnsSpent, remainingTurns,
-  handlePinInput, handlePinDelete, handlePinClear, handleSubmit, resetGame, initializeStage, startFrom,
+  handlePinInput, handlePinDelete, handlePinClear, handleSubmit, initializeStage, startFrom,
 } = useDeductionGameState(episode.stages);
 ```
 
 - 스테이지 이동은 훅 내부(`handleSubmit`)에서 자동 처리됩니다. 외부에 `nextStage`는 없습니다.
 - `isComplete`/`isGameOver`가 되면 화면 컴포넌트의 `useEffect`가 결과 라우트로 이동시킵니다.
-- `resetGame`은 두 화면 모두에서 구조 분해만 하고 실제로는 호출하지 않습니다(재시작은 라우트 재진입으로 처리).
+- 재시작은 라우트 재진입으로 처리합니다. 훅에 리셋 액션은 없습니다.
 
 ### 타입 정의 (lib/types.ts)
 
@@ -268,7 +271,7 @@ readAllRuns(mode)   // 에피소드 선택 화면의 "진행 중" 배지용
 
 ### 이미지 톤
 
-생성 이미지는 `.noct-img` 필터(`brightness(0.6) sepia(0.16) saturate(0.84) contrast(1.03)`)로 톤을 통일합니다. 잠긴 상태용 `.noct-img-locked`도 정의되어 있으나 현재 미사용입니다.
+생성 이미지는 `.noct-img` 필터(`brightness(0.6) sepia(0.16) saturate(0.84) contrast(1.03)`)로 톤을 통일합니다. 
 
 ### 레이아웃
 
@@ -294,7 +297,6 @@ readAllRuns(mode)   // 에피소드 선택 화면의 "진행 중" 배지용
 getDifficultyInfo(difficulty)      // { text: 'EASY'|'NORMAL'|'HARD', color, stars } — 에피소드 목록에서 사용
 getPinLength(lockType)             // 'pin4' → 4 — useGameState에서 사용
 cn(...classes)                     // 조건부 클래스 결합 — PinDisplay/InputArea에서 사용
-getDifficultyStars(difficulty)     // 현재 미사용
 calculateDeductionStars(turnsUsed) // 추리 모드 별점 — useDeductionGameState가 사용
 ```
 
@@ -344,6 +346,7 @@ specs/
 ├── payload.spec.ts        # 에피소드 데이터가 클라이언트로 새지 않는지
 ├── a11y.spec.ts           # 줌 허용 · 모션 감소 · 포커스 표시 · 다이얼로그
 ├── contrast.spec.ts       # 팔레트 명암비 AA 기준
+├── metadata.spec.ts       # 에피소드별 OG · robots · sitemap · 404
 └── resume.spec.ts         # 이어하기 · 게임오버 정답 비노출
 ```
 
@@ -451,6 +454,7 @@ export default episode;
 - 각 `answers` 항목과 `answer`의 길이는 `lockType` 자릿수와 정확히 일치해야 합니다 (불일치 시 제출 자체가 막힘).
 - PIN은 숫자 전용입니다. 키패드는 숫자 · 한 자리 삭제(⌫) · 확인으로 구성되고, 전체 삭제는 키패드 위 "전체 지움" 텍스트 버튼입니다(입력이 없으면 숨김). 물리 키보드는 `usePinKeyboard`가 처리합니다 — 숫자 입력, `Backspace` 한 자리 삭제, `Escape` 전체 삭제, `Enter` 제출.
 - 키패드를 여닫는 푸터 높이는 약 440px입니다. 키패드가 열렸을 때 본문의 `pb-[30rem]`(480px)이 이보다 작아지면 내용이 가려집니다 — 키패드에 행을 추가하면 함께 조정하세요.
-- `PinDisplay` / `InputArea` / `Header`의 `accentColor` prop은 단일 팔레트 전환 이후 **동작하지 않는 호환용 잔재**입니다.
+- 배포 도메인은 `lib/site.ts`의 `SITE_URL` 한 곳에만 둡니다. 루트 메타데이터·에피소드별 OG·사이트맵·SNS 공유 버튼이 모두 이 값을 씁니다 — 하드코딩하면 한쪽만 낡아 어긋납니다(실제로 `layout.tsx`가 옛 vercel.app 주소로 남아 있었습니다).
+- 에피소드 페이지는 `generateMetadata`로 제목·설명·OG 이미지를 따로 냅니다. 스토리는 `synopsis`를 설명으로, `ep-{id}.png`(1344×768)를 OG 이미지로 씁니다. 루트 레이아웃의 `title.template`이 뒤에 사이트명을 붙입니다.
 - `next.config.js`는 사실상 비어 있습니다. `output: 'export'`는 주석 처리된 상태입니다.
 - `reference/`, `design-samples/`, `tasks/`는 앱 번들에 포함되지 않는 참고 자료입니다. `tasks/004-features-and-fixes.md`의 효과음 시스템 등은 아직 미구현입니다.
