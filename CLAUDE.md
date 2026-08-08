@@ -64,7 +64,7 @@ components/
 │   └── HeartsDisplay.tsx       # 남은 시도 — 하트가 아닌 작은 점(dot)
 └── illustrations/
     ├── StoryIllustrations.tsx  # "epId-stageId" → PNG 배경 매핑
-    └── DeductionIllustrations.tsx  # 현재 빈 맵 (이미지 미제작)
+    └── DeductionIllustrations.tsx  # "epId-stageId" → PNG 배경 매핑
 
 hooks/
 ├── useGameState.ts             # useStoryGameState, useDeductionGameState
@@ -86,7 +86,7 @@ data/
 
 scripts/                         # Replicate(FLUX) 이미지 생성 · 아이콘/OG 생성 · 리사이즈
 public/images/story/             # ep-N.png(카드 16:9), N-M.png(스테이지 9:16)
-public/images/deduction/         # 비어 있음 — 추리 모드는 아직 이미지 없음
+public/images/deduction/         # ep-101~108.png(카드), 101-1 …(스테이지)
 reference/, design-samples/, tasks/   # 원본 소스·디자인 시안·작업 문서 (앱 코드 아님)
 ```
 
@@ -324,13 +324,14 @@ calculateDeductionStars(turnsUsed) // 추리 모드 별점 — useDeductionGameS
 ```
 scripts/lib/replicate.js   # API 호출·폴링·다운로드
 scripts/lib/prompt.js      # 공통 스타일 프롬프트
-scripts/gen-epN-replicate.js   # 에피소드별 프롬프트 (N=1~20)
+scripts/gen-epN-replicate.js       # 스토리 에피소드별 프롬프트 (N=1~20)
+scripts/gen-deduction-replicate.js # 추리 8편 전체 (--only=101로 부분 재생성)
 scripts/resize-images.js, gen-icons.js, gen-og-image.js
 ```
 
 - 파일 규칙: 카드 배경 `public/images/story/ep-N.png`(16:9), 스테이지 배경 `public/images/story/N-M.png`(9:16)
 - API 키는 `.env.local` (`.env.local.example` 참고)
-- 추리 모드는 아직 이미지가 없습니다 — `public/images/deduction/`은 비어 있고 `deductionIllustrations`도 빈 맵입니다. 목록 카드의 `<img>`는 `onError`로 숨겨지고, 게임 화면은 그라데이션으로 폴백합니다.
+- 프롬프트에 `glowing`·`neon` 같은 표현을 쓰면 발광하는 추상 화면이 나와 기존 이미지와 톤이 어긋납니다. **어둡게 조명된 실제 장면**으로 묘사하세요(단일 광원, 깊은 그림자). 공통 스타일 접미사가 색 그레이딩을 담당합니다.
 
 ## 테스트
 

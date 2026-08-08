@@ -210,7 +210,7 @@ node scripts/gen-ep1-replicate.js  # 에피소드별 이미지 생성
 node scripts/resize-images.js      # public/images/story/original → 가로 420px 리사이즈
 ```
 
-추리 모드는 아직 전용 이미지가 없으며, 이미지가 없을 때는 그라데이션으로 폴백합니다.
+추리 모드 이미지는 `node scripts/gen-deduction-replicate.js`로 생성합니다. 스토리·추리 28편 모두 카드(16:9)와 스테이지(9:16) 이미지를 갖고 있습니다.
 
 ## 진행 상황 저장
 
