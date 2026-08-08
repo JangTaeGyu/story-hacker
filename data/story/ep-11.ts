@@ -4,7 +4,7 @@ const episode = {
   id: 11,
   title: "첫 번째 임무",
   subtitle: "Chapter 1: 해커의 탄생",
-  difficulty: 1,
+  difficulty: 2,
   mode: "story",
   synopsis: "네오 시티의 뒷골목, 2087년. 이름도 얼굴도 없던 당신에게 해커 조직 '쉐도우넷'이 손을 내민다. 코드명 '제로'로 살아갈 첫 밤, 세 번의 시험이 기다린다.",
   stages: [

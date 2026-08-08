@@ -4,7 +4,7 @@ const episode = {
   id: 13,
   title: "추적자",
   subtitle: "Chapter 3: 그림자의 발자국",
-  difficulty: 1,
+  difficulty: 2,
   mode: "story",
   previousEpisode: 12,
   synopsis: "옴니코프가 침입을 눈치챘다. 역추적이 시작되고, 제로는 자신이 남긴 발자국을 지우며 어둠 속으로 달아난다. 안전가옥에서 그를 기다리는 건, 네온이 남긴 작은 상자 하나.",

@@ -4,7 +4,7 @@ const episode = {
   id: 16,
   title: "진실의 무게",
   subtitle: "Chapter 6: 배신의 연쇄",
-  difficulty: 2,
+  difficulty: 3,
   mode: "story",
   previousEpisode: 15,
   synopsis: "프로젝트 X의 충격적인 실체가 드러나는 순간, 쉐도우넷 내부의 더 깊은 배신이 함께 모습을 드러낸다.",

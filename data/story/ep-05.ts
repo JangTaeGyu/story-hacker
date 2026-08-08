@@ -4,7 +4,7 @@ const episode = {
   id: 5,
   title: "게이머의 비밀",
   subtitle: "로그아웃하지 않은 친구",
-  difficulty: 2,
+  difficulty: 1,
   mode: "story",
   synopsis: "3년을 함께 플레이한 길드 친구 '한별'이 사흘째 접속이 없다. 마지막 메시지는 단 한 줄 — '나 진짜 큰일 난 것 같아.' 그의 계정 안에 답이 있다.",
   stages: [

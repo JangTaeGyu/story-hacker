@@ -4,7 +4,7 @@ const episode = {
   id: 7,
   title: "병원 탈출",
   subtitle: "703호의 빈 침대",
-  difficulty: 3,
+  difficulty: 1,
   mode: "story",
   synopsis: "정전된 새벽의 병원에서 눈을 떴다. 내 병실 번호도, 내 이름도, 내가 왜 여기 있는지도 기억나지 않는다. 잠긴 문 너머로, 누군가 나를 이 안에 가둬두려 하고 있다.",
   stages: [

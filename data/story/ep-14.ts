@@ -4,7 +4,7 @@ const episode = {
   id: 14,
   title: "내부자",
   subtitle: "Chapter 4: 이중 스파이",
-  difficulty: 2,
+  difficulty: 3,
   mode: "story",
   previousEpisode: 13,
   synopsis: "쉐도우넷 내부에 옴니코프의 끄나풀이 숨어 있다. 팬텀의 지시로 제로는 동료들을 의심하는 조사를 시작한다.",

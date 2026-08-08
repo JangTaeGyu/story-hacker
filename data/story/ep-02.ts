@@ -4,7 +4,7 @@ const episode = {
   id: 2,
   title: "사라진 보물",
   subtitle: "할아버지가 남긴 마지막 수수께끼",
-  difficulty: 1,
+  difficulty: 2,
   mode: "story",
   synopsis: "돌아가신 할아버지는 유언장 대신 낡은 스마트폰 하나를 남겼다. 화면 너머에서, 평생 수수께끼를 좋아하던 노인이 마지막으로 손주에게 말을 건넨다.",
   stages: [

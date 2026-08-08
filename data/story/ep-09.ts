@@ -4,7 +4,7 @@ const episode = {
   id: 9,
   title: "마법사의 탑",
   subtitle: "스승의 마지막 봉인",
-  difficulty: 2,
+  difficulty: 1,
   mode: "story",
   synopsis: "대마법사가 자신의 탑 꼭대기에서 죽은 채 발견됐다. 사고라고들 한다. 하지만 그의 마지막 제자인 나는, 스승이 죽기 전 탑 곳곳에 봉인을 남긴 이유를 알아야 한다.",
   stages: [
