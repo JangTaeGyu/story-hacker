@@ -128,7 +128,7 @@ export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
 
       {/* 성공 오버레이 — 느린 NOCTURNE 페이드 */}
       {showSuccess && (
-        <div className="absolute inset-0 z-50 flex items-center justify-center bg-noct-page/95 animate-fadeIn">
+        <div role="status" className="absolute inset-0 z-50 flex items-center justify-center bg-noct-page/95 animate-fadeIn">
           <div className="text-center animate-scaleIn">
             <p className="font-display text-3xl text-noct-gold">잠금 해제</p>
             <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-noct-gold-dim mt-3">
@@ -248,7 +248,7 @@ export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
 
           {/* 오답 피드백 */}
           {isWrong && (
-            <p className="font-serif text-[13px] text-noct-ink-dim mt-5 animate-shake">
+            <p role="status" className="font-serif text-[13px] text-noct-ink-dim mt-5 animate-shake">
               오답입니다. 새로운 단서가 공개되었습니다.
             </p>
           )}

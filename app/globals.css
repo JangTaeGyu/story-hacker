@@ -33,6 +33,28 @@ body {
   min-height: 100vh;
 }
 
+/* 키보드 포커스 표시.
+   :where()로 특이도를 0으로 두어 컴포넌트 스타일을 덮어쓰지 않는다.
+   마우스 클릭에는 나타나지 않고 키보드 탐색에서만 보인다. */
+:where(a, button, [tabindex]):focus-visible {
+  outline: 2px solid var(--noct-gold);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* 모션 감소 선호 시 애니메이션을 무력화한다.
+   타이핑 효과는 CSS가 아니라 타이머라 useTypingEffect에서 따로 처리한다. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* 스크롤바 숨기기 (모바일 최적화) */
 .hide-scrollbar {
   -ms-overflow-style: none;

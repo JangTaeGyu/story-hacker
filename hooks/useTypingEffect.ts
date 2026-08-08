@@ -36,6 +36,16 @@ export function useTypingEffect(
 
     if (!text) return;
 
+    // 모션 감소를 선호하면 타이핑 없이 전문을 바로 보여준다.
+    if (
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    ) {
+      setDisplayedText(text);
+      setIsComplete(true);
+      return;
+    }
+
     let currentIndex = 0;
 
     // 딜레이 후 타이핑 시작

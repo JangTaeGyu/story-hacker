@@ -51,8 +51,8 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
+  // 확대를 막지 않는다. 본문이 15px 명조라 확대가 필요한 사용자가 있다.
+  // (maximumScale/userScalable로 핀치 줌을 잠그면 WCAG 1.4.4 위반)
   themeColor: '#0a0908',
 };
 

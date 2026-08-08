@@ -138,7 +138,7 @@ export default function StoryGamePlay({ episode }: StoryGamePlayProps) {
 
       {/* 성공 오버레이 — 잔잔한 페이드 */}
       {showSuccess && (
-        <div className="absolute inset-0 z-50 flex items-center justify-center bg-noct-black/95 animate-fadeIn">
+        <div role="status" className="absolute inset-0 z-50 flex items-center justify-center bg-noct-black/95 animate-fadeIn">
           <div className="text-center animate-scaleIn px-8">
             <div className="mx-auto mb-6 h-px w-16 bg-gradient-to-r from-transparent via-noct-gold to-transparent" />
             <h2 className="font-display text-4xl text-noct-gold">잠금 해제</h2>
@@ -259,7 +259,10 @@ export default function StoryGamePlay({ episode }: StoryGamePlayProps) {
 
           {/* 오답 피드백 */}
           {isWrong && (
-            <p className="mt-6 animate-fadeIn text-center font-mono text-[11px] tracking-[0.2em] uppercase text-noct-ink-dim">
+            <p
+              role="status"
+              className="mt-6 animate-fadeIn text-center font-mono text-[11px] tracking-[0.2em] uppercase text-noct-ink-dim"
+            >
               일치하지 않습니다 · 다시 시도하세요
             </p>
           )}
