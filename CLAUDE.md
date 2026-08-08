@@ -65,6 +65,7 @@ hooks/
 
 lib/
 ├── types.ts                    # 모든 TypeScript 타입/인터페이스
+├── progress.ts                 # 진행도 저장소 — useProgress, 이어하기(run) 조회/저장
 ├── clearToken.ts               # 클리어 증표 발급/소비 (진행도 위조 방지)
 └── utils.ts                    # 유틸리티 함수
 
@@ -101,14 +102,14 @@ reference/, design-samples/, tasks/   # 원본 소스·디자인 시안·작업 
 const {
   currentStageIndex, pin, turnsUsed, hintUsed, isWrong, isComplete, isGameOver, stars,
   currentStage, pinLength, remainingTurns,
-  handlePinInput, handlePinDelete, handlePinClear, handleSubmit, handleUseHint, resetGame,
+  handlePinInput, handlePinDelete, handlePinClear, handleSubmit, handleUseHint, resetGame, startFrom,
 } = useStoryGameState(episode.stages);
 
 // 추리 모드
 const {
   currentStageIndex, pin, turnsUsed, revealedClues, isWrong, isComplete, isGameOver,
-  currentStage, pinLength, stars, remainingTurns,
-  handlePinInput, handlePinDelete, handlePinClear, handleSubmit, resetGame, initializeStage,
+  currentStage, pinLength, stars, turnsSpent, remainingTurns,
+  handlePinInput, handlePinDelete, handlePinClear, handleSubmit, resetGame, initializeStage, startFrom,
 } = useDeductionGameState(episode.stages);
 ```
 
@@ -157,7 +158,6 @@ interface DeductionStage {
 
 interface GameProgress {
   completedEpisodes: Record<number, { stars: number; completed: boolean }>;
-  totalStars: number;      // 타입에는 있으나 현재 어디에서도 읽거나 쓰지 않음
 }
 ```
 
@@ -176,11 +176,29 @@ interface GameProgress {
 2. PIN 입력 후 `pin === stage.answer`로 판정.
 3. 정답 → 다음 스테이지(턴 1로 초기화, 해당 스테이지 초기 단서 세팅) 또는 완료.
 4. 오답 → `turnsUsed++` 후 **새 `turnsUsed`와 `turn` 값이 같은 단서**를 추가 공개. `turnsUsed > maxTurns`면 게임오버 (시도 기회 = `maxTurns`회).
-5. 별점: `turnsUsed <= 2` → 3, `<= 4` → 2, 그 외 1. (훅 내부 `calculateStars`가 계산)
+5. 별점: `turnsUsed <= 2` → 3, `<= 4` → 2, 그 외 1. (`lib/utils.ts`의 `calculateDeductionStars`)
+6. 화면의 `Turns` 표시는 두 모드 모두 **사용한 시도 횟수**입니다. 추리 모드의 `turnsUsed`는 1부터 시작하므로 표시에는 `turnsSpent`(= `turnsUsed - 1`)를 쓰세요.
 
 > **단서 공개 순서.** 공개 순서는 `turn` **오름차순**입니다 — `turn: 1`이 시작 시점에 공개되고, 오답할 때마다 2, 3, … 순으로 열립니다. 데이터도 이에 맞춰 **배열 순서 = 공개 순서**로 정렬되어 있습니다(위에서 아래로 포괄적 → 구체적, 마지막 단서는 사실상 정답 확인). 단서를 추가·수정할 때 이 규칙을 유지하세요. `turn`이 `maxTurns`를 넘으면 그 단서는 게임오버 전에 공개되지 않습니다.
 
 ### 진행 상황 저장
+
+저장소 접근은 **반드시 `lib/progress.ts`를 거칩니다.** 페이지마다 `GameProgress`를 다시 선언하거나 `useLocalStorage`를 직접 부르지 마세요.
+
+```typescript
+const { progress, recordClear, isInitialized, totalStars } = useProgress();
+readRun(mode, episodeId) / saveRun(mode, episodeId, { stageIndex, stars }) / clearRun(mode, episodeId)
+readAllRuns(mode)   // 에피소드 선택 화면의 "진행 중" 배지용
+```
+
+두 종류를 분리해 둡니다.
+
+| 키 | 내용 | 수명 |
+|---|---|---|
+| `story-hacker-progress` | 에피소드별 최고 기록(별점·완료) | 영구 (하향되지 않음) |
+| `story-hacker-run` | 진행 중인 판의 이어하기 지점 | 완료·게임오버 시 삭제 |
+
+**이어하기**: 스테이지를 하나 넘길 때마다 `saveRun`이 호출되어 `{ stageIndex, stars }`가 저장됩니다. 에피소드에 다시 들어오면 `ResumePrompt`가 떠서 "이어서 시작 / 처음부터"를 묻고, 이어서 시작하면 훅의 `startFrom`이 해당 스테이지로 상태를 되돌립니다. **게임오버는 이어하기를 남기지 않습니다** — 처음부터 다시 하는 것이 기존 난이도입니다.
 
 - localStorage 키: `'story-hacker-progress'` (스토리·추리 모드 공용, 에피소드 ID로 구분)
 - 저장 시점: **complete 페이지의 `useEffect`** (`isInitialized` 가드 뒤). 게임플레이 중에는 저장하지 않습니다.
@@ -245,7 +263,7 @@ getDifficultyInfo(difficulty)      // { text: 'EASY'|'NORMAL'|'HARD', color, sta
 getPinLength(lockType)             // 'pin4' → 4 — useGameState에서 사용
 cn(...classes)                     // 조건부 클래스 결합 — PinDisplay/InputArea에서 사용
 getDifficultyStars(difficulty)     // 현재 미사용
-calculateDeductionStars(turnsUsed) // 현재 미사용 (useDeductionGameState가 동일 로직을 자체 보유)
+calculateDeductionStars(turnsUsed) // 추리 모드 별점 — useDeductionGameState가 사용
 ```
 
 ## 라우팅 구조
@@ -290,8 +308,11 @@ specs/
 ├── seed.spec.ts           # MCP generator용 시드 (비어 있음, 지우지 말 것)
 ├── typing-skip.spec.ts    # 타이핑 스킵 · noct-page 토큰
 ├── pin-input.spec.ts      # 키패드 삭제 · 물리 키보드 입력
-└── progress-guard.spec.ts # 클리어 증표 기반 진행도 기록 가드
+├── progress-guard.spec.ts # 클리어 증표 기반 진행도 기록 가드
+└── resume.spec.ts         # 이어하기 · 게임오버 정답 비노출
 ```
+
+`npm run build` 직후 `npm test`를 돌리면 `.next`가 프로덕션 산출물로 덮여 있어 dev 서버가 라우트를 전부 다시 컴파일합니다. 워커 여러 개가 동시에 서로 다른 라우트를 요청하면 기본 5초 타임아웃으로는 부족해서 대량 실패가 납니다 — `playwright.config.ts`에서 `timeout`/`expect.timeout`을 늘려둔 이유입니다. 줄이지 마세요.
 
 키보드로 입력하는 테스트는 **하이드레이션 이후**에 눌러야 합니다(`waitForStoryReady`). 그 전에 누른 키는 리스너가 붙기 전이라 사라집니다. PIN 자리수는 키패드 숫자 버튼과 섞이지 않도록 `[data-testid="pin-display"]` 안에서만 셉니다.
 
