@@ -130,10 +130,10 @@ story-hacker/
 | `noct-black-2` | `#15130f` | 카드·키패드 표면 |
 | `noct-page` | `#0a0908` | body 배경 |
 | `noct-ink` | `#cfc7b8` | 본문 텍스트 |
-| `noct-ink-dim` | `#837c6e` | 보조 텍스트 |
-| `noct-ink-faint` | `#565045` | 라벨·비활성 |
+| `noct-ink-dim` | `#a49f93` | 보조 텍스트 |
+| `noct-ink-faint` | `#867c6b` | 라벨·비활성 |
 | `noct-gold` | `#c9a86a` | 강조·별점 |
-| `noct-gold-dim` | `#8f7a4e` | 은은한 강조·보더 |
+| `noct-gold-dim` | `#907b4e` | 은은한 강조·보더 |
 
 ### 타이포그래피
 

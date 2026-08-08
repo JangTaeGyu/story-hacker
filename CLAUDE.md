@@ -234,10 +234,10 @@ readAllRuns(mode)   // 에피소드 선택 화면의 "진행 중" 배지용
 | `noct-black-2` | `#15130f` | 카드·키패드 표면 |
 | `noct-page` | `#0a0908` | body 배경 · 추리 모드 표면 |
 | `noct-ink` | `#cfc7b8` | 본문 텍스트 |
-| `noct-ink-dim` | `#837c6e` | 보조 텍스트 |
-| `noct-ink-faint` | `#565045` | 라벨·비활성 |
+| `noct-ink-dim` | `#a49f93` | 보조 텍스트 |
+| `noct-ink-faint` | `#867c6b` | 라벨·비활성 |
 | `noct-gold` | `#c9a86a` | 강조·별점·확인 버튼 |
-| `noct-gold-dim` | `#8f7a4e` | 은은한 강조·보더 |
+| `noct-gold-dim` | `#907b4e` | 은은한 강조·보더 |
 
 > 새 색을 추가할 때 한쪽만 정의하면 클래스가 조용히 생성되지 않습니다(`bg-*`가 아무 배경도 칠하지 않음). 반드시 양쪽에 함께 넣으세요. `specs/typing-skip.spec.ts`에 이를 잡는 회귀 테스트가 있습니다.
 
@@ -284,7 +284,9 @@ readAllRuns(mode)   // 에피소드 선택 화면의 "진행 중" 배지용
 - **오버레이는 다이얼로그로 노출합니다.** `ResumePrompt`는 `role="dialog"` + `aria-modal` + `aria-labelledby`를 갖고, 열릴 때 기본 동작에 포커스를 줍니다.
 - **오답·성공 안내는 `role="status"`** 로 스크린리더에 전달됩니다.
 
-> **알려진 미해결 항목 — 색 대비.** `noct-ink-faint`(`#565045`)는 `noct-black` 위에서 **2.40:1**로 WCAG AA(4.5:1)에 미달합니다. 10px 라벨("미해결", "Turns 0/3", "Story Mode" 등)에 광범위하게 쓰입니다. 고치려면 토큰 값을 올려야 하는데 NOCTURNE의 "조용한" 톤이 전반적으로 바뀌므로 별도 판단이 필요합니다. 참고로 `noct-ink-dim`(4.63:1), `noct-gold-dim`(4.62:1)은 통과합니다.
+- **색 대비.** 전경 토큰 5개가 배경 3종 위에서 모두 AA 본문 기준(4.5:1)을 넘습니다. `specs/contrast.spec.ts`가 CSS 변수를 읽어 15개 조합을 전수 검사합니다.
+
+> **팔레트 값을 낮추지 마세요.** 잉크 3단계는 대비를 지키면서 서로 구분되도록 다시 잡은 눈금입니다(`noct-black-2` 기준 11.06 / 7.03 / 4.51). 특히 `noct-ink-faint`는 10px 라벨("미해결", "Turns 0/3", "Story Mode" 등)에 쓰여서, 여기서 한 단계만 어두워져도 그 라벨들이 읽히지 않습니다.
 
 ## 유틸리티 함수 (lib/utils.ts)
 
@@ -341,6 +343,7 @@ specs/
 ├── progress-guard.spec.ts # 클리어 증표 기반 진행도 기록 가드
 ├── payload.spec.ts        # 에피소드 데이터가 클라이언트로 새지 않는지
 ├── a11y.spec.ts           # 줌 허용 · 모션 감소 · 포커스 표시 · 다이얼로그
+├── contrast.spec.ts       # 팔레트 명암비 AA 기준
 └── resume.spec.ts         # 이어하기 · 게임오버 정답 비노출
 ```
 

@@ -13,11 +13,13 @@ const config: Config = {
         'noct-black-2': '#15130f',
         // globals.css의 --noct-page와 같은 값. 양쪽을 함께 유지할 것.
         'noct-page': '#0a0908',
+        // 잉크 3단계는 모두 WCAG AA(4.5:1)를 넘도록 잡혀 있다.
+        // 값을 낮추면 10px 라벨이 읽히지 않는다 — specs/contrast.spec.ts 참고.
         'noct-ink': '#cfc7b8',
-        'noct-ink-dim': '#837c6e',
-        'noct-ink-faint': '#565045',
+        'noct-ink-dim': '#a49f93',
+        'noct-ink-faint': '#867c6b',
         'noct-gold': '#c9a86a',
-        'noct-gold-dim': '#8f7a4e',
+        'noct-gold-dim': '#907b4e',
       },
       fontFamily: {
         display: ['Song Myung', 'serif'],
