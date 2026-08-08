@@ -43,5 +43,10 @@ next-env.d.ts
 # Playwright MCP
 .playwright-mcp/
 
+# Playwright 실행 산출물
+/test-results/
+/playwright-report/
+/blob-report/
+
 # MCP config (local)
 .mcp.json
