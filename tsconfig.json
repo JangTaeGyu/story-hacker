@@ -1,5 +1,8 @@
 {
   "compilerOptions": {
+    // 미지정 시 ES5로 떨어져 Set/Map 순회, Array.entries() 같은 표준 문법이
+    // tsc 검사에서만 오류가 난다 (SWC 빌드는 통과). Next 14 기본값에 맞춘다.
+    "target": "ES2017",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
