@@ -12,6 +12,12 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   reporter: 'list',
 
+  // 개발 서버는 라우트를 요청받을 때 컴파일한다. 특히 `npm run build` 직후에는
+  // .next가 프로덕션 산출물로 덮여 있어 첫 요청마다 전체 재컴파일이 일어나고,
+  // 워커 여러 개가 동시에 서로 다른 라우트를 때리면 기본 5초로는 부족하다.
+  timeout: 60 * 1000,
+  expect: { timeout: 15 * 1000 },
+
   use: {
     baseURL: 'http://localhost:3000',
     trace: 'on-first-retry',
