@@ -1,16 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { deductionEpisodes } from '@/data/deductionEpisodes';
 import { getDifficultyInfo } from '@/lib/utils';
-import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { readAllRuns, useProgress, type RunState } from '@/lib/progress';
 import Header from '@/components/ui/Header';
 import SolvedStamp from '@/components/ui/SolvedStamp';
-
-interface GameProgress {
-  completedEpisodes: Record<number, { stars: number; completed: boolean }>;
-}
 
 const FILTERS = [
   { value: 0, label: 'ALL' },
@@ -20,10 +16,14 @@ const FILTERS = [
 ] as const;
 
 export default function DeductionEpisodeSelectPage() {
-  const [progress] = useLocalStorage<GameProgress>('story-hacker-progress', {
-    completedEpisodes: {},
-  });
+  const { progress, totalStars } = useProgress();
   const [filter, setFilter] = useState<number>(0);
+
+  // 진행 중인 판 (localStorage 직접 조회이므로 마운트 후에 읽는다)
+  const [runs, setRuns] = useState<Record<number, RunState>>({});
+  useEffect(() => {
+    setRuns(readAllRuns('deduction'));
+  }, []);
 
   const filteredEpisodes = filter === 0
     ? deductionEpisodes
@@ -44,6 +44,9 @@ export default function DeductionEpisodeSelectPage() {
           </h2>
           <p className="font-mono text-[11px] tracking-[0.15em] uppercase text-noct-ink-dim mt-2">
             {filteredEpisodes.length} Episodes
+            <span className="mx-2 text-noct-ink-faint/50">·</span>
+            <span className="text-noct-gold-dim">★ {totalStars}</span>
+            <span className="text-noct-ink-faint"> / {deductionEpisodes.length * 3}</span>
           </p>
 
           <div className="flex gap-2 mt-5">
@@ -70,6 +73,7 @@ export default function DeductionEpisodeSelectPage() {
             const completedInfo = progress.completedEpisodes[episode.id];
             const isCompleted = completedInfo?.completed;
             const stars = completedInfo?.stars ?? 0;
+            const run = runs[episode.id];
             return (
               <Link
                 key={episode.id}
@@ -116,9 +120,13 @@ export default function DeductionEpisodeSelectPage() {
                         </span>
                         <SolvedStamp />
                       </>
+                    ) : run ? (
+                      <span className="mt-auto font-mono text-[10px] tracking-[0.2em] uppercase text-noct-gold-dim">
+                        Stage {run.stageIndex + 1} 진행 중
+                      </span>
                     ) : (
                       <span className="mt-auto font-mono text-[10px] tracking-[0.2em] uppercase text-noct-ink-faint group-hover:text-noct-ink-dim transition-colors">
-                        Locked
+                        미해결
                       </span>
                     )}
                   </div>

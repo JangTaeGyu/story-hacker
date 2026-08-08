@@ -7,6 +7,8 @@ import { useStoryGameState } from '@/hooks/useGameState';
 import { useTypingEffect } from '@/hooks/useTypingEffect';
 import { usePinKeyboard } from '@/hooks/usePinKeyboard';
 import { issueClearToken } from '@/lib/clearToken';
+import { clearRun, readRun, saveRun, type RunState } from '@/lib/progress';
+import ResumePrompt from '@/components/ui/ResumePrompt';
 import PinDisplay from '@/components/ui/PinDisplay';
 import InputArea from '@/components/ui/InputArea';
 import HeartsDisplay from '@/components/ui/HeartsDisplay';
@@ -41,7 +43,17 @@ export default function StoryGamePlay({ episode }: StoryGamePlayProps) {
     handleSubmit,
     handleUseHint,
     resetGame,
+    startFrom,
   } = useStoryGameState(episode.stages);
+
+  // 진행 중이던 판이 있으면 이어하기를 먼저 묻는다.
+  const [pendingRun, setPendingRun] = useState<RunState | null>(null);
+  useEffect(() => {
+    const run = readRun('story', episode.id);
+    if (run && run.stageIndex < episode.stages.length) {
+      setPendingRun(run);
+    }
+  }, [episode.id, episode.stages.length]);
 
   // 스토리 + 단서 텍스트 타이핑 효과
   const fullText = currentStage ? `${currentStage.story}\n\n🔍 ${currentStage.clue}` : '';
@@ -58,8 +70,17 @@ export default function StoryGamePlay({ episode }: StoryGamePlayProps) {
     onClear: handlePinClear,
     onSubmit: handleSubmit,
     onActivate: openKeypad,
-    enabled: !isComplete && !isGameOver,
+    enabled: !isComplete && !isGameOver && pendingRun === null,
   });
+
+  // 스테이지를 하나 넘길 때마다 이어하기 지점을 저장한다.
+  // (완료·게임오버 시에는 아래 effect에서 지운다)
+  useEffect(() => {
+    if (pendingRun !== null) return;
+    if (isComplete || isGameOver) return;
+    if (currentStageIndex === 0) return;
+    saveRun('story', episode.id, { stageIndex: currentStageIndex, stars });
+  }, [currentStageIndex, stars, isComplete, isGameOver, episode.id, pendingRun]);
 
   // 스테이지 변경 시 타이핑 리셋 및 키패드 닫기
   useEffect(() => {
@@ -72,6 +93,7 @@ export default function StoryGamePlay({ episode }: StoryGamePlayProps) {
     if (isComplete) {
       setShowKeypad(false);
       setShowSuccess(true);
+      clearRun('story', episode.id);
       const timer = setTimeout(() => {
         // 완료 화면이 진행도를 기록해도 되는지 판별할 1회용 증표
         issueClearToken('story', episode.id, stars);
@@ -79,6 +101,8 @@ export default function StoryGamePlay({ episode }: StoryGamePlayProps) {
       }, 1500);
       return () => clearTimeout(timer);
     } else if (isGameOver) {
+      // 게임오버는 처음부터 다시 — 이어하기 지점을 남기지 않는다.
+      clearRun('story', episode.id);
       router.push(`/story/${episode.id}/gameover?stage=${currentStageIndex}`);
     }
   }, [isComplete, isGameOver, router, episode.id, stars, currentStageIndex]);
@@ -95,6 +119,23 @@ export default function StoryGamePlay({ episode }: StoryGamePlayProps) {
 
   return (
     <div className="min-h-screen flex flex-col relative bg-noct-black">
+      {/* 이어하기 확인 */}
+      {pendingRun && (
+        <ResumePrompt
+          stageIndex={pendingRun.stageIndex}
+          totalStages={episode.stages.length}
+          stageTitle={episode.stages[pendingRun.stageIndex]?.title}
+          onResume={() => {
+            startFrom(pendingRun.stageIndex, pendingRun.stars);
+            setPendingRun(null);
+          }}
+          onRestart={() => {
+            clearRun('story', episode.id);
+            setPendingRun(null);
+          }}
+        />
+      )}
+
       {/* 성공 오버레이 — 잔잔한 페이드 */}
       {showSuccess && (
         <div className="absolute inset-0 z-50 flex items-center justify-center bg-noct-black/95 animate-fadeIn">

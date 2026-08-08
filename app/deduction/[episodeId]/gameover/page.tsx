@@ -63,8 +63,11 @@ export default function DeductionGameOverPage() {
         </p>
         {stage && (
           <p className="font-mono text-[11px] tracking-[0.2em] uppercase text-noct-ink-faint mb-10">
-            Answer{' '}
-            <span className="text-noct-gold-dim">{stage.answer}</span>
+            Stage {stageIndex + 1}
+            <span className="mx-2 text-noct-ink-faint/50">·</span>
+            <span className="text-noct-ink-dim normal-case tracking-normal font-serif">
+              {stage.title}
+            </span>
           </p>
         )}
 

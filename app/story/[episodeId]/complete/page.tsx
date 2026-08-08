@@ -4,12 +4,8 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useParams, useSearchParams } from 'next/navigation';
 import { storyEpisodes } from '@/data/storyEpisodes';
-import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { consumeClearToken } from '@/lib/clearToken';
-
-interface GameProgress {
-  completedEpisodes: Record<number, { stars: number; completed: boolean }>;
-}
+import { clearRun, useProgress } from '@/lib/progress';
 
 export default function StoryCompletePage() {
   const params = useParams();
@@ -23,9 +19,7 @@ export default function StoryCompletePage() {
   const [showContent, setShowContent] = useState(false);
   // 실제로 기록된 별점. 직접 URL로 들어온 경우에는 null로 남는다.
   const [awardedStars, setAwardedStars] = useState<number | null>(null);
-  const [, setProgress, isInitialized] = useLocalStorage<GameProgress>('story-hacker-progress', {
-    completedEpisodes: {},
-  });
+  const { recordClear, isInitialized } = useProgress();
 
   // 에피소드 완료 저장 (localStorage 초기화 완료 후 실행)
   useEffect(() => {
@@ -37,19 +31,10 @@ export default function StoryCompletePage() {
     if (stars === null) return;
 
     setAwardedStars(stars);
-    setProgress((prev) => {
-      const existingRecord = prev.completedEpisodes[episodeId];
-      // 더 높은 별점이거나 처음 완료한 경우에만 저장
-      if (existingRecord && existingRecord.stars >= stars) return prev;
-      return {
-        ...prev,
-        completedEpisodes: {
-          ...prev.completedEpisodes,
-          [episodeId]: { stars, completed: true },
-        },
-      };
-    });
-  }, [isInitialized, episodeId, setProgress]);
+    recordClear(episodeId, stars);
+    // 에피소드를 끝냈으므로 이어하기 지점은 필요 없다.
+    clearRun('story', episodeId);
+  }, [isInitialized, episodeId, recordClear]);
 
   const stars = awardedStars ?? queryStars;
 

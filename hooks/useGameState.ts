@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import type { StoryStage, DeductionStage, DeductionClue } from '@/lib/types';
-import { getPinLength } from '@/lib/utils';
+import { calculateDeductionStars, getPinLength } from '@/lib/utils';
 
 // ============================================
 // 스토리 모드 게임 상태
@@ -129,6 +129,20 @@ export function useStoryGameState(stages: StoryStage[]) {
     });
   }, []);
 
+  // 이어하기 — 저장된 스테이지·별점에서 다시 시작한다.
+  const startFrom = useCallback((stageIndex: number, stars: number) => {
+    setState({
+      currentStageIndex: stageIndex,
+      pin: '',
+      turnsUsed: 0,
+      hintUsed: false,
+      isWrong: false,
+      isComplete: false,
+      isGameOver: false,
+      stars,
+    });
+  }, []);
+
   return {
     ...state,
     currentStage,
@@ -140,6 +154,7 @@ export function useStoryGameState(stages: StoryStage[]) {
     handleSubmit,
     handleUseHint,
     resetGame,
+    startFrom,
   };
 }
 
@@ -251,13 +266,6 @@ export function useDeductionGameState(stages: DeductionStage[]) {
     });
   }, [pinLength, stages, getInitialClues]);
 
-  // 별점 계산 (빨리 맞출수록 고득점)
-  const calculateStars = useCallback((turnsUsed: number) => {
-    if (turnsUsed <= 2) return 3;
-    if (turnsUsed <= 4) return 2;
-    return 1;
-  }, []);
-
   // 게임 리셋
   const resetGame = useCallback(() => {
     const firstStage = stages[0];
@@ -282,11 +290,31 @@ export function useDeductionGameState(stages: DeductionStage[]) {
     }
   }, [currentStage, state.revealedClues.length, getInitialClues]);
 
+  // 이어하기 — 저장된 스테이지에서 다시 시작한다.
+  const startFrom = useCallback(
+    (stageIndex: number) => {
+      const stage = stages[stageIndex];
+      if (!stage) return;
+      setState({
+        currentStageIndex: stageIndex,
+        pin: '',
+        turnsUsed: 1,
+        revealedClues: getInitialClues(stage),
+        isWrong: false,
+        isComplete: false,
+        isGameOver: false,
+      });
+    },
+    [stages, getInitialClues]
+  );
+
   return {
     ...state,
     currentStage,
     pinLength,
-    stars: calculateStars(state.turnsUsed),
+    stars: calculateDeductionStars(state.turnsUsed),
+    // turnsUsed는 1부터 시작하므로 실제 사용한 시도 횟수는 하나 적다.
+    turnsSpent: state.turnsUsed - 1,
     remainingTurns: currentStage ? currentStage.maxTurns - state.turnsUsed + 1 : 0,
     handlePinInput,
     handlePinDelete,
@@ -294,5 +322,6 @@ export function useDeductionGameState(stages: DeductionStage[]) {
     handleSubmit,
     resetGame,
     initializeStage,
+    startFrom,
   };
 }

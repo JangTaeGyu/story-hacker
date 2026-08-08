@@ -6,6 +6,8 @@ import type { DeductionEpisode } from '@/lib/types';
 import { useDeductionGameState } from '@/hooks/useGameState';
 import { usePinKeyboard } from '@/hooks/usePinKeyboard';
 import { issueClearToken } from '@/lib/clearToken';
+import { clearRun, readRun, saveRun, type RunState } from '@/lib/progress';
+import ResumePrompt from '@/components/ui/ResumePrompt';
 import PinDisplay from '@/components/ui/PinDisplay';
 import InputArea from '@/components/ui/InputArea';
 import HeartsDisplay from '@/components/ui/HeartsDisplay';
@@ -24,6 +26,7 @@ export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
     currentStageIndex,
     pin,
     turnsUsed,
+    turnsSpent,
     revealedClues,
     isWrong,
     isComplete,
@@ -38,7 +41,17 @@ export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
     handleSubmit,
     resetGame,
     initializeStage,
+    startFrom,
   } = useDeductionGameState(episode.stages);
+
+  // 진행 중이던 판이 있으면 이어하기를 먼저 묻는다.
+  const [pendingRun, setPendingRun] = useState<RunState | null>(null);
+  useEffect(() => {
+    const run = readRun('deduction', episode.id);
+    if (run && run.stageIndex < episode.stages.length) {
+      setPendingRun(run);
+    }
+  }, [episode.id, episode.stages.length]);
 
   // 물리 키보드 입력 (데스크톱)
   const openKeypad = useCallback(() => setShowKeypad(true), []);
@@ -48,8 +61,16 @@ export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
     onClear: handlePinClear,
     onSubmit: handleSubmit,
     onActivate: openKeypad,
-    enabled: !isComplete && !isGameOver,
+    enabled: !isComplete && !isGameOver && pendingRun === null,
   });
+
+  // 스테이지를 하나 넘길 때마다 이어하기 지점을 저장한다.
+  useEffect(() => {
+    if (pendingRun !== null) return;
+    if (isComplete || isGameOver) return;
+    if (currentStageIndex === 0) return;
+    saveRun('deduction', episode.id, { stageIndex: currentStageIndex, stars });
+  }, [currentStageIndex, stars, isComplete, isGameOver, episode.id, pendingRun]);
 
   // 스테이지 변경 시 키패드 닫기
   useEffect(() => {
@@ -66,6 +87,7 @@ export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
     if (isComplete) {
       setShowKeypad(false);
       setShowSuccess(true);
+      clearRun('deduction', episode.id);
       const timer = setTimeout(() => {
         // 완료 화면이 진행도를 기록해도 되는지 판별할 1회용 증표
         issueClearToken('deduction', episode.id, stars);
@@ -73,6 +95,8 @@ export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
       }, 1500);
       return () => clearTimeout(timer);
     } else if (isGameOver) {
+      // 게임오버는 처음부터 다시 — 이어하기 지점을 남기지 않는다.
+      clearRun('deduction', episode.id);
       router.push(`/deduction/${episode.id}/gameover?stage=${currentStageIndex}`);
     }
   }, [isComplete, isGameOver, router, episode.id, stars, turnsUsed, currentStageIndex]);
@@ -85,6 +109,23 @@ export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
 
   return (
     <div className="min-h-screen flex flex-col relative bg-noct-page text-noct-ink">
+      {/* 이어하기 확인 */}
+      {pendingRun && (
+        <ResumePrompt
+          stageIndex={pendingRun.stageIndex}
+          totalStages={episode.stages.length}
+          stageTitle={episode.stages[pendingRun.stageIndex]?.title}
+          onResume={() => {
+            startFrom(pendingRun.stageIndex);
+            setPendingRun(null);
+          }}
+          onRestart={() => {
+            clearRun('deduction', episode.id);
+            setPendingRun(null);
+          }}
+        />
+      )}
+
       {/* 성공 오버레이 — 느린 NOCTURNE 페이드 */}
       {showSuccess && (
         <div className="absolute inset-0 z-50 flex items-center justify-center bg-noct-page/95 animate-fadeIn">
@@ -131,7 +172,7 @@ export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
             <div className="mx-auto max-w-md">
               <div className="flex items-center justify-between mb-3">
                 <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-noct-ink-faint">
-                  Turns {turnsUsed}/{currentStage.maxTurns}
+                  Turns {turnsSpent}/{currentStage.maxTurns}
                 </span>
                 <HeartsDisplay
                   totalTurns={currentStage.maxTurns}

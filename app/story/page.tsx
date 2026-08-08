@@ -1,16 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { storyEpisodes } from '@/data/storyEpisodes';
 import { getDifficultyInfo } from '@/lib/utils';
-import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { readAllRuns, useProgress, type RunState } from '@/lib/progress';
 import Header from '@/components/ui/Header';
 import SolvedStamp from '@/components/ui/SolvedStamp';
-
-interface GameProgress {
-  completedEpisodes: Record<number, { stars: number; completed: boolean }>;
-}
 
 const FILTERS = [
   { value: 0, label: 'ALL' },
@@ -20,10 +16,14 @@ const FILTERS = [
 ] as const;
 
 export default function StoryEpisodeSelectPage() {
-  const [progress] = useLocalStorage<GameProgress>('story-hacker-progress', {
-    completedEpisodes: {},
-  });
+  const { progress, totalStars } = useProgress();
   const [filter, setFilter] = useState<number>(0);
+
+  // 진행 중인 판 (localStorage 직접 조회이므로 마운트 후에 읽는다)
+  const [runs, setRuns] = useState<Record<number, RunState>>({});
+  useEffect(() => {
+    setRuns(readAllRuns('story'));
+  }, []);
 
   const filteredEpisodes = filter === 0
     ? storyEpisodes
@@ -44,6 +44,9 @@ export default function StoryEpisodeSelectPage() {
           </h2>
           <p className="mt-2 font-mono text-[10px] tracking-[0.2em] uppercase text-noct-ink-faint">
             {filteredEpisodes.length} Episodes
+            <span className="mx-2 text-noct-ink-faint/50">·</span>
+            <span className="text-noct-gold-dim">★ {totalStars}</span>
+            <span className="text-noct-ink-faint"> / {storyEpisodes.length * 3}</span>
           </p>
         </div>
 
@@ -70,6 +73,7 @@ export default function StoryEpisodeSelectPage() {
             const diffInfo = getDifficultyInfo(episode.difficulty);
             const completedInfo = progress.completedEpisodes[episode.id];
             const isCompleted = completedInfo?.completed;
+            const run = runs[episode.id];
             return (
               <Link
                 key={episode.id}
@@ -116,6 +120,10 @@ export default function StoryEpisodeSelectPage() {
                   <div className="absolute right-2 bottom-3">
                     {isCompleted ? (
                       <SolvedStamp />
+                    ) : run ? (
+                      <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-noct-gold-dim">
+                        Stage {run.stageIndex + 1} 진행 중
+                      </span>
                     ) : (
                       <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-noct-ink-faint">
                         미해결

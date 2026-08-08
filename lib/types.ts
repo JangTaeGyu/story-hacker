@@ -69,7 +69,6 @@ export interface EpisodeProgress {
 
 export interface GameProgress {
   completedEpisodes: Record<number, EpisodeProgress>;
-  totalStars: number;
 }
 
 // ============================================
