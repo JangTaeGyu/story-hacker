@@ -11,6 +11,8 @@ const config: Config = {
         // NOCTURNE — dark literary mystery palette
         'noct-black': '#100f0d',
         'noct-black-2': '#15130f',
+        // globals.css의 --noct-page와 같은 값. 양쪽을 함께 유지할 것.
+        'noct-page': '#0a0908',
         'noct-ink': '#cfc7b8',
         'noct-ink-dim': '#837c6e',
         'noct-ink-faint': '#565045',
