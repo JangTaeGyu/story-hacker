@@ -274,6 +274,18 @@ readAllRuns(mode)   // 에피소드 선택 화면의 "진행 중" 배지용
 
 `app/layout.tsx`의 `<main>`이 `max-w-md`(448px)로 모바일 폭을 고정합니다. 게임 화면은 하단 고정 푸터(키패드)와 상단 고정 헤더를 쓰므로, 본문 스크롤 영역에 `pb-*` 여백이 필요합니다.
 
+## 접근성
+
+`specs/a11y.spec.ts`가 아래 항목을 고정합니다. 되돌리지 마세요.
+
+- **핀치 줌을 막지 않습니다.** `viewport`에 `maximumScale`/`userScalable`을 넣으면 WCAG 1.4.4 위반입니다. 본문이 15px 명조라 확대가 필요한 사용자가 있습니다.
+- **`prefers-reduced-motion: reduce`를 존중합니다.** `globals.css`의 미디어 쿼리가 모든 애니메이션·트랜지션을 무력화하고, `useTypingEffect`는 타이머 기반이라 훅 안에서 따로 판별해 전문을 즉시 보여줍니다. **CSS가 아닌 모션을 새로 만들면 훅처럼 직접 처리해야 합니다.**
+- **키보드 포커스가 보입니다.** `globals.css`의 `:where(a, button, [tabindex]):focus-visible`이 골드 아웃라인을 그립니다. `:where()`로 특이도가 0이라 컴포넌트 스타일을 덮지 않습니다.
+- **오버레이는 다이얼로그로 노출합니다.** `ResumePrompt`는 `role="dialog"` + `aria-modal` + `aria-labelledby`를 갖고, 열릴 때 기본 동작에 포커스를 줍니다.
+- **오답·성공 안내는 `role="status"`** 로 스크린리더에 전달됩니다.
+
+> **알려진 미해결 항목 — 색 대비.** `noct-ink-faint`(`#565045`)는 `noct-black` 위에서 **2.40:1**로 WCAG AA(4.5:1)에 미달합니다. 10px 라벨("미해결", "Turns 0/3", "Story Mode" 등)에 광범위하게 쓰입니다. 고치려면 토큰 값을 올려야 하는데 NOCTURNE의 "조용한" 톤이 전반적으로 바뀌므로 별도 판단이 필요합니다. 참고로 `noct-ink-dim`(4.63:1), `noct-gold-dim`(4.62:1)은 통과합니다.
+
 ## 유틸리티 함수 (lib/utils.ts)
 
 ```typescript
@@ -328,6 +340,7 @@ specs/
 ├── pin-input.spec.ts      # 키패드 삭제 · 물리 키보드 입력
 ├── progress-guard.spec.ts # 클리어 증표 기반 진행도 기록 가드
 ├── payload.spec.ts        # 에피소드 데이터가 클라이언트로 새지 않는지
+├── a11y.spec.ts           # 줌 허용 · 모션 감소 · 포커스 표시 · 다이얼로그
 └── resume.spec.ts         # 이어하기 · 게임오버 정답 비노출
 ```
 
