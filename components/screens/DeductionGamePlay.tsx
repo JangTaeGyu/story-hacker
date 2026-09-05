@@ -8,9 +8,10 @@ import { usePinKeyboard } from '@/hooks/usePinKeyboard';
 import { issueClearToken } from '@/lib/clearToken';
 import { clearRun, readRun, saveRun, type RunState } from '@/lib/progress';
 import ResumePrompt from '@/components/ui/ResumePrompt';
+import LockModal from '@/components/ui/LockModal';
 import PinDisplay from '@/components/ui/PinDisplay';
 import InputArea from '@/components/ui/InputArea';
-import HeartsDisplay from '@/components/ui/HeartsDisplay';
+import StageStatus from '@/components/ui/StageStatus';
 import Header from '@/components/ui/Header';
 import { deductionIllustrations } from '@/components/illustrations/DeductionIllustrations';
 
@@ -21,7 +22,8 @@ interface DeductionGamePlayProps {
 export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
   const router = useRouter();
   const [showSuccess, setShowSuccess] = useState(false);
-  const [showKeypad, setShowKeypad] = useState(false);
+  // PIN 입력 레이어. 본문을 덮으므로 열려 있는 동안이 곧 "입력 중"이다.
+  const [lockOpen, setLockOpen] = useState(false);
   const {
     currentStageIndex,
     pin,
@@ -52,14 +54,17 @@ export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
     }
   }, [episode.id, episode.stages.length]);
 
-  // 물리 키보드 입력 (데스크톱)
-  const openKeypad = useCallback(() => setShowKeypad(true), []);
+  const openLock = useCallback(() => setLockOpen(true), []);
+  const closeLock = useCallback(() => setLockOpen(false), []);
+
+  // 물리 키보드 입력 (데스크톱). 숫자를 누르면 레이어가 열린다.
   usePinKeyboard({
     onInput: handlePinInput,
     onDelete: handlePinDelete,
     onClear: handlePinClear,
     onSubmit: handleSubmit,
-    onActivate: openKeypad,
+    onActivate: openLock,
+    onEscape: closeLock,
     enabled: !isComplete && !isGameOver && pendingRun === null,
   });
 
@@ -71,9 +76,9 @@ export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
     saveRun('deduction', episode.id, { stageIndex: currentStageIndex, stars });
   }, [currentStageIndex, stars, isComplete, isGameOver, episode.id, pendingRun]);
 
-  // 스테이지 변경 시 키패드 닫기
+  // 스테이지가 넘어가면 레이어를 닫는다
   useEffect(() => {
-    setShowKeypad(false);
+    setLockOpen(false);
   }, [currentStageIndex]);
 
   // 스테이지 시작 시 초기 단서 설정
@@ -84,7 +89,7 @@ export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
   // 완료 또는 게임오버 시 리다이렉트
   useEffect(() => {
     if (isComplete) {
-      setShowKeypad(false);
+      setLockOpen(false);
       setShowSuccess(true);
       clearRun('deduction', episode.id);
       const timer = setTimeout(() => {
@@ -141,6 +146,7 @@ export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
       <Header
         backHref="/deduction"
         backText="EXIT"
+        width="narrow"
         center={`EP.${episode.id - 100} · STAGE ${currentStageIndex + 1}/${episode.stages.length}`}
         right={
           <span className="text-noct-gold text-sm tracking-[0.1em]">
@@ -150,12 +156,13 @@ export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
         }
       />
 
-      {/* 메인 컨텐츠 */}
-      <main className={`flex-1 overflow-y-auto ${showKeypad ? 'pb-[30rem]' : 'pb-28'}`}>
+      {/* 본문 — 단일 컬럼. 입력은 레이어로 뜨므로 폭을 나눠 쓰지 않는다.
+          main 랜드마크는 app/layout.tsx에 하나만 두므로 여기서는 div다. */}
+      <div className="mx-auto w-full max-w-md pb-20 lg:max-w-2xl lg:pt-20">
         {/* 스테이지 전환 — currentStageIndex 변경 시 페이드업 재생 */}
         <div key={currentStageIndex} className="animate-fadeInUp">
         {/* 히어로 밴드 — 일러스트(있을 경우) + 검정 그라데이션 페이드 */}
-        <div className="relative h-56 w-full overflow-hidden">
+        <div className="relative h-56 lg:h-[24rem] w-full overflow-hidden">
           {IllustrationComponent ? (
             <div className="absolute inset-0">
               <IllustrationComponent />
@@ -165,17 +172,20 @@ export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
           )}
           {/* 검정으로 가라앉히는 그라데이션 — 하드 프레임 없음 */}
           <div className="absolute inset-0 bg-gradient-to-t from-noct-page via-noct-page/55 to-noct-page/30" />
+          {/* 데스크톱에서는 이미지가 화면 폭을 채우지 않아 좌우가 하드컷으로 보인다 */}
+          <div className="pointer-events-none absolute inset-y-0 left-0 hidden w-16 bg-gradient-to-r from-noct-page to-transparent lg:block" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-16 bg-gradient-to-l from-noct-page to-transparent lg:block" />
 
           {/* 크럼 + 남은 시도 오버레이 */}
           <div className="absolute inset-x-0 bottom-0 px-5 pb-5">
-            <div className="mx-auto max-w-md">
+            <div className="mx-auto max-w-md lg:max-w-none">
+              {/* 턴 표시 */}
               <div className="flex items-center justify-between mb-3">
-                <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-noct-ink-faint">
-                  Turns {turnsSpent}/{currentStage.maxTurns}
-                </span>
-                <HeartsDisplay
-                  totalTurns={currentStage.maxTurns}
+                <StageStatus
+                  turns={turnsSpent}
+                  maxTurns={currentStage.maxTurns}
                   remainingTurns={remainingTurns}
+                  labelClassName="tracking-[0.2em] text-noct-ink-faint"
                 />
               </div>
               <h2 className="font-display text-2xl text-noct-ink leading-snug">
@@ -185,7 +195,7 @@ export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
           </div>
         </div>
 
-        <div className="mx-auto max-w-md px-5 pt-6">
+        <div className="mx-auto max-w-md lg:max-w-none px-5 lg:px-0 pt-6">
           {/* 상황 설명 */}
           <section className="mb-8">
             <p className="font-mono text-[10px] tracking-[0.25em] uppercase text-noct-ink-faint mb-3">
@@ -245,64 +255,82 @@ export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
             오답 시 새로운 단서가 공개됩니다. 빨리 맞출수록 높은 평가를 받습니다.
           </p>
 
-          {/* 오답 피드백 */}
+          <button
+            onClick={openLock}
+            className="mt-8 block w-full border border-noct-gold-dim py-3.5 font-mono text-[11px] tracking-[0.3em] uppercase text-noct-gold transition-colors hover:bg-noct-gold/5"
+          >
+            Enter PIN
+          </button>
+        </div>
+        </div>
+      </div>
+
+      {/* PIN 입력 레이어 — 공개된 단서를 함께 담는다 */}
+      {lockOpen && (
+        <LockModal label="잠금 장치" onClose={closeLock}>
+          <div className="mt-4 flex items-center justify-between">
+            <StageStatus
+              turns={turnsSpent}
+              maxTurns={currentStage.maxTurns}
+              remainingTurns={remainingTurns}
+              labelClassName="tracking-[0.2em] text-noct-ink-faint"
+            />
+          </div>
+
+          {/* 공개된 단서 — 본문이 가려지므로 여기서 다시 읽을 수 있어야 한다 */}
+          <div className="mt-4 max-h-48 overflow-y-auto border-t border-noct-ink/10 pt-4">
+            <p className="mb-3 font-mono text-[10px] tracking-[0.25em] uppercase text-noct-ink-faint">
+              Revealed Clues · {revealedClues.length}
+            </p>
+            <div className="space-y-3">
+              {revealedClues.map((clue, index) => (
+                <div
+                  key={`${clue.turn}-${index}`}
+                  className={`border-l pl-3 ${
+                    index === revealedClues.length - 1
+                      ? 'border-noct-gold'
+                      : 'border-noct-gold-dim/50'
+                  }`}
+                >
+                  <p className="mb-1 font-mono text-[10px] tracking-[0.2em] uppercase text-noct-ink-faint">
+                    Clue · T{clue.turn}
+                  </p>
+                  <p className="font-serif text-[14px] leading-[1.7] text-noct-ink-dim">
+                    {clue.text}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* PIN 디스플레이 */}
+          <div className={`mt-6 ${isWrong ? 'animate-shake' : ''}`}>
+            <PinDisplay pin={pin} pinLength={pinLength} isWrong={isWrong} />
+          </div>
+
+          {/* 키패드 */}
+          <div className="mt-3">
+            <InputArea
+              onInput={handlePinInput}
+              onDelete={handlePinDelete}
+              onClear={handlePinClear}
+              onSubmit={handleSubmit}
+              canSubmit={pin.length === pinLength}
+              hasInput={pin.length > 0}
+            />
+          </div>
+
+          {/* 오답 피드백 — 제출한 자리에서 바로 보여준다 */}
           {isWrong && (
-            <p role="status" className="font-serif text-[13px] text-noct-ink-dim mt-5 animate-shake">
+            <p
+              role="status"
+              className="mt-4 animate-fadeIn border-t border-noct-ink/10 pt-4 font-serif text-[13px] leading-relaxed text-noct-ink-dim"
+            >
               오답입니다. 새로운 단서가 공개되었습니다.
             </p>
           )}
-        </div>
-        </div>
-      </main>
-
-      {/* 입력 영역 (하단 고정) */}
-      <footer className="fixed bottom-0 left-0 right-0 bg-noct-black/95 backdrop-blur border-t border-noct-ink/10">
-        <div className="max-w-md mx-auto px-5">
-          {/* 토글 버튼 */}
-          <button
-            onClick={() => setShowKeypad(!showKeypad)}
-            className="w-full py-4 font-mono text-[11px] tracking-[0.25em] uppercase text-noct-ink-dim hover:text-noct-ink transition-colors flex items-center justify-center gap-2"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className={`h-3.5 w-3.5 transition-transform duration-300 ${showKeypad ? 'rotate-180' : ''}`}
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path fillRule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clipRule="evenodd" />
-            </svg>
-            Enter PIN
-          </button>
-
-          {/* 키패드 영역 (슬라이드 애니메이션) */}
-          <div
-            className={`grid transition-all duration-300 ease-in-out ${
-              showKeypad ? 'grid-rows-[1fr] opacity-100 pb-5' : 'grid-rows-[0fr] opacity-0'
-            }`}
-          >
-            <div className="overflow-hidden">
-              {/* PIN 디스플레이 */}
-              <div className={`mb-3 ${isWrong ? 'animate-shake' : ''}`}>
-                <PinDisplay
-                  pin={pin}
-                  pinLength={pinLength}
-                  isWrong={isWrong}
-                />
-              </div>
-
-              {/* 키패드 */}
-              <InputArea
-                onInput={handlePinInput}
-                onDelete={handlePinDelete}
-                onClear={handlePinClear}
-                onSubmit={handleSubmit}
-                canSubmit={pin.length === pinLength}
-                hasInput={pin.length > 0}
-              />
-            </div>
-          </div>
-        </div>
-      </footer>
+        </LockModal>
+      )}
     </div>
   );
 }

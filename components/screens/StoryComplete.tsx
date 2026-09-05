@@ -51,7 +51,7 @@ export default function StoryComplete({
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-8 bg-noct-black">
       <div
-        className={`w-full max-w-xs text-center ${
+        className={`w-full max-w-xs lg:max-w-sm text-center ${
           showContent ? 'animate-fadeIn' : 'opacity-0'
         }`}
       >

@@ -9,7 +9,7 @@ export default function ModeSelectPage() {
     <div className="min-h-screen">
       <Header backHref="/" />
 
-      <div className="px-7 pt-24 pb-12">
+      <div className="mx-auto max-w-md lg:max-w-6xl px-7 lg:px-8 pt-24 pb-12">
         {/* 타이틀 */}
         <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-noct-ink-faint">
           Choose Your Approach
@@ -17,18 +17,18 @@ export default function ModeSelectPage() {
         <h2 className="mt-2 font-display text-3xl text-noct-ink">수사 방식</h2>
 
         {/* 모드 선택 */}
-        <div className="mt-9 space-y-px">
+        <div className="mt-9 space-y-px lg:grid lg:grid-cols-2 lg:gap-8 lg:space-y-0">
           {/* 스토리 모드 */}
           <Link
             href="/story"
             className="group block border-t border-noct-ink/10 pt-6 pb-7 transition-colors"
           >
-            <div className="relative h-28 w-full overflow-hidden">
+            <div className="relative h-28 lg:h-44 w-full overflow-hidden">
               <Image
                 src="/images/story/ep-1.png"
                 alt=""
                 fill
-                sizes="448px"
+                sizes="(min-width: 1024px) 480px, 448px"
                 className="noct-img object-cover object-center transition-transform duration-700 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-r from-noct-black via-noct-black/30 to-noct-black/70" />
@@ -63,12 +63,12 @@ export default function ModeSelectPage() {
             href="/deduction"
             className="group block border-t border-noct-ink/10 pt-6 pb-7 transition-colors"
           >
-            <div className="relative h-28 w-full overflow-hidden">
+            <div className="relative h-28 lg:h-44 w-full overflow-hidden">
               <Image
                 src="/images/story/ep-11.png"
                 alt=""
                 fill
-                sizes="448px"
+                sizes="(min-width: 1024px) 480px, 448px"
                 className="noct-img object-cover object-center transition-transform duration-700 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-r from-noct-black via-noct-black/30 to-noct-black/70" />

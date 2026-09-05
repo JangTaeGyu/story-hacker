@@ -5,33 +5,35 @@ import { deductionEpisodes } from '@/data/deductionEpisodes';
 
 export default function HomePage() {
   return (
-    <div className="relative min-h-screen flex flex-col">
+    <div className="relative mx-auto flex min-h-screen max-w-md flex-col lg:grid lg:max-w-6xl lg:grid-cols-2 lg:items-center lg:gap-14 lg:px-8">
       {/* 상단 마이크로 라벨 */}
       <p className="absolute top-6 inset-x-0 z-20 text-center font-mono text-[10px] tracking-[0.3em] uppercase text-noct-ink-faint">
         A Mystery In Twenty Acts
       </p>
 
       {/* 히어로 이미지 — 상단을 채우고 어둠으로 녹아든다 */}
-      <div className="relative w-full h-[58vh] min-h-[320px]">
+      <div className="relative w-full h-[58vh] min-h-[320px] lg:order-2 lg:h-[76vh]">
         <Image
           src="/images/story/ep-1.png"
           alt=""
           fill
           priority
-          sizes="448px"
+          sizes="(min-width: 1024px) 576px, 448px"
           className="noct-img object-cover object-center"
         />
         {/* noct-black 으로 그라데이션 페이드 */}
-        <div className="absolute inset-0 bg-gradient-to-b from-noct-black/50 via-noct-black/10 to-noct-black" />
+        <div className="absolute inset-0 bg-gradient-to-b from-noct-black/50 via-noct-black/10 to-noct-black lg:bg-gradient-to-l lg:from-noct-black/40 lg:via-transparent lg:to-noct-black" />
         <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-b from-transparent to-noct-black" />
+        {/* 데스크톱: 위쪽 가장자리도 묻어 사진이 붙여넣은 사각형처럼 보이지 않게 한다 */}
+        <div className="absolute inset-x-0 top-0 hidden h-1/4 bg-gradient-to-b from-noct-black to-transparent lg:block" />
       </div>
 
       {/* 하단 어두운 영역 */}
-      <div className="relative z-10 flex-1 -mt-12 px-7 pb-12 flex flex-col">
+      <div className="relative z-10 flex-1 -mt-12 px-7 pb-12 flex flex-col lg:order-1 lg:mt-0 lg:px-0 lg:pb-0">
         {/* 워드마크 */}
         <h1 className="font-display leading-[0.95]">
-          <span className="block text-5xl sm:text-6xl text-noct-ink">STORY</span>
-          <span className="block text-5xl sm:text-6xl text-noct-ink-dim">HACKER</span>
+          <span className="block text-5xl sm:text-6xl lg:text-7xl text-noct-ink">STORY</span>
+          <span className="block text-5xl sm:text-6xl lg:text-7xl text-noct-ink-dim">HACKER</span>
         </h1>
 
         {/* 태그라인 */}

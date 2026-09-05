@@ -26,8 +26,16 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      // 모바일 우선(max-width 448px) 레이아웃이므로 모바일 뷰포트를 기본으로 둔다.
+      // 모바일 우선 레이아웃이므로 모바일 뷰포트를 기본으로 둔다.
+      // 데스크톱 전용 스펙은 아래 desktop 프로젝트가 맡는다.
+      testIgnore: /responsive\.spec\.ts/,
       use: { ...devices['Pixel 7'] },
+    },
+    {
+      // 데스크톱 2단 레이아웃(≥lg) 전용. 이 프로젝트가 없으면 데스크톱은 아무도 안 본다.
+      name: 'desktop',
+      testMatch: /responsive\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } },
     },
   ],
 

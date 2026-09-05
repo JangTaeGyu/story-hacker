@@ -87,8 +87,9 @@ export default function RootLayout({
           }}
         />
 
-        {/* 메인 컨텐츠 */}
-        <main className="relative z-10 mx-auto max-w-md min-h-screen bg-noct-black">
+        {/* 메인 컨텐츠 — 폭은 각 화면이 직접 정한다.
+            여기서 전역으로 max-w를 씌우면 데스크톱 2단 레이아웃이 448px에 갇힌다. */}
+        <main className="relative z-10 min-h-screen bg-noct-black">
           {children}
         </main>
 

@@ -35,7 +35,7 @@ export default function ResumePrompt({
       aria-labelledby="resume-prompt-title"
       className="fixed inset-0 z-50 flex items-center justify-center bg-noct-black/95 px-8 animate-fadeIn"
     >
-      <div className="w-full max-w-xs text-center">
+      <div className="w-full max-w-xs lg:max-w-sm text-center">
         <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-noct-ink-faint">
           Resume
         </p>

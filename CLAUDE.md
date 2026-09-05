@@ -60,8 +60,10 @@ components/
 │   ├── PinDisplay.tsx          # PIN 자릿수 표시 (밑줄 + 숫자)
 │   ├── InputArea.tsx           # 숫자 키패드 + 백스페이스/확인
 │   ├── ResumePrompt.tsx        # 이어하기 확인 오버레이
+│   ├── LockModal.tsx           # PIN 입력 레이어 (단서·힌트 포함)
 │   ├── SolvedStamp.tsx         # "해결" 도장 직인 (완료 에피소드 표시)
-│   └── HeartsDisplay.tsx       # 남은 시도 — 하트가 아닌 작은 점(dot)
+│   ├── HeartsDisplay.tsx       # 남은 시도 — 하트가 아닌 작은 점(dot)
+│   └── StageStatus.tsx         # "Turns n/m" + 점 — 모바일·데스크톱 두 자리에 렌더
 └── illustrations/
     ├── StoryIllustrations.tsx  # "epId-stageId" → PNG 배경 매핑
     └── DeductionIllustrations.tsx  # "epId-stageId" → PNG 배경 매핑
@@ -182,7 +184,7 @@ interface GameProgress {
 ### 게임 메커니즘
 
 **스토리 모드** (`turnsUsed`는 0에서 시작)
-1. `story` + `\n\n🔍 ` + `clue`를 하나의 문자열로 합쳐 타이핑 효과 재생 (탭하면 스킵). 화면에서 `🔍 ` 기준으로 본문/단서 블록을 분리합니다.
+1. `story` + `\n\n🔍 ` + `clue`를 하나의 문자열로 합쳐 타이핑 효과 재생 (탭하면 스킵). 화면에서 `🔍 ` 기준으로 본문/단서 블록을 분리합니다. 타이핑이 끝나야 "PIN 입력" 버튼이 나타납니다.
 2. PIN 입력 후 `stage.answers.includes(pin)`으로 판정.
 3. 정답 → 다음 스테이지(턴·힌트 초기화) 또는 에피소드 완료.
 4. 오답 → `turnsUsed++`, shake 애니메이션. `turnsUsed >= maxTurns`면 게임오버 (즉 시도 기회 = `maxTurns`회).
@@ -273,9 +275,33 @@ readAllRuns(mode)   // 에피소드 선택 화면의 "진행 중" 배지용
 
 생성 이미지는 `.noct-img` 필터(`brightness(0.6) sepia(0.16) saturate(0.84) contrast(1.03)`)로 톤을 통일합니다. 
 
-### 레이아웃
+### 레이아웃 (모바일 우선 + 데스크톱 확장)
 
-`app/layout.tsx`의 `<main>`이 `max-w-md`(448px)로 모바일 폭을 고정합니다. 게임 화면은 하단 고정 푸터(키패드)와 상단 고정 헤더를 쓰므로, 본문 스크롤 영역에 `pb-*` 여백이 필요합니다.
+**`app/layout.tsx`의 `<main>`은 폭을 캡하지 않습니다.** 폭은 각 화면이 직접 정합니다. **새 화면을 만들면 `mx-auto max-w-md`를 직접 넣으세요.** 빠뜨리면 모바일에서 전체 폭으로 퍼집니다.
+
+고정 헤더(`Header`)는 `width` prop으로 본문 폭을 따라갑니다. **한쪽만 바꾸면 데스크톱에서 헤더와 본문의 좌측이 어긋납니다.**
+
+| | 모바일 | ≥`lg`(1024px) | Header |
+|---|---|---|---|
+| 목록 · 홈 · 모드선택 | `max-w-md` | `max-w-6xl` | `width="wide"` (기본) |
+| 게임 화면 | `max-w-md` | `max-w-2xl` (읽기 폭) | `width="narrow"` |
+| 결과 · 오류 · 이어하기 | `max-w-xs` | `lg:max-w-sm` | — |
+
+목록은 데스크톱에서 그리드로 펼칩니다(스토리 2→3열, 추리 2열). `space-y-*`와 함께 쓰므로 `lg:space-y-0`을 빠뜨리지 마세요.
+
+### PIN 입력 레이어 (`components/ui/LockModal.tsx`)
+
+**입력은 모바일·데스크톱 모두 레이어(모달)로 뜹니다.** 하단 고정 키패드도, 데스크톱 2단 그리드도 없습니다 — 본문이 화면을 온전히 쓰고, 입력은 별도의 행동이 됩니다.
+
+- 진입 버튼은 **글이 다 노출된 뒤에야** 나타납니다(`useTypingEffect`의 `isComplete`). 탭해서 스킵하면 즉시 나타납니다. 추리 모드는 타이핑이 없어 항상 보입니다.
+- **레이어는 본문을 덮으므로 단서를 함께 담습니다.** 스토리는 `stage.clue`와 힌트를, 추리는 공개된 단서 목록을 넣습니다. 이걸 빼면 자릿수를 누르다 단서를 보려고 여닫기를 반복하게 됩니다.
+- 숫자 키를 누르면 닫혀 있던 레이어가 열립니다(`usePinKeyboard`의 `onActivate`).
+- **`Escape`는 "전체 지움"이 아니라 "레이어 닫기"입니다.** 다이얼로그 관례를 따릅니다. 훅의 `onEscape`로 넘기며, 지정하지 않으면 종전대로 `onClear`가 됩니다. 전체 삭제는 키패드 위 "전체 지움" 버튼입니다.
+- 키보드 처리는 `usePinKeyboard` 한 곳에만 둡니다. `LockModal`이 `Escape`를 따로 듣지 않는 이유입니다 — 두 곳에서 들으면 같은 키에 두 동작이 걸립니다.
+
+**`main` 랜드마크는 `app/layout.tsx`에 하나만 둡니다.** 게임 화면의 본문은 `<div>`입니다 — 중첩되면 스크린리더가 본문을 두 개로 읽습니다.
+
+턴 상태 한 줄은 `components/ui/StageStatus.tsx`로 분리해 히어로 위와 레이어 안에 각각 렌더합니다.
 
 ## 접근성
 
@@ -342,18 +368,21 @@ specs/
 ├── helpers.ts             # 하이드레이션 대기, PIN 자리수 카운트
 ├── seed.spec.ts           # MCP generator용 시드 (비어 있음, 지우지 말 것)
 ├── typing-skip.spec.ts    # 타이핑 스킵 · noct-page 토큰
-├── pin-input.spec.ts      # 키패드 삭제 · 물리 키보드 입력
+├── pin-input.spec.ts      # 키패드 삭제 · 물리 키보드 · 입력 레이어 여닫기
 ├── progress-guard.spec.ts # 클리어 증표 기반 진행도 기록 가드
 ├── payload.spec.ts        # 에피소드 데이터가 클라이언트로 새지 않는지
 ├── a11y.spec.ts           # 줌 허용 · 모션 감소 · 포커스 표시 · 다이얼로그
 ├── contrast.spec.ts       # 팔레트 명암비 AA 기준
 ├── metadata.spec.ts       # 에피소드별 OG · robots · sitemap · 404
-└── resume.spec.ts         # 이어하기 · 게임오버 정답 비노출
+├── resume.spec.ts         # 이어하기 · 게임오버 정답 비노출
+└── responsive.spec.ts     # 데스크톱 단일 컬럼 · 레이어 · 목록 그리드 · 가로 스크롤
 ```
+
+프로젝트가 둘입니다. `chromium`(Pixel 7)이 `responsive.spec.ts`를 제외한 전부를, `desktop`(1440×900)이 `responsive.spec.ts`만 돌립니다. **모바일 스펙이 기존 동작을 고정해주므로 `lg:` 레이어는 추가분이고 회귀 위험이 낮습니다.** 반대로 데스크톱은 `responsive.spec.ts`가 유일한 방어선이라, 2단 구조를 건드리면 여기부터 확인하세요.
 
 `npm run build` 직후 `npm test`를 돌리면 `.next`가 프로덕션 산출물로 덮여 있어 dev 서버가 라우트를 전부 다시 컴파일합니다. 워커 여러 개가 동시에 서로 다른 라우트를 요청하면 기본 5초 타임아웃으로는 부족해서 대량 실패가 납니다 — `playwright.config.ts`에서 `timeout`/`expect.timeout`을 늘려둔 이유입니다. 줄이지 마세요.
 
-키보드로 입력하는 테스트는 **하이드레이션 이후**에 눌러야 합니다(`waitForStoryReady`). 그 전에 누른 키는 리스너가 붙기 전이라 사라집니다. PIN 자리수는 키패드 숫자 버튼과 섞이지 않도록 `[data-testid="pin-display"]` 안에서만 셉니다.
+키보드로 입력하는 테스트는 **하이드레이션 이후**에 눌러야 합니다(`waitForStoryReady` — 본문에 글자가 찍혔는지로 판별). 그 전에 누른 키는 리스너가 붙기 전이라 사라집니다. 키패드를 클릭해야 하면 `openLock(page)`로 타이핑을 스킵하고 레이어를 여세요 — 그냥 기다리면 스테이지마다 5초씩 걸립니다. PIN 자리수는 키패드 숫자 버튼과 섞이지 않도록 `[data-testid="pin-display"]` 안에서만 셉니다.
 
 Playwright MCP agents도 같은 설정을 사용합니다 (`.mcp.json`의 `playwright-test` 서버).
 - **playwright-test-planner**: 테스트 계획 작성 → `specs/`
@@ -454,7 +483,7 @@ export default episode;
 - 스토리 EP.11–20은 "네오 시티의 그림자" 연작 — 정답이 에피소드 간 상호 참조되므로 정답 변경 시 연쇄 영향을 확인하세요.
 - 각 `answers` 항목과 `answer`의 길이는 `lockType` 자릿수와 정확히 일치해야 합니다 (불일치 시 제출 자체가 막힘).
 - PIN은 숫자 전용입니다. 키패드는 숫자 · 한 자리 삭제(⌫) · 확인으로 구성되고, 전체 삭제는 키패드 위 "전체 지움" 텍스트 버튼입니다(입력이 없으면 숨김). 물리 키보드는 `usePinKeyboard`가 처리합니다 — 숫자 입력, `Backspace` 한 자리 삭제, `Escape` 전체 삭제, `Enter` 제출.
-- 키패드를 여닫는 푸터 높이는 약 440px입니다. 키패드가 열렸을 때 본문의 `pb-[30rem]`(480px)이 이보다 작아지면 내용이 가려집니다 — 키패드에 행을 추가하면 함께 조정하세요.
+- 키패드는 `LockModal` 안에 있고 레이어는 `max-w-sm`입니다. 키패드에 행을 추가하면 모바일 세로 높이를 확인하세요 — 레이어가 뷰포트를 넘으면 내부 스크롤이 생깁니다.
 - 배포 도메인은 `lib/site.ts`의 `SITE_URL` 한 곳에만 둡니다. 루트 메타데이터·에피소드별 OG·사이트맵·SNS 공유 버튼이 모두 이 값을 씁니다 — 하드코딩하면 한쪽만 낡아 어긋납니다(실제로 `layout.tsx`가 옛 vercel.app 주소로 남아 있었습니다).
 - 에피소드 페이지는 `generateMetadata`로 제목·설명·OG 이미지를 따로 냅니다. 스토리는 `synopsis`를 설명으로, `ep-{id}.png`(1344×768)를 OG 이미지로 씁니다. 루트 레이아웃의 `title.template`이 뒤에 사이트명을 붙입니다.
 - `next.config.js`는 사실상 비어 있습니다. `output: 'export'`는 주석 처리된 상태입니다.

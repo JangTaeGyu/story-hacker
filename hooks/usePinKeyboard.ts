@@ -7,8 +7,13 @@ interface UsePinKeyboardOptions {
   onDelete: () => void;
   onClear: () => void;
   onSubmit: () => void;
-  /** 입력이 들어왔을 때 호출 — 접혀 있는 키패드를 펼치는 용도 */
+  /** 입력이 들어왔을 때 호출 — 닫혀 있는 입력 레이어를 여는 용도 */
   onActivate?: () => void;
+  /**
+   * Escape 동작. 기본값은 전체 삭제지만, 입력이 레이어 안에 있으면
+   * 레이어 닫기가 맞다 — 다이얼로그의 Escape는 닫기가 관례다.
+   */
+  onEscape?: () => void;
   enabled?: boolean;
 }
 
@@ -22,6 +27,7 @@ export function usePinKeyboard({
   onClear,
   onSubmit,
   onActivate,
+  onEscape,
   enabled = true,
 }: UsePinKeyboardOptions) {
   useEffect(() => {
@@ -42,11 +48,11 @@ export function usePinKeyboard({
       } else if (event.key === 'Enter') {
         onSubmit();
       } else if (event.key === 'Escape') {
-        onClear();
+        (onEscape ?? onClear)();
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onInput, onDelete, onClear, onSubmit, onActivate, enabled]);
+  }, [onInput, onDelete, onClear, onSubmit, onActivate, onEscape, enabled]);
 }

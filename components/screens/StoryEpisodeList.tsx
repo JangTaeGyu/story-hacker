@@ -37,7 +37,7 @@ export default function StoryEpisodeList({ episodes }: StoryEpisodeListProps) {
     <div className="min-h-screen bg-noct-black pb-24">
       <Header backHref="/mode-select" />
 
-      <div className="mx-auto max-w-md px-5 pt-24">
+      <div className="mx-auto max-w-md lg:max-w-6xl px-5 lg:px-8 pt-24">
         {/* 타이틀 */}
         <div className="mb-8">
           <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-noct-ink-faint">
@@ -71,8 +71,8 @@ export default function StoryEpisodeList({ episodes }: StoryEpisodeListProps) {
           ))}
         </div>
 
-        {/* 에피소드 목록 */}
-        <div className="space-y-10">
+        {/* 에피소드 목록 — 데스크톱에서는 카드 그리드 */}
+        <div className="space-y-10 lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-x-8 lg:gap-y-12 lg:space-y-0">
           {filteredEpisodes.map((episode, index) => {
             const diffInfo = getDifficultyInfo(episode.difficulty);
             const completedInfo = progress.completedEpisodes[episode.id];
@@ -90,7 +90,7 @@ export default function StoryEpisodeList({ episodes }: StoryEpisodeListProps) {
                     src={`/images/story/ep-${episode.id}.png`}
                     alt=""
                     fill
-                    sizes="448px"
+                    sizes="(min-width: 1024px) 380px, 448px"
                     // 첫 화면에 보이는 두 장만 우선 로드한다
                     priority={index < 2}
                     className="noct-img object-cover transition-transform duration-700 group-hover:scale-[1.03]"

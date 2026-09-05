@@ -37,7 +37,7 @@ export default function DeductionEpisodeList({ episodes }: DeductionEpisodeListP
     <div className="min-h-screen pb-24">
       <Header backHref="/mode-select" />
 
-      <div className="mx-auto max-w-md px-5 pt-24">
+      <div className="mx-auto max-w-md lg:max-w-6xl px-5 lg:px-8 pt-24">
         {/* 타이틀 + 필터 */}
         <div className="mb-8">
           <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-noct-ink-faint mb-3">
@@ -71,7 +71,7 @@ export default function DeductionEpisodeList({ episodes }: DeductionEpisodeListP
         </div>
 
         {/* 에피소드 목록 */}
-        <div className="space-y-px">
+        <div className="space-y-px lg:grid lg:grid-cols-2 lg:gap-x-8 lg:space-y-0">
           {filteredEpisodes.map((episode, index) => {
             const diffInfo = getDifficultyInfo(episode.difficulty);
             const completedInfo = progress.completedEpisodes[episode.id];
@@ -90,7 +90,7 @@ export default function DeductionEpisodeList({ episodes }: DeductionEpisodeListP
                     src={`/images/deduction/ep-${episode.id}.png`}
                     alt=""
                     fill
-                    sizes="180px"
+                    sizes="(min-width: 1024px) 240px, 180px"
                     // 첫 화면에 보이는 세 장만 우선 로드한다
                     priority={index < 3}
                     className="noct-img object-cover"
