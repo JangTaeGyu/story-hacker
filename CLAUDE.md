@@ -262,7 +262,11 @@ app/[locale]/layout.tsx  실제 셸 — <html lang>, 메타데이터, LocaleProv
 
 **그런데도 `app/layout.tsx`를 지우면 안 됩니다.** `app/not-found.tsx`는 루트 레이아웃 없이는 빌드 자체가 실패합니다(`not-found.tsx doesn't have a root layout`). 이 통과 레이아웃이 없으면 브랜드 404가 사라지고 잘못된 URL이 전부 Next 기본 404로 떨어집니다.
 
-또한 **404 화면은 `app/not-found.tsx` 하나뿐입니다.** 루트 레이아웃이 동적 세그먼트 안에 있으면 Next는 `notFound()`를 `app/[locale]/not-found.tsx`로 보내지 못하고 전역 not-found로 떨어뜨립니다. 세그먼트별 not-found를 만들어도 쓰이지 않으니 만들지 마세요. 이 화면은 루트 레이아웃 바깥이라 레이아웃·폰트가 적용되지 않아 `globals.css`를 직접 import하고, 언어는 `usePathname()`으로 경로에서 읽습니다.
+또한 **404 화면은 `app/not-found.tsx` 하나뿐입니다.** 루트 레이아웃이 동적 세그먼트 안에 있으면 Next는 `notFound()`를 `app/[locale]/not-found.tsx`로 보내지 못하고 전역 not-found로 떨어뜨립니다. 세그먼트별 not-found를 만들어도 쓰이지 않으니 만들지 마세요.
+
+> **이 파일은 `<html>`과 `<body>`를 직접 그려야 합니다.** 통과 레이아웃 아래에서 셸을 아무도 그리지 않으면 Next가 SSR에서 임의로 끼워 넣는데, 클라이언트가 하이드레이션할 트리에는 없는 요소가 DOM에는 있어 트리가 어긋나고 **React가 전체를 버려 화면이 통째로 빕니다.** 실제로 그렇게 배포된 적이 있습니다 — 원본 HTML에는 문구가 있는데 브라우저에서는 새까만 화면이 나오는 증상입니다.
+
+루트 레이아웃 바깥이라 레이아웃의 스타일·폰트가 오지 않으므로 `globals.css`와 폰트 링크도 이 파일이 직접 겁니다. 언어는 `usePathname()`으로 경로에서 읽습니다.
 
 `app/[locale]/layout.tsx`에는 `dynamicParams = false`가 걸려 있어 `/fr/...` 같은 미등록 언어는 404입니다. 다만 **에피소드 세그먼트에는 `dynamicParams = true`를 다시 열어 두었습니다** — 그러지 않으면 없는 에피소드 id가 라우팅 단계에서 잘려 `notFound()`가 실행되지 않고 Next 기본 404가 뜹니다.
 
@@ -473,6 +477,8 @@ specs/
 스펙의 경로에는 **언어 접두사를 직접 붙이세요**(`page.goto('/ko/story/1')`). 리다이렉트에 기대면 무엇을 테스트하는지 흐려집니다 — 리다이렉트 자체는 `i18n.spec.ts`가 따로 검증합니다.
 
 프로젝트가 둘입니다. `chromium`(Pixel 7)이 `responsive.spec.ts`를 제외한 전부를, `desktop`(1440×900)이 `responsive.spec.ts`만 돌립니다. **모바일 스펙이 기존 동작을 고정해주므로 `lg:` 레이어는 추가분이고 회귀 위험이 낮습니다.** 반대로 데스크톱은 `responsive.spec.ts`가 유일한 방어선이라, 2단 구조를 건드리면 여기부터 확인하세요.
+
+> **이 스펙들은 `npm run dev`를 상대로 돕니다.** 그래서 프로덕션 빌드에서만 드러나는 문제(특히 하이드레이션 불일치)는 통과해버릴 수 있습니다. 위 404 화면이 실제 사례입니다 — dev에서는 멀쩡히 렌더돼 테스트가 통과했지만 배포된 프로덕션 빌드에서는 빈 화면이었습니다. **레이아웃·셸 구조를 건드렸다면 `npm run build && npm start`로 한 번 직접 열어보세요.**
 
 `npm run build` 직후 `npm test`를 돌리면 `.next`가 프로덕션 산출물로 덮여 있어 dev 서버가 라우트를 전부 다시 컴파일합니다. 워커 여러 개가 동시에 서로 다른 라우트를 요청하면 기본 5초 타임아웃으로는 부족해서 대량 실패가 납니다 — `playwright.config.ts`에서 `timeout`/`expect.timeout`을 늘려둔 이유입니다. 줄이지 마세요.
 

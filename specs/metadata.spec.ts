@@ -94,4 +94,30 @@ test.describe('오류 화면', () => {
     expect(response?.status()).toBe(404);
     await expect(page.getByText('기록 없음')).toBeVisible();
   });
+
+  test('404가 자기 html 셸을 그린다', async ({ page }) => {
+    // app/not-found.tsx는 루트 레이아웃 바깥이라 <html>/<body>를 직접 그려야 한다.
+    // 그리지 않으면 Next가 SSR에서 셸을 끼워 넣고, 클라이언트 트리와 어긋나
+    // React가 전체를 버려 화면이 통째로 빈다. 그 사고는 프로덕션 빌드에서만
+    // 드러났으므로(이 스펙은 dev 서버를 상대로 돈다), 셸의 주인이 우리라는
+    // 사실 자체를 고정한다 — 셸이 합성되면 lang이 비어 버린다.
+    await page.goto('/ko/story/999');
+
+    await expect(page.locator('html')).toHaveAttribute('lang', /^[a-z]{2}$/);
+    expect(await page.locator('html').count()).toBe(1);
+    await expect(page.locator('body')).not.toBeEmpty();
+  });
+
+  test('404 문구가 경로의 언어를 따라간다', async ({ page }) => {
+    for (const [path, title] of [
+      ['/ko/story/999', '기록 없음'],
+      ['/en/story/999', 'No Record'],
+      ['/ja/deduction/999', '記録なし'],
+      // 언어 접두사가 없는 경로는 기본 언어로 떨어진다
+      ['/nonsense', '기록 없음'],
+    ]) {
+      await page.goto(path);
+      await expect(page.getByRole('heading', { level: 1, name: title })).toBeVisible();
+    }
+  });
 });
