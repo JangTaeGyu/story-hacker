@@ -1,6 +1,7 @@
 'use client';
 
 import { cn } from '@/lib/utils';
+import { useI18n } from '@/components/i18n/LocaleProvider';
 
 interface InputAreaProps {
   onInput: (digit: string) => void;
@@ -24,6 +25,8 @@ export default function InputArea({
   hasInput = false,
   disabled = false,
 }: InputAreaProps) {
+  const { t } = useI18n();
+
   const keyBase =
     'h-16 rounded flex items-center justify-center transition-all duration-200 active:scale-[0.97] disabled:opacity-40 disabled:cursor-not-allowed [-webkit-tap-highlight-color:transparent]';
   const digitClass =
@@ -38,7 +41,7 @@ export default function InputArea({
           disabled={disabled || !hasInput}
           className="font-mono text-[10px] tracking-[0.2em] uppercase text-noct-ink-faint transition-opacity hover:text-noct-ink-dim disabled:pointer-events-none disabled:opacity-0"
         >
-          전체 지움
+          {t.input.clearAll}
         </button>
       </div>
 
@@ -58,7 +61,7 @@ export default function InputArea({
         <button
           onClick={onDelete}
           disabled={disabled || !hasInput}
-          aria-label="한 자리 삭제"
+          aria-label={t.input.deleteOne}
           className={cn(
             keyBase,
             'bg-noct-black-2 border border-noct-ink/[0.07] text-noct-ink-dim active:bg-[#1f1c16]'
@@ -100,7 +103,7 @@ export default function InputArea({
               : 'bg-noct-black-2 border-noct-ink/[0.07] text-noct-ink-faint'
           )}
         >
-          확인
+          {t.input.submit}
         </button>
       </div>
     </div>

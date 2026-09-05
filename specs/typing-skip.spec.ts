@@ -5,7 +5,7 @@ const CLUE_TAIL = '낡은 폴더폰을 쓰던 시절처럼 눌러라.';
 
 test.describe('스토리 모드 타이핑 효과', () => {
   test('본문을 탭하면 전체 텍스트가 즉시 표시되고 되돌아가지 않는다', async ({ page }) => {
-    await page.goto('/story/1');
+    await page.goto('/ko/story/1');
 
     const typingArea = page.locator('div.cursor-pointer').first();
 
@@ -33,7 +33,7 @@ test.describe('스토리 모드 타이핑 효과', () => {
 
 test.describe('NOCTURNE 테마 토큰', () => {
   test('noct-page 유틸리티가 실제 배경색으로 적용된다', async ({ page }) => {
-    await page.goto('/deduction/101');
+    await page.goto('/ko/deduction/101');
 
     // tailwind.config.ts에 토큰이 없으면 클래스가 생성되지 않아 transparent가 된다.
     const bg = await page

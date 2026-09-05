@@ -17,8 +17,8 @@ async function hasHorizontalOverflow(page: Page) {
 }
 
 const GAME_ROUTES = [
-  ['스토리', '/story/1'],
-  ['추리', '/deduction/101'],
+  ['스토리', '/ko/story/1'],
+  ['추리', '/ko/deduction/101'],
 ] as const;
 
 for (const [label, path] of GAME_ROUTES) {
@@ -61,9 +61,9 @@ for (const [label, path] of GAME_ROUTES) {
 
 test.describe('에피소드 목록 (데스크톱)', () => {
   test('스토리 목록이 여러 열로 배치된다', async ({ page }) => {
-    await page.goto('/story');
+    await page.goto('/ko/story');
 
-    const cards = page.locator('a[href^="/story/"]');
+    const cards = page.locator('a[href^="/ko/story/"]');
     const first = (await cards.nth(0).boundingBox())!;
     const second = (await cards.nth(1).boundingBox())!;
 
@@ -73,7 +73,7 @@ test.describe('에피소드 목록 (데스크톱)', () => {
   });
 
   test('가로 스크롤이 생기지 않는다', async ({ page }) => {
-    for (const path of ['/', '/mode-select', '/story', '/deduction']) {
+    for (const path of ['/ko', '/ko/mode-select', '/ko/story', '/ko/deduction']) {
       await page.goto(path);
       expect(await hasHorizontalOverflow(page), `${path}에서 가로 스크롤 발생`).toBe(false);
     }
@@ -81,6 +81,6 @@ test.describe('에피소드 목록 (데스크톱)', () => {
 });
 
 test('본문 랜드마크(main)는 문서에 하나만 존재한다', async ({ page }) => {
-  await page.goto('/story/1');
+  await page.goto('/ko/story/1');
   await expect(page.locator('main')).toHaveCount(1);
 });

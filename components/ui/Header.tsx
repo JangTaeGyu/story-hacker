@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useI18n } from '@/components/i18n/LocaleProvider';
 
 interface HeaderProps {
   backHref: string;
@@ -16,11 +17,14 @@ interface HeaderProps {
 
 export default function Header({
   backHref,
-  backText = 'BACK',
+  backText,
   center,
   right,
   width = 'wide',
 }: HeaderProps) {
+  const { t } = useI18n();
+  const label = backText ?? t.common.back;
+
   return (
     <header className="fixed top-0 inset-x-0 z-40 border-b border-noct-ink/10 bg-noct-black/95 backdrop-blur">
       <div
@@ -32,7 +36,7 @@ export default function Header({
           href={backHref}
           className="font-mono text-[11px] tracking-[0.2em] uppercase text-noct-ink-faint hover:text-noct-ink transition-colors"
         >
-          ‹ {backText}
+          ‹ {label}
         </Link>
         {center && (
           <div className="text-center font-mono text-[11px] tracking-[0.18em] uppercase text-noct-ink-dim">

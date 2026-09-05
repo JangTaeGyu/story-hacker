@@ -8,20 +8,19 @@ import { getDifficultyInfo } from '@/lib/utils';
 import { readAllRuns, useProgress, type RunState } from '@/lib/progress';
 import Header from '@/components/ui/Header';
 import SolvedStamp from '@/components/ui/SolvedStamp';
+import LanguageSwitcher from '@/components/i18n/LanguageSwitcher';
+import { useI18n } from '@/components/i18n/LocaleProvider';
 
-const FILTERS = [
-  { value: 0, label: 'ALL' },
-  { value: 1, label: 'EASY' },
-  { value: 2, label: 'NORMAL' },
-  { value: 3, label: 'HARD' },
-] as const;
+const FILTER_VALUES = [0, 1, 2, 3] as const;
 
 interface DeductionEpisodeListProps {
   episodes: EpisodeSummary[];
 }
 
 export default function DeductionEpisodeList({ episodes }: DeductionEpisodeListProps) {
+  const { t, href } = useI18n();
   const { progress, totalStars } = useProgress();
+  const filterLabels = [t.filters.all, t.filters.easy, t.filters.normal, t.filters.hard];
   const [filter, setFilter] = useState<number>(0);
 
   // 진행 중인 판 (localStorage 직접 조회이므로 마운트 후에 읽는다)
@@ -35,36 +34,36 @@ export default function DeductionEpisodeList({ episodes }: DeductionEpisodeListP
 
   return (
     <div className="min-h-screen pb-24">
-      <Header backHref="/mode-select" />
+      <Header backHref={href('/mode-select')} right={<LanguageSwitcher />} />
 
       <div className="mx-auto max-w-md lg:max-w-6xl px-5 lg:px-8 pt-24">
         {/* 타이틀 + 필터 */}
         <div className="mb-8">
           <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-noct-ink-faint mb-3">
-            Deduction Mode
+            {t.deductionList.eyebrow}
           </p>
-          <h2 className="font-display text-3xl text-noct-ink leading-tight">
-            추론의 방
-          </h2>
+          <h1 className="font-display text-3xl text-noct-ink leading-tight">
+            {t.deductionList.title}
+          </h1>
           <p className="font-mono text-[11px] tracking-[0.15em] uppercase text-noct-ink-dim mt-2">
-            {filteredEpisodes.length} Episodes
+            {t.episodeList.episodes(filteredEpisodes.length)}
             <span className="mx-2 text-noct-ink-faint/50">·</span>
             <span className="text-noct-gold-dim">★ {totalStars}</span>
             <span className="text-noct-ink-faint"> / {episodes.length * 3}</span>
           </p>
 
           <div className="flex gap-2 mt-5">
-            {FILTERS.map((f) => (
+            {FILTER_VALUES.map((value) => (
               <button
-                key={f.value}
-                onClick={() => setFilter(f.value)}
+                key={value}
+                onClick={() => setFilter(value)}
                 className={`px-3 py-1.5 font-mono text-[10px] tracking-[0.18em] uppercase border transition-colors duration-300 ${
-                  filter === f.value
+                  filter === value
                     ? 'border-noct-gold-dim text-noct-gold'
                     : 'border-noct-ink/10 text-noct-ink-faint hover:text-noct-ink-dim hover:border-noct-ink/20'
                 }`}
               >
-                {f.label}
+                {filterLabels[value]}
               </button>
             ))}
           </div>
@@ -81,7 +80,7 @@ export default function DeductionEpisodeList({ episodes }: DeductionEpisodeListP
             return (
               <Link
                 key={episode.id}
-                href={`/deduction/${episode.id}`}
+                href={href(`/deduction/${episode.id}`)}
                 className="group relative block overflow-hidden border-b border-noct-ink/10 transition-colors duration-300 hover:bg-noct-black-2/60"
               >
                 {/* 에피소드 이미지 스트립 — 오른쪽에서 검정으로 사라진다 */}
@@ -111,11 +110,11 @@ export default function DeductionEpisodeList({ episodes }: DeductionEpisodeListP
                         {diffInfo.text}
                       </span>
                     </div>
-                    <h3 className="font-display text-xl text-noct-ink leading-snug truncate">
+                    <h2 className="font-display text-xl text-noct-ink leading-snug truncate">
                       {episode.title}
-                    </h3>
+                    </h2>
                     <p className="font-mono text-[10px] tracking-[0.15em] uppercase text-noct-ink-faint mt-1.5">
-                      {episode.stageCount} Stages
+                      {t.episodeList.stages(episode.stageCount)}
                     </p>
                   </div>
 
@@ -132,11 +131,11 @@ export default function DeductionEpisodeList({ episodes }: DeductionEpisodeListP
                       </>
                     ) : run ? (
                       <span className="mt-auto font-mono text-[10px] tracking-[0.2em] uppercase text-noct-gold-dim">
-                        Stage {run.stageIndex + 1} 진행 중
+                        {t.episodeList.inProgress(run.stageIndex + 1)}
                       </span>
                     ) : (
                       <span className="mt-auto font-mono text-[10px] tracking-[0.2em] uppercase text-noct-ink-faint group-hover:text-noct-ink-dim transition-colors">
-                        미해결
+                        {t.episodeList.unsolved}
                       </span>
                     )}
                   </div>

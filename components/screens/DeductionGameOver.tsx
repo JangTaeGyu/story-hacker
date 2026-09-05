@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import { useI18n } from '@/components/i18n/LocaleProvider';
 
 interface DeductionGameOverProps {
   episodeId: number;
@@ -16,6 +17,7 @@ export default function DeductionGameOver({
   episodeTitle,
   stageTitles,
 }: DeductionGameOverProps) {
+  const { t, href } = useI18n();
   const searchParams = useSearchParams();
   const stageIndex = parseInt(searchParams.get('stage') || '0', 10);
   const stageTitle = stageTitles[stageIndex];
@@ -36,12 +38,12 @@ export default function DeductionGameOver({
       >
         {/* 서브라인 */}
         <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-noct-ink-faint mb-5">
-          Decode Failed
+          {t.gameOver.deduction.eyebrow}
         </p>
 
         {/* 타이틀 */}
         <h1 className="font-display text-4xl text-noct-ink mb-4">
-          미해결
+          {t.gameOver.deduction.title}
         </h1>
 
         {/* 에피소드 */}
@@ -54,10 +56,10 @@ export default function DeductionGameOver({
 
         {/* 메시지 */}
         <p className="font-serif text-sm text-noct-ink-dim leading-relaxed mb-2">
-          모든 단서를 사용했지만 해독에 실패했습니다.
+          {t.gameOver.deduction.message}
         </p>
         <p className="font-serif text-xs text-noct-ink-faint leading-relaxed mb-6">
-          다시 도전하여 더 빨리 정답을 찾아보세요.
+          {t.gameOver.deduction.submessage}
         </p>
         {stageTitle && (
           <p className="font-mono text-[11px] tracking-[0.2em] uppercase text-noct-ink-faint mb-10">
@@ -72,16 +74,16 @@ export default function DeductionGameOver({
         {/* 버튼들 */}
         <div className="space-y-4">
           <Link
-            href={`/deduction/${episodeId}`}
+            href={href(`/deduction/${episodeId}`)}
             className="block w-full py-3.5 border border-noct-ink/15 text-noct-ink font-mono text-[11px] tracking-[0.3em] uppercase hover:border-noct-ink/30 transition-colors"
           >
-            Try Again
+            {t.common.tryAgain}
           </Link>
           <Link
-            href="/deduction"
+            href={href('/deduction')}
             className="block font-mono text-[11px] tracking-[0.3em] uppercase text-noct-ink-dim hover:text-noct-ink transition-colors"
           >
-            <span className="border-b border-noct-ink/20 pb-1">Episode Select</span>
+            <span className="border-b border-noct-ink/20 pb-1">{t.common.episodeSelect}</span>
           </Link>
         </div>
       </div>

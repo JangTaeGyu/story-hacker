@@ -3,7 +3,7 @@ import { filledDigits, openLock, waitForStoryReady } from './helpers';
 
 test.describe('PIN 입력', () => {
   test('키패드로 한 자리 삭제와 전체 지움이 동작한다', async ({ page }) => {
-    await page.goto('/story/1');
+    await page.goto('/ko/story/1');
     await openLock(page);
 
     for (const digit of ['1', '2', '3']) {
@@ -25,7 +25,7 @@ test.describe('PIN 입력', () => {
   });
 
   test('물리 키보드로 입력·삭제·제출할 수 있다', async ({ page }) => {
-    await page.goto('/story/1');
+    await page.goto('/ko/story/1');
     await waitForStoryReady(page);
 
     // 숫자를 누르면 닫혀 있던 입력 레이어가 자동으로 열린다
@@ -55,7 +55,7 @@ test.describe('PIN 입력', () => {
 
 test.describe('PIN 입력 레이어', () => {
   test('본문을 다 읽기 전에는 진입 버튼이 없다', async ({ page }) => {
-    await page.goto('/story/1');
+    await page.goto('/ko/story/1');
     await waitForStoryReady(page);
 
     // 타이핑이 도는 동안에는 버튼이 아직 없다
@@ -68,7 +68,7 @@ test.describe('PIN 입력 레이어', () => {
   });
 
   test('레이어 안에서 단서를 다시 읽을 수 있다', async ({ page }) => {
-    await page.goto('/story/1');
+    await page.goto('/ko/story/1');
     await openLock(page);
 
     // 본문이 가려지므로 단서가 레이어 안에도 있어야 한다
@@ -78,7 +78,7 @@ test.describe('PIN 입력 레이어', () => {
   });
 
   test('Escape·✕·배경 클릭으로 닫힌다', async ({ page }) => {
-    await page.goto('/story/1');
+    await page.goto('/ko/story/1');
 
     await openLock(page);
     await page.keyboard.press('Escape');

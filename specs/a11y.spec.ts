@@ -3,7 +3,7 @@ import { waitForStoryReady } from './helpers';
 
 test.describe('접근성', () => {
   test('핀치 줌을 막지 않는다', async ({ page }) => {
-    await page.goto('/story/1');
+    await page.goto('/ko/story/1');
 
     const viewport = await page
       .locator('meta[name="viewport"]')
@@ -16,7 +16,7 @@ test.describe('접근성', () => {
 
   test('모션 감소를 선호하면 타이핑 없이 전문이 바로 보인다', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
-    await page.goto('/story/1');
+    await page.goto('/ko/story/1');
 
     const typingArea = page.locator('div.cursor-pointer').first();
 
@@ -30,7 +30,7 @@ test.describe('접근성', () => {
 
   test('모션 감소를 선호하면 CSS 애니메이션이 무력화된다', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
-    await page.goto('/story/1');
+    await page.goto('/ko/story/1');
     await waitForStoryReady(page);
 
     const duration = await page
@@ -42,7 +42,7 @@ test.describe('접근성', () => {
   });
 
   test('키보드로 이동한 포커스가 눈에 보인다', async ({ page }) => {
-    await page.goto('/story/1');
+    await page.goto('/ko/story/1');
     await waitForStoryReady(page);
 
     // :focus-visible은 프로그램적 focus()가 아니라 키보드 상호작용에 반응한다.
@@ -66,7 +66,7 @@ test.describe('접근성', () => {
 
   test('이어하기 오버레이가 다이얼로그로 노출되고 포커스를 받는다', async ({ page }) => {
     // 스테이지 1을 풀어 이어하기 지점을 만든다
-    await page.goto('/story/1');
+    await page.goto('/ko/story/1');
     await waitForStoryReady(page);
     for (const digit of '4673') {
       await page.keyboard.press(digit);
@@ -74,7 +74,7 @@ test.describe('접근성', () => {
     await page.keyboard.press('Enter');
     await expect(page.getByText('STAGE 2 / 4')).toBeVisible();
 
-    await page.goto('/story/1');
+    await page.goto('/ko/story/1');
 
     const dialog = page.getByRole('dialog');
     await expect(dialog).toBeVisible();

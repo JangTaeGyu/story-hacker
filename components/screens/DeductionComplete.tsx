@@ -6,6 +6,7 @@ import { useSearchParams } from 'next/navigation';
 import { consumeClearToken } from '@/lib/clearToken';
 import { clearRun, useProgress } from '@/lib/progress';
 import { SITE_URL } from '@/lib/site';
+import { useI18n } from '@/components/i18n/LocaleProvider';
 
 interface DeductionCompleteProps {
   episodeId: number;
@@ -18,6 +19,7 @@ export default function DeductionComplete({
   episodeTitle,
   nextEpisodeId,
 }: DeductionCompleteProps) {
+  const { t, href } = useI18n();
   const searchParams = useSearchParams();
   const queryStars = parseInt(searchParams.get('stars') || '3', 10);
   const turnsUsed = parseInt(searchParams.get('turns') || '1', 10);
@@ -49,6 +51,14 @@ export default function DeductionComplete({
     return () => clearTimeout(timer);
   }, []);
 
+  // 공유 문구는 한 곳에서 만든다 — 버튼마다 따로 쓰면 언어가 어긋난다.
+  const shareText = t.share.deduction(
+    episodeId - 100,
+    episodeTitle,
+    `${'★'.repeat(stars)}${'☆'.repeat(3 - stars)}`,
+    turnsUsed
+  );
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-8 bg-noct-black">
       <div
@@ -58,12 +68,12 @@ export default function DeductionComplete({
       >
         {/* 서브라인 */}
         <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-noct-ink-faint mb-5">
-          Access Granted
+          {t.complete.deduction.eyebrow}
         </p>
 
         {/* 타이틀 */}
         <h1 className="font-display text-4xl text-noct-gold mb-4">
-          잠금 해제
+          {t.complete.deduction.title}
         </h1>
 
         {/* 에피소드 */}
@@ -80,25 +90,22 @@ export default function DeductionComplete({
           <span className="text-noct-ink-faint">{'☆'.repeat(3 - stars)}</span>
         </div>
         <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-noct-ink-dim mb-1">
-          {stars === 3 && 'Brilliant'}
-          {stars === 2 && 'Astute'}
-          {stars === 1 && 'Deciphered'}
+          {t.complete.deduction.ranks[stars - 1]}
         </p>
         <p className="font-serif text-xs text-noct-ink-faint mb-10">
-          {turnsUsed}번째 시도에 성공
+          {t.complete.deduction.attempt(turnsUsed)}
         </p>
 
         {/* SNS 공유 */}
         <div className="mb-10">
           <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-noct-ink-faint mb-4">
-            Share
+            {t.complete.share}
           </p>
           <div className="flex justify-center gap-3">
             {/* X (Twitter) */}
             <button
               onClick={() => {
-                const text = `Story Hacker 추론모드 EP.${episodeId - 100} "${episodeTitle}" 클리어! ${'★'.repeat(stars)}${'☆'.repeat(3 - stars)} (${turnsUsed}번째 시도)`;
-                window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
+                window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`, '_blank');
               }}
               className="w-11 h-11 bg-noct-black-2 border border-noct-ink/10 flex items-center justify-center hover:border-noct-ink/25 transition-colors"
               title="X"
@@ -110,8 +117,7 @@ export default function DeductionComplete({
             {/* Facebook */}
             <button
               onClick={() => {
-                const text = `Story Hacker 추론모드 EP.${episodeId - 100} "${episodeTitle}" 클리어! ${'★'.repeat(stars)}${'☆'.repeat(3 - stars)} (${turnsUsed}번째 시도)`;
-                window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(SITE_URL)}&quote=${encodeURIComponent(text)}`, '_blank');
+                window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(SITE_URL)}&quote=${encodeURIComponent(shareText)}`, '_blank');
               }}
               className="w-11 h-11 bg-noct-black-2 border border-noct-ink/10 flex items-center justify-center hover:border-noct-ink/25 transition-colors"
               title="Facebook"
@@ -123,8 +129,7 @@ export default function DeductionComplete({
             {/* Threads */}
             <button
               onClick={() => {
-                const text = `Story Hacker 추론모드 EP.${episodeId - 100} "${episodeTitle}" 클리어! ${'★'.repeat(stars)}${'☆'.repeat(3 - stars)} (${turnsUsed}번째 시도)`;
-                window.open(`https://www.threads.net/intent/post?text=${encodeURIComponent(text)}`, '_blank');
+                window.open(`https://www.threads.net/intent/post?text=${encodeURIComponent(shareText)}`, '_blank');
               }}
               className="w-11 h-11 bg-noct-black-2 border border-noct-ink/10 flex items-center justify-center hover:border-noct-ink/25 transition-colors"
               title="Threads"
@@ -136,12 +141,11 @@ export default function DeductionComplete({
             {/* 텍스트 복사 */}
             <button
               onClick={() => {
-                const text = `Story Hacker 추론모드 EP.${episodeId - 100} "${episodeTitle}" 클리어! ${'★'.repeat(stars)}${'☆'.repeat(3 - stars)} (${turnsUsed}번째 시도)`;
-                navigator.clipboard.writeText(text);
-                alert('클립보드에 복사되었습니다!');
+                navigator.clipboard.writeText(shareText);
+                alert(t.complete.copied);
               }}
               className="w-11 h-11 bg-noct-black-2 border border-noct-ink/10 flex items-center justify-center hover:border-noct-ink/25 transition-colors"
-              title="복사"
+              title={t.complete.copy}
             >
               <svg className="w-4 h-4 text-noct-ink-dim" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
@@ -155,23 +159,23 @@ export default function DeductionComplete({
         <div className="space-y-4">
           {nextEpisodeId !== null && (
             <Link
-              href={`/deduction/${nextEpisodeId}`}
+              href={href(`/deduction/${nextEpisodeId}`)}
               className="block w-full py-3.5 border border-noct-gold-dim text-noct-gold font-mono text-[11px] tracking-[0.3em] uppercase hover:bg-noct-gold/5 transition-colors"
             >
-              Next Episode
+              {t.common.nextEpisode}
             </Link>
           )}
           <Link
-            href={`/deduction/${episodeId}`}
+            href={href(`/deduction/${episodeId}`)}
             className="block font-mono text-[11px] tracking-[0.3em] uppercase text-noct-ink-dim hover:text-noct-ink transition-colors"
           >
-            <span className="border-b border-noct-ink/20 pb-1">Replay</span>
+            <span className="border-b border-noct-ink/20 pb-1">{t.common.replay}</span>
           </Link>
           <Link
-            href="/deduction"
+            href={href('/deduction')}
             className="block font-mono text-[11px] tracking-[0.3em] uppercase text-noct-ink-dim hover:text-noct-ink transition-colors"
           >
-            <span className="border-b border-noct-ink/20 pb-1">Episode Select</span>
+            <span className="border-b border-noct-ink/20 pb-1">{t.common.episodeSelect}</span>
           </Link>
         </div>
       </div>

@@ -10,6 +10,8 @@ Story Hacker는 두 가지 모드를 제공하는 퍼즐-추리 게임입니다:
 
 Next.js 14 (App Router), React 18, TypeScript, Tailwind CSS로 구축되었습니다. 백엔드·DB 없이 전부 클라이언트 사이드로 동작하며, 진행 상황은 localStorage에만 저장됩니다.
 
+**한국어·영어·일본어 3개 언어**를 지원합니다. 모든 라우트에 언어 접두사가 붙습니다(`/ko/story/1`, `/en/story/1`, `/ja/story/1`).
+
 비주얼 테마는 **NOCTURNE** — 어두운 문학 미스터리 톤(검정 + 빛바랜 금색 + 명조 본문)입니다. 초기 버전의 사이버펑크/네온 팔레트는 더 이상 사용하지 않습니다.
 
 ## 명령어
@@ -29,21 +31,24 @@ npm run test:ui # Playwright UI 모드
 
 ```
 app/                              # Next.js App Router
-├── layout.tsx                   # 루트 레이아웃 (메타데이터, OG, 스토리지 버전 스크립트)
-├── template.tsx                 # 라우트 전환 페이드 (opacity 전용)
-├── page.tsx                     # 홈 (히어로 이미지 + 워드마크)
+├── layout.tsx                   # 통과 전용 루트 레이아웃 (아래 "다국어" 참고)
+├── not-found.tsx                # 전역 404 — 브랜드 404는 여기 하나뿐이다
 ├── globals.css                  # CSS 변수, 폰트, 애니메이션
-├── icon.svg / manifest.json     # PWA 메타
-├── sitemap.ts / robots.ts       # 색인 대상 (결과 화면 제외)
-├── not-found.tsx / error.tsx    # 404 · 런타임 오류 화면
-├── mode-select/page.tsx         # 모드 선택 (스토리/추리)
-├── story/
-│   ├── page.tsx                # 스토리 에피소드 선택 (난이도 필터)
-│   └── [episodeId]/
-│       ├── page.tsx            # 서버 컴포넌트 — 에피소드 조회 후 GamePlay 렌더
-│       ├── complete/page.tsx   # 에피소드 클리어 (진행도 저장 + SNS 공유)
-│       └── gameover/page.tsx   # 게임오버 (정답 공개)
-└── deduction/                   # 추리 모드 (동일 구조 + layout.tsx)
+├── icon.svg / manifest.ts       # PWA 메타 (매니페스트는 /manifest.webmanifest 로 생성)
+├── sitemap.ts / robots.ts       # 색인 대상 · 언어별 hreflang (결과 화면 제외)
+└── [locale]/                    # ko · en · ja — 실질적인 루트
+    ├── layout.tsx              # <html lang> · 메타데이터 · OG · LocaleProvider
+    ├── template.tsx            # 라우트 전환 페이드 (opacity 전용)
+    ├── page.tsx                # 홈 (히어로 이미지 + 워드마크)
+    ├── error.tsx               # 런타임 오류 화면
+    ├── mode-select/page.tsx    # 모드 선택 (스토리/추리)
+    ├── story/
+    │   ├── page.tsx            # 스토리 에피소드 선택 (난이도 필터)
+    │   └── [episodeId]/
+    │       ├── page.tsx        # 서버 컴포넌트 — 에피소드 조회 후 GamePlay 렌더
+    │       ├── complete/page.tsx   # 에피소드 클리어 (진행도 저장 + SNS 공유)
+    │       └── gameover/page.tsx   # 게임오버 (정답 공개)
+    └── deduction/               # 추리 모드 (동일 구조 + layout.tsx)
 
 components/
 ├── screens/                    # 각 라우트의 클라이언트 컴포넌트
@@ -61,9 +66,13 @@ components/
 │   ├── InputArea.tsx           # 숫자 키패드 + 백스페이스/확인
 │   ├── ResumePrompt.tsx        # 이어하기 확인 오버레이
 │   ├── LockModal.tsx           # PIN 입력 레이어 (단서·힌트 포함)
-│   ├── SolvedStamp.tsx         # "해결" 도장 직인 (완료 에피소드 표시)
+│   ├── SolvedStamp.tsx         # 사건 종결 도장 직인 (글자 수에 맞춰 크기 조정)
 │   ├── HeartsDisplay.tsx       # 남은 시도 — 하트가 아닌 작은 점(dot)
 │   └── StageStatus.tsx         # "Turns n/m" + 점 — 모바일·데스크톱 두 자리에 렌더
+├── i18n/
+│   ├── LocaleProvider.tsx      # 클라이언트 트리에 locale·문자열·href 헬퍼 공급
+│   └── LanguageSwitcher.tsx    # KO · EN · JA — 보던 화면의 같은 위치로 이동
+├── seo/JsonLd.tsx              # 구조화 데이터 삽입 (서버 전용)
 └── illustrations/
     ├── StoryIllustrations.tsx  # "epId-stageId" → PNG 배경 매핑
     └── DeductionIllustrations.tsx  # "epId-stageId" → PNG 배경 매핑
@@ -76,15 +85,19 @@ hooks/
 
 lib/
 ├── types.ts                    # 모든 TypeScript 타입/인터페이스
-├── site.ts                     # 배포 도메인·사이트명 (메타데이터·사이트맵·공유 링크 공용)
+├── i18n.ts                     # 지원 언어·기본 언어·경로 헬퍼(localePath/stripLocale)
+├── messages/{ko,en,ja}.ts      # UI 문자열 사전 (ko가 Messages 타입의 기준)
+├── seo.ts                      # canonical·hreflang·JSON-LD 빌더
+├── site.ts                     # 배포 도메인·사이트명 (언어 무관한 값만)
 ├── progress.ts                 # 진행도 저장소 — useProgress, 이어하기(run) 조회/저장
 ├── clearToken.ts               # 클리어 증표 발급/소비 (진행도 위조 방지)
 └── utils.ts                    # 유틸리티 함수
 
 data/
-├── storyEpisodes.ts            # 배럴: story/ep-NN.ts 20개를 storyEpisodes 배열로 export
-├── story/ep-01.ts ~ ep-20.ts   # 스토리 에피소드 1개당 1파일 (satisfies StoryEpisode)
-└── deductionEpisodes.ts        # 추리 에피소드 8개 (단일 파일, id 101~108)
+├── storyEpisodes.ts            # getStoryEpisodes(locale) · findStoryEpisode · storyEpisodeIds
+├── deductionEpisodes.ts        # getDeductionEpisodes(locale) · findDeductionEpisode · …Ids
+├── story/{ko,en,ja}/           # 언어별 스토리 20편 — ep-01.ts ~ ep-20.ts + index.ts 배럴
+└── deduction/{ko,en,ja}.ts     # 언어별 추리 8편 (단일 파일, id 101~108)
 
 scripts/                         # Replicate(FLUX) 이미지 생성 · 아이콘/OG 생성 · 리사이즈
 public/images/story/             # ep-N.png(카드 16:9), N-M.png(스테이지 9:16)
@@ -96,20 +109,23 @@ reference/, design-samples/, tasks/   # 원본 소스·디자인 시안·작업 
 
 "모든 페이지가 클라이언트 컴포넌트"가 **아닙니다.** 현재 경계는 다음과 같습니다.
 
-**`app/` 아래 page.tsx는 전부 서버 컴포넌트입니다.** 상호작용은 `components/screens/`의 클라이언트 컴포넌트가 맡습니다.
+**`app/` 아래 page.tsx는 전부 서버 컴포넌트입니다.** 상호작용은 `components/screens/`의 클라이언트 컴포넌트가 맡습니다. 아래 경로는 전부 `app/[locale]/` 기준입니다.
 
 | 페이지 (서버) | 렌더 | 넘기는 것 | 클라이언트 컴포넌트 |
 |---|---|---|---|
-| `app/page.tsx`, `mode-select` | ○ 정적 | — | 없음 |
-| `story/page.tsx`, `deduction/page.tsx` | ○ 정적 | `EpisodeSummary[]` | `*EpisodeList` |
+| `page.tsx`, `mode-select` | ● SSG | — | `LanguageSwitcher`만 |
+| `story/page.tsx`, `deduction/page.tsx` | ● SSG | `EpisodeSummary[]` | `*EpisodeList` |
 | `*/[episodeId]/page.tsx` | ● SSG | 에피소드 1개 전체 | `*GamePlay` |
 | `*/[episodeId]/complete/page.tsx` | ● SSG | id·제목·다음 화 id | `*Complete` |
 | `*/[episodeId]/gameover/page.tsx` | ● SSG | id·제목·스테이지 제목 배열 | `*GameOver` |
 
-두 가지 규칙이 있습니다.
+서버 페이지는 `getMessages(locale)`로 문자열을, `getStoryEpisodes(locale)`로 데이터를 직접 읽습니다. 클라이언트 쪽은 `LocaleProvider`가 `locale` 하나만 받아 사전을 다시 조회합니다 — 사전에 함수형 템플릿이 있어 props로 직렬화할 수 없기 때문입니다.
+
+세 가지 규칙이 있습니다.
 
 1. **클라이언트 컴포넌트에서 `data/`를 직접 import하지 마세요.** 에피소드 배열을 import하면 본문·단서·정답이 통째로 클라이언트 번들에 실립니다(스토리 모드 약 25~30kB). 서버 페이지에서 필요한 필드만 추려 props로 넘기세요. `specs/payload.spec.ts`가 이를 검증합니다.
 2. **`useSearchParams`를 쓰는 클라이언트 컴포넌트는 `<Suspense>`로 감싸세요.** 감싸지 않으면 그 라우트 전체가 동적 렌더(ƒ)로 떨어집니다.
+3. **`headers()`·`cookies()`를 쓰지 마세요.** 레이아웃이나 페이지에서 한 번만 불러도 그 아래 전부가 동적 렌더로 떨어져 271개 정적 페이지가 사라집니다. 언어는 URL 세그먼트(`params.locale`)에서만 읽습니다.
 
 게임 진행 상태는 화면 컴포넌트가 아니라 `hooks/useGameState.ts`에 격리되어 있고, 클리어·게임오버는 상태 전환이 아니라 **별도 라우트로 `router.push`** 하여 처리합니다.
 
@@ -227,6 +243,72 @@ readAllRuns(mode)   // 에피소드 선택 화면의 "진행 중" 배지용
 - 완료 화면으로 가는 경로를 새로 만들면 `issueClearToken` 호출을 빠뜨리지 마세요. 빠뜨리면 정상 플레이인데도 기록이 남지 않습니다. `specs/progress-guard.spec.ts`가 양쪽(정상 플레이는 기록, 직접 진입은 미기록)을 검증합니다.
 - `app/layout.tsx`의 `STORAGE_VERSION` 상수 + 인라인 `<script>`가 하이드레이션 전에 동기 실행되어, 값이 바뀐 클라이언트에서 최초 1회 `localStorage.clear()`를 수행합니다. 데이터 구조나 정답을 대규모로 바꿨을 때 이 값을 올리세요. 버전은 `'story-hacker-version'` 키에 저장됩니다.
 
+## 다국어 (ko · en · ja)
+
+### 라우팅
+
+**모든 언어에 접두사가 붙습니다** — `/ko/story/1`, `/en/story/1`, `/ja/story/1`. 한국어만 접두사 없이 두면 `/` 아래에 라우트 트리를 두 벌 유지해야 하고 hreflang이 비대칭이 되어 색인 사고가 나기 쉽습니다.
+
+접두사 없는 옛 주소는 `next.config.js`의 **영구 리다이렉트(308)** 가 `/ko/...`로 넘깁니다. 다국어 도입 전에 공유·색인된 링크가 깨지지 않게 하는 유일한 장치이므로 지우지 마세요. 루트 `/`는 `/ko`로 307(임시)입니다 — 나중에 `Accept-Language` 기반 언어 감지를 붙일 여지를 남긴 것입니다.
+
+### 루트 레이아웃이 두 개인 이유
+
+```
+app/layout.tsx           children를 그대로 반환 (html 없음)
+app/[locale]/layout.tsx  실제 셸 — <html lang>, 메타데이터, LocaleProvider
+```
+
+`<html lang>`이 언어를 따라가야 하는데 `app/layout.tsx`는 params를 받지 못합니다. 그래서 셸을 `[locale]` 안으로 내렸습니다.
+
+**그런데도 `app/layout.tsx`를 지우면 안 됩니다.** `app/not-found.tsx`는 루트 레이아웃 없이는 빌드 자체가 실패합니다(`not-found.tsx doesn't have a root layout`). 이 통과 레이아웃이 없으면 브랜드 404가 사라지고 잘못된 URL이 전부 Next 기본 404로 떨어집니다.
+
+또한 **404 화면은 `app/not-found.tsx` 하나뿐입니다.** 루트 레이아웃이 동적 세그먼트 안에 있으면 Next는 `notFound()`를 `app/[locale]/not-found.tsx`로 보내지 못하고 전역 not-found로 떨어뜨립니다. 세그먼트별 not-found를 만들어도 쓰이지 않으니 만들지 마세요. 이 화면은 루트 레이아웃 바깥이라 레이아웃·폰트가 적용되지 않아 `globals.css`를 직접 import하고, 언어는 `usePathname()`으로 경로에서 읽습니다.
+
+`app/[locale]/layout.tsx`에는 `dynamicParams = false`가 걸려 있어 `/fr/...` 같은 미등록 언어는 404입니다. 다만 **에피소드 세그먼트에는 `dynamicParams = true`를 다시 열어 두었습니다** — 그러지 않으면 없는 에피소드 id가 라우팅 단계에서 잘려 `notFound()`가 실행되지 않고 Next 기본 404가 뜹니다.
+
+### UI 문자열
+
+`lib/messages/{ko,en,ja}.ts`에 있고 `ko.ts`가 `Messages` 타입의 기준입니다. **`ko.ts`에 키를 추가하면 en·ja가 타입 오류로 즉시 잡힙니다** — 이게 번역 누락을 막는 장치이므로 `Messages`를 느슨하게 만들지 마세요.
+
+- 서버 컴포넌트: `getMessages(locale)`를 직접 호출
+- 클라이언트 컴포넌트: `useI18n()` → `{ locale, t, href }`
+
+사전에 함수형 템플릿(`t.share.story(...)` 등)이 있어 서버→클라이언트로 props에 실어 보낼 수 없습니다. 그래서 `LocaleProvider`는 `locale` 문자열만 받고 사전은 클라이언트에서 다시 조회합니다.
+
+**내부 링크는 반드시 `href()`를 거치세요.** `href('/story/1')` → `/en/story/1`. 하드코딩하면 영어판에서 한국어판으로 튕깁니다.
+
+> **NOCTURNE의 대문자 모노 라벨은 번역하지 않습니다.** `Story Mode`, `Access Granted`, `Turns 0 / 3`, `Next Episode` 등은 언어가 아니라 디자인 요소입니다. 세 언어 모두 영문 그대로 둡니다.
+
+### 에피소드 데이터
+
+`data/story/{ko,en,ja}/ep-NN.ts`, `data/deduction/{ko,en,ja}.ts`. 서버 페이지는 `getStoryEpisodes(locale)` / `findStoryEpisode(locale, id)`로 접근합니다.
+
+> **언어판은 글만 다르고 판은 같아야 합니다.** `id` · `difficulty` · `lockType` · `answers`/`answer` · `maxTurns` · 단서 `turn`이 세 언어에서 전부 동일해야 합니다. 진행도·이어하기·클리어 증표가 전부 에피소드 id에 묶여 있고 EP.11–20은 앞 화의 정답을 다음 화의 재료로 쓰기 때문에, 한 언어에서 정답이 어긋나면 언어를 바꾼 순간 기록이 뒤섞이거나 풀 수 없는 스테이지가 생깁니다. `specs/episode-parity.spec.ts`가 이를 전수 검사합니다.
+
+**한글에 묶인 퍼즐은 정답을 바꾸지 말고 장치를 바꾸세요.** EP.13 스테이지 2가 유일한 사례입니다 — 한국어판은 '쉐도우넷'을 뒤집어 초성 ㄴㅇㄷㅅ을 뽑고, 번역판은 `SHADOWNET`을 뒤집은 `TENWODAHS`에서 1·3·5·7번째 글자 T·N·O·A를 뽑습니다. 대응표(T=8, N=0, O=3, A=4)까지 맞춰 **양쪽 모두 8034**가 나옵니다. 나머지 퍼즐은 전부 라틴 알파벳·숫자 기반이라 그대로 번역됩니다.
+
+### 폰트
+
+로드하는 웹폰트는 한국어 기준(Song Myung · Nanum Myeongjo)입니다. 영어는 Nanum Myeongjo에 라틴 글리프가 있어 그대로 쓰이고, **일본어는 시스템 명조로 폴백**합니다(macOS 히라기노 명조 등). 일본어 웹폰트를 추가하면 한글 self-host와 같은 수 MB 비용이 드니, 폴백이 실제로 문제가 된 뒤에 검토하세요.
+
+### 언어를 하나 추가하려면
+
+1. `lib/i18n.ts`의 `locales`와 `localeMeta`에 추가
+2. `lib/messages/<code>.ts` 작성 (`Messages` 타입을 만족해야 함) 후 `lib/messages/index.ts`에 등록
+3. `data/story/<code>/` 20편 + `data/deduction/<code>.ts` 작성 후 각 배럴에 등록
+4. 끝. 사이트맵·hreflang·정적 생성은 `locales`를 읽으므로 자동으로 따라옵니다.
+
+## SEO
+
+`specs/i18n.spec.ts`와 `specs/metadata.spec.ts`가 아래를 고정합니다.
+
+- **모든 페이지가 자기 canonical과 3개 언어 alternate + `x-default`를 냅니다** (`lib/seo.ts`의 `alternatesFor`). 한쪽만 빠지면 검색엔진이 언어판을 중복 문서로 보고 하나만 색인합니다. `x-default`는 기본 언어(한국어)를 가리킵니다.
+- **사이트맵은 경로 하나당 언어 수만큼 항목을 냅니다.** 각 항목이 `alternates.languages`로 나머지 언어판을 가리킵니다 — hreflang은 상호 참조되어야 합니다.
+- **구조화 데이터(JSON-LD).** 홈에 `WebSite` + `VideoGame` 그래프, 목록에 `CollectionPage` + `ItemList`, 에피소드에 `VideoGame` + `BreadcrumbList`. 삽입은 `components/seo/JsonLd.tsx`.
+- **결과 화면은 `robots: { index: false }`** 입니다. robots.txt로도 막지만, 외부에서 링크되는 경우까지 덮으려면 메타가 필요합니다.
+- **각 페이지에 h1이 하나 있습니다.** 목록 화면의 제목이 h1, 에피소드 카드가 h2입니다. 예전에는 목록에 h1이 없어 검색엔진이 페이지 주제를 잡을 근거가 없었습니다.
+- 배포 도메인은 여전히 `lib/site.ts`의 `SITE_URL` 한 곳입니다.
+
 ## 스타일링 (NOCTURNE)
 
 ### 팔레트
@@ -252,9 +334,11 @@ readAllRuns(mode)   // 에피소드 선택 화면의 "진행 중" 배지용
 - `font-serif` — Nanum Myeongjo (본문·단서, body 기본값)
 - `font-mono` — Space Mono (대문자 트래킹 라벨)
 
-`app/layout.tsx`의 `<head>`에서 preconnect 2개 + Google Fonts `<link>`로 불러옵니다. `globals.css`에서 `@import` 하면 CSS를 받아 파싱한 뒤에야 폰트 CSS를 요청하게 되어 한 단계 더 직렬화되므로 그렇게 하지 마세요.
+`app/[locale]/layout.tsx`의 `<head>`에서 preconnect 2개 + Google Fonts `<link>`로 불러옵니다. `globals.css`에서 `@import` 하면 CSS를 받아 파싱한 뒤에야 폰트 CSS를 요청하게 되어 한 단계 더 직렬화되므로 그렇게 하지 마세요.
 
 **`next/font`는 쓰지 않습니다.** `Song_Myung`은 `korean` 서브셋을 아예 지원하지 않고(타입 오류), 한글 폰트를 self-host하면 유니코드 범위별로 쪼개진 파일이 370개·5.2MB까지 늘어납니다. 이 결정을 되돌리려면 먼저 그 비용부터 확인하세요.
+
+로드하는 폰트는 한국어 기준입니다. 영어는 Nanum Myeongjo의 라틴 글리프를 쓰고, **일본어는 시스템 명조로 폴백**합니다 — 자세한 내용은 위 "다국어 › 폰트"를 보세요.
 
 ### 애니메이션
 
@@ -328,20 +412,26 @@ calculateDeductionStars(turnsUsed) // 추리 모드 별점 — useDeductionGameS
 
 ## 라우팅 구조
 
+`{locale}`은 `ko` · `en` · `ja` 중 하나입니다.
+
 ```
-/                                    홈
-├── /mode-select                     스토리 / 추리 선택
-├── /story                           에피소드 선택 (난이도 필터)
-│   └── /story/[episodeId]           게임 플레이
-│       ├── /complete?stars=N        클리어 — 진행도 저장, SNS 공유
-│       └── /gameover?stage=N        게임오버 — 해당 스테이지 정답 공개
-└── /deduction                       에피소드 선택
-    └── /deduction/[episodeId]       게임 플레이
+/                                          → /ko (307)
+/{locale}                                  홈
+├── /{locale}/mode-select                  스토리 / 추리 선택
+├── /{locale}/story                        에피소드 선택 (난이도 필터)
+│   └── /{locale}/story/[episodeId]        게임 플레이
+│       ├── /complete?stars=N              클리어 — 진행도 저장, SNS 공유
+│       └── /gameover?stage=N              게임오버 — 해당 스테이지 정답 공개
+└── /{locale}/deduction                    에피소드 선택
+    └── /{locale}/deduction/[episodeId]    게임 플레이
         ├── /complete?stars=N&turns=M
         └── /gameover?stage=N
+
+/story/*, /deduction/*, /mode-select       → /ko/... (308, 옛 주소 호환)
 ```
 
 `stage` 쿼리는 스테이지 **인덱스**(0부터)입니다.
+빌드 시 271개 페이지가 전부 정적 생성됩니다(3개 언어 × 라우트).
 
 ## 이미지 파이프라인
 
@@ -375,8 +465,12 @@ specs/
 ├── contrast.spec.ts       # 팔레트 명암비 AA 기준
 ├── metadata.spec.ts       # 에피소드별 OG · robots · sitemap · 404
 ├── resume.spec.ts         # 이어하기 · 게임오버 정답 비노출
-└── responsive.spec.ts     # 데스크톱 단일 컬럼 · 레이어 · 목록 그리드 · 가로 스크롤
+├── responsive.spec.ts     # 데스크톱 단일 컬럼 · 레이어 · 목록 그리드 · 가로 스크롤
+├── i18n.spec.ts           # 언어 라우팅 · 옛 주소 리다이렉트 · hreflang · JSON-LD
+└── episode-parity.spec.ts # 세 언어의 정답·구조 일치 (브라우저를 쓰지 않는 데이터 검사)
 ```
+
+스펙의 경로에는 **언어 접두사를 직접 붙이세요**(`page.goto('/ko/story/1')`). 리다이렉트에 기대면 무엇을 테스트하는지 흐려집니다 — 리다이렉트 자체는 `i18n.spec.ts`가 따로 검증합니다.
 
 프로젝트가 둘입니다. `chromium`(Pixel 7)이 `responsive.spec.ts`를 제외한 전부를, `desktop`(1440×900)이 `responsive.spec.ts`만 돌립니다. **모바일 스펙이 기존 동작을 고정해주므로 `lg:` 레이어는 추가분이고 회귀 위험이 낮습니다.** 반대로 데스크톱은 `responsive.spec.ts`가 유일한 방어선이라, 2단 구조를 건드리면 여기부터 확인하세요.
 
@@ -445,12 +539,13 @@ const episode = {
 export default episode;
 ```
 
-2. `data/storyEpisodes.ts` 배럴에 `import`와 배열 등록 추가.
-3. 이미지 생성 후 `components/illustrations/StoryIllustrations.tsx`에 `"에피소드ID-스테이지ID"` 키로 매핑 추가.
+   경로는 `data/story/ko/ep-NN.ts`입니다. **같은 파일을 `en/`·`ja/`에도 만들어야 합니다** — 글만 번역하고 `id`·`lockType`·`answers`·`maxTurns`는 그대로 둡니다(`specs/episode-parity.spec.ts`가 검사).
+2. `data/story/{ko,en,ja}/index.ts` 배럴 **세 개 모두**에 `import`와 배열 등록 추가.
+3. 이미지 생성 후 `components/illustrations/StoryIllustrations.tsx`에 `"에피소드ID-스테이지ID"` 키로 매핑 추가 (이미지는 언어 공용).
 
 ### 새 추리 에피소드 추가
 
-`data/deductionEpisodes.ts` 배열에 추가합니다 (ID는 101부터, 스토리와 구분).
+`data/deduction/{ko,en,ja}.ts` **세 파일 모두**의 배열에 추가합니다 (ID는 101부터, 스토리와 구분). 정답·단서 `turn`은 세 언어가 같아야 합니다.
 
 ```typescript
 {
@@ -484,6 +579,8 @@ export default episode;
 - 각 `answers` 항목과 `answer`의 길이는 `lockType` 자릿수와 정확히 일치해야 합니다 (불일치 시 제출 자체가 막힘).
 - PIN은 숫자 전용입니다. 키패드는 숫자 · 한 자리 삭제(⌫) · 확인으로 구성되고, 전체 삭제는 키패드 위 "전체 지움" 텍스트 버튼입니다(입력이 없으면 숨김). 물리 키보드는 `usePinKeyboard`가 처리합니다 — 숫자 입력, `Backspace` 한 자리 삭제, `Escape` 전체 삭제, `Enter` 제출.
 - 키패드는 `LockModal` 안에 있고 레이어는 `max-w-sm`입니다. 키패드에 행을 추가하면 모바일 세로 높이를 확인하세요 — 레이어가 뷰포트를 넘으면 내부 스크롤이 생깁니다.
+- 내부 링크는 `useI18n()`의 `href()` 또는 `localePath(locale, path)`를 거칩니다. 하드코딩하면 영어·일본어판에서 한국어판으로 튕깁니다.
+- 새 화면에 사용자에게 읽히는 문장을 넣을 때는 `lib/messages/ko.ts`에 키를 먼저 만드세요. en·ja를 빠뜨리면 타입 오류가 납니다.
 - 배포 도메인은 `lib/site.ts`의 `SITE_URL` 한 곳에만 둡니다. 루트 메타데이터·에피소드별 OG·사이트맵·SNS 공유 버튼이 모두 이 값을 씁니다 — 하드코딩하면 한쪽만 낡아 어긋납니다(실제로 `layout.tsx`가 옛 vercel.app 주소로 남아 있었습니다).
 - 에피소드 페이지는 `generateMetadata`로 제목·설명·OG 이미지를 따로 냅니다. 스토리는 `synopsis`를 설명으로, `ep-{id}.png`(1344×768)를 OG 이미지로 씁니다. 루트 레이아웃의 `title.template`이 뒤에 사이트명을 붙입니다.
 - `next.config.js`는 사실상 비어 있습니다. `output: 'export'`는 주석 처리된 상태입니다.

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { useI18n } from '@/components/i18n/LocaleProvider';
 
 interface ResumePromptProps {
   /** 이어서 시작할 스테이지 인덱스 (0-based) */
@@ -22,6 +23,8 @@ export default function ResumePrompt({
   onResume,
   onRestart,
 }: ResumePromptProps) {
+  const { t } = useI18n();
+
   // 오버레이가 뜨면 기본 동작에 포커스를 준다 (키보드 사용자가 바로 조작 가능)
   const resumeButtonRef = useRef<HTMLButtonElement>(null);
   useEffect(() => {
@@ -37,10 +40,10 @@ export default function ResumePrompt({
     >
       <div className="w-full max-w-xs lg:max-w-sm text-center">
         <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-noct-ink-faint">
-          Resume
+          {t.resume.eyebrow}
         </p>
         <h2 id="resume-prompt-title" className="mt-3 font-display text-3xl text-noct-ink">
-          이어하기
+          {t.resume.title}
         </h2>
 
         <div className="mx-auto my-7 h-px w-16 bg-gradient-to-r from-transparent via-noct-gold-dim to-transparent" />
@@ -60,13 +63,13 @@ export default function ResumePrompt({
             onClick={onResume}
             className="block w-full border border-noct-gold-dim py-3.5 font-mono text-[11px] tracking-[0.3em] uppercase text-noct-gold transition-colors hover:bg-noct-gold/5"
           >
-            이어서 시작
+            {t.resume.resume}
           </button>
           <button
             onClick={onRestart}
             className="block w-full font-mono text-[11px] tracking-[0.3em] uppercase text-noct-ink-dim transition-colors hover:text-noct-ink"
           >
-            <span className="border-b border-noct-ink/20 pb-1">처음부터</span>
+            <span className="border-b border-noct-ink/20 pb-1">{t.resume.restart}</span>
           </button>
         </div>
       </div>

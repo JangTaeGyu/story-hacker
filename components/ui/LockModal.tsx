@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { useI18n } from '@/components/i18n/LocaleProvider';
 
 interface LockModalProps {
   /** 헤더 라벨 — 보통 "잠금 장치" */
@@ -21,6 +22,7 @@ interface LockModalProps {
  * 위해서다. 두 곳에서 들으면 같은 키에 두 동작이 걸린다.
  */
 export default function LockModal({ label, onClose, children }: LockModalProps) {
+  const { t } = useI18n();
   const closeRef = useRef<HTMLButtonElement>(null);
 
   // 열릴 때 포커스를 안으로 들여놓는다 (ResumePrompt와 같은 방식)
@@ -51,7 +53,7 @@ export default function LockModal({ label, onClose, children }: LockModalProps) 
           <button
             ref={closeRef}
             onClick={onClose}
-            aria-label="닫기"
+            aria-label={t.common.close}
             className="-m-2 p-2 font-mono text-sm leading-none text-noct-ink-faint transition-colors hover:text-noct-ink"
           >
             ✕

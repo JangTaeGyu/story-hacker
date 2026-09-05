@@ -15,12 +15,14 @@ import InputArea from '@/components/ui/InputArea';
 import StageStatus from '@/components/ui/StageStatus';
 import Header from '@/components/ui/Header';
 import { storyIllustrations } from '@/components/illustrations/StoryIllustrations';
+import { useI18n } from '@/components/i18n/LocaleProvider';
 
 interface StoryGamePlayProps {
   episode: StoryEpisode;
 }
 
 export default function StoryGamePlay({ episode }: StoryGamePlayProps) {
+  const { t, href } = useI18n();
   const router = useRouter();
   const [showSuccess, setShowSuccess] = useState(false);
   const [stageKey, setStageKey] = useState(0);
@@ -104,15 +106,15 @@ export default function StoryGamePlay({ episode }: StoryGamePlayProps) {
       const timer = setTimeout(() => {
         // 완료 화면이 진행도를 기록해도 되는지 판별할 1회용 증표
         issueClearToken('story', episode.id, stars);
-        router.push(`/story/${episode.id}/complete?stars=${stars}`);
+        router.push(href(`/story/${episode.id}/complete?stars=${stars}`));
       }, 1500);
       return () => clearTimeout(timer);
     } else if (isGameOver) {
       // 게임오버는 처음부터 다시 — 이어하기 지점을 남기지 않는다.
       clearRun('story', episode.id);
-      router.push(`/story/${episode.id}/gameover?stage=${currentStageIndex}`);
+      router.push(href(`/story/${episode.id}/gameover?stage=${currentStageIndex}`));
     }
-  }, [isComplete, isGameOver, router, episode.id, stars, currentStageIndex]);
+  }, [isComplete, isGameOver, router, href, episode.id, stars, currentStageIndex]);
 
   if (!currentStage) return null;
 
@@ -148,9 +150,9 @@ export default function StoryGamePlay({ episode }: StoryGamePlayProps) {
         <div role="status" className="absolute inset-0 z-50 flex items-center justify-center bg-noct-black/95 animate-fadeIn">
           <div className="text-center animate-scaleIn px-8">
             <div className="mx-auto mb-6 h-px w-16 bg-gradient-to-r from-transparent via-noct-gold to-transparent" />
-            <h2 className="font-display text-4xl text-noct-gold">잠금 해제</h2>
+            <h2 className="font-display text-4xl text-noct-gold">{t.game.unlocked}</h2>
             <p className="mt-3 font-mono text-[11px] tracking-[0.3em] uppercase text-noct-ink-dim">
-              Access Granted
+              {t.game.accessGranted}
             </p>
             <div className="mx-auto mt-6 h-px w-16 bg-gradient-to-r from-transparent via-noct-gold to-transparent" />
           </div>
@@ -159,8 +161,8 @@ export default function StoryGamePlay({ episode }: StoryGamePlayProps) {
 
       {/* 헤더 — 뒤로가기 */}
       <Header
-        backHref="/story"
-        backText="EXIT"
+        backHref={href('/story')}
+        backText={t.common.exit}
         width="narrow"
         center={`EP.${String(episode.id).padStart(2, '0')} · STAGE ${currentStageIndex + 1} / ${episode.stages.length}`}
         right={
@@ -227,7 +229,7 @@ export default function StoryGamePlay({ episode }: StoryGamePlayProps) {
               {clueParts.length > 0 && (
                 <div className="mt-6 border-l border-noct-gold-dim pl-4">
                   <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-noct-gold-dim">
-                    단서
+                    {t.game.clue}
                   </p>
                   <p className="mt-1.5 font-serif text-[15px] leading-[1.8] text-noct-ink-dim">
                     {clueText}
@@ -238,7 +240,7 @@ export default function StoryGamePlay({ episode }: StoryGamePlayProps) {
 
               {isTyping && (
                 <p className="mt-3 text-right font-mono text-[10px] tracking-[0.2em] uppercase text-noct-ink-faint">
-                  탭하여 스킵
+                  {t.game.tapToSkip}
                 </p>
               )}
             </div>
@@ -250,7 +252,7 @@ export default function StoryGamePlay({ episode }: StoryGamePlayProps) {
                 onClick={openLock}
                 className="mt-9 block w-full animate-fadeIn border border-noct-gold-dim py-3.5 font-mono text-[11px] tracking-[0.3em] uppercase text-noct-gold transition-colors hover:bg-noct-gold/5"
               >
-                PIN 입력
+                {t.game.enterPin}
               </button>
             )}
           </div>
@@ -259,7 +261,7 @@ export default function StoryGamePlay({ episode }: StoryGamePlayProps) {
 
       {/* PIN 입력 레이어 — 단서와 힌트를 함께 담는다 */}
       {lockOpen && (
-        <LockModal label="잠금 장치" onClose={closeLock}>
+        <LockModal label={t.game.lockLabel} onClose={closeLock}>
           <div className="mt-4 flex items-center justify-between">
             <StageStatus
               turns={turnsUsed}
@@ -271,7 +273,7 @@ export default function StoryGamePlay({ episode }: StoryGamePlayProps) {
           {/* 단서 — 본문이 가려지므로 여기서 다시 읽을 수 있어야 한다 */}
           <div className="mt-4 border-l border-noct-gold-dim pl-4">
             <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-noct-gold-dim">
-              단서
+              {t.game.clue}
             </p>
             <p className="mt-1.5 font-serif text-[14px] leading-[1.7] text-noct-ink-dim">
               {currentStage.clue}
@@ -285,16 +287,16 @@ export default function StoryGamePlay({ episode }: StoryGamePlayProps) {
               className="mt-4 flex w-full items-center justify-between border-t border-noct-ink/10 pt-4 text-left transition-colors hover:border-noct-ink/20"
             >
               <span className="font-mono text-[11px] tracking-[0.2em] uppercase text-noct-ink-dim">
-                힌트 보기
+                {t.game.showHint}
               </span>
               <span className="font-mono text-[10px] tracking-[0.15em] uppercase text-noct-gold-dim">
-                별 1 소모
+                {t.game.hintCost}
               </span>
             </button>
           ) : (
             <div className="mt-4 animate-fadeIn border-l border-noct-gold-dim pl-4">
               <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-noct-gold-dim">
-                힌트
+                {t.game.hint}
               </p>
               <p className="mt-1.5 font-serif text-[14px] leading-[1.7] text-noct-ink-dim">
                 {currentStage.hint}
@@ -325,7 +327,7 @@ export default function StoryGamePlay({ episode }: StoryGamePlayProps) {
               role="status"
               className="mt-4 animate-fadeIn border-t border-noct-ink/10 pt-4 text-center font-mono text-[11px] tracking-[0.2em] uppercase text-noct-ink-dim"
             >
-              일치하지 않습니다 · 다시 시도하세요
+              {t.game.wrongPin}
             </p>
           )}
         </LockModal>

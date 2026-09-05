@@ -14,12 +14,14 @@ import InputArea from '@/components/ui/InputArea';
 import StageStatus from '@/components/ui/StageStatus';
 import Header from '@/components/ui/Header';
 import { deductionIllustrations } from '@/components/illustrations/DeductionIllustrations';
+import { useI18n } from '@/components/i18n/LocaleProvider';
 
 interface DeductionGamePlayProps {
   episode: DeductionEpisode;
 }
 
 export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
+  const { t, href } = useI18n();
   const router = useRouter();
   const [showSuccess, setShowSuccess] = useState(false);
   // PIN 입력 레이어. 본문을 덮으므로 열려 있는 동안이 곧 "입력 중"이다.
@@ -95,15 +97,17 @@ export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
       const timer = setTimeout(() => {
         // 완료 화면이 진행도를 기록해도 되는지 판별할 1회용 증표
         issueClearToken('deduction', episode.id, stars);
-        router.push(`/deduction/${episode.id}/complete?stars=${stars}&turns=${turnsUsed}`);
+        router.push(
+          href(`/deduction/${episode.id}/complete?stars=${stars}&turns=${turnsUsed}`)
+        );
       }, 1500);
       return () => clearTimeout(timer);
     } else if (isGameOver) {
       // 게임오버는 처음부터 다시 — 이어하기 지점을 남기지 않는다.
       clearRun('deduction', episode.id);
-      router.push(`/deduction/${episode.id}/gameover?stage=${currentStageIndex}`);
+      router.push(href(`/deduction/${episode.id}/gameover?stage=${currentStageIndex}`));
     }
-  }, [isComplete, isGameOver, router, episode.id, stars, turnsUsed, currentStageIndex]);
+  }, [isComplete, isGameOver, router, href, episode.id, stars, turnsUsed, currentStageIndex]);
 
   if (!currentStage) return null;
 
@@ -134,9 +138,9 @@ export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
       {showSuccess && (
         <div role="status" className="absolute inset-0 z-50 flex items-center justify-center bg-noct-page/95 animate-fadeIn">
           <div className="text-center animate-scaleIn">
-            <p className="font-display text-3xl text-noct-gold">잠금 해제</p>
+            <p className="font-display text-3xl text-noct-gold">{t.game.unlocked}</p>
             <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-noct-gold-dim mt-3">
-              Access Granted
+              {t.game.accessGranted}
             </p>
           </div>
         </div>
@@ -144,8 +148,8 @@ export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
 
       {/* 헤더 */}
       <Header
-        backHref="/deduction"
-        backText="EXIT"
+        backHref={href('/deduction')}
+        backText={t.common.exit}
         width="narrow"
         center={`EP.${episode.id - 100} · STAGE ${currentStageIndex + 1}/${episode.stages.length}`}
         right={
@@ -188,9 +192,9 @@ export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
                   labelClassName="tracking-[0.2em] text-noct-ink-faint"
                 />
               </div>
-              <h2 className="font-display text-2xl text-noct-ink leading-snug">
+              <h1 className="font-display text-2xl text-noct-ink leading-snug">
                 {currentStage.title}
-              </h2>
+              </h1>
             </div>
           </div>
         </div>
@@ -199,7 +203,7 @@ export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
           {/* 상황 설명 */}
           <section className="mb-8">
             <p className="font-mono text-[10px] tracking-[0.25em] uppercase text-noct-ink-faint mb-3">
-              Situation
+              {t.game.situation}
             </p>
             <p className="font-serif text-[15px] leading-relaxed text-noct-ink-dim whitespace-pre-wrap">
               {currentStage.situation}
@@ -209,7 +213,7 @@ export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
           {/* 공개된 단서들 — 왼쪽 골드 보더 블록 */}
           <section className="mb-8">
             <p className="font-mono text-[10px] tracking-[0.25em] uppercase text-noct-ink-faint mb-4">
-              Revealed Clues · {revealedClues.length}
+              {t.game.revealedClues} · {revealedClues.length}
             </p>
             {revealedClues.length > 0 ? (
               <div className="space-y-4">
@@ -245,21 +249,21 @@ export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
               </div>
             ) : (
               <p className="font-serif text-sm text-noct-ink-faint italic">
-                아직 공개된 단서가 없습니다.
+                {t.game.noClues}
               </p>
             )}
           </section>
 
           {/* 게임 규칙 안내 */}
           <p className="font-serif text-[13px] leading-relaxed text-noct-ink-faint border-t border-noct-ink/10 pt-5">
-            오답 시 새로운 단서가 공개됩니다. 빨리 맞출수록 높은 평가를 받습니다.
+            {t.game.deductionRule}
           </p>
 
           <button
             onClick={openLock}
             className="mt-8 block w-full border border-noct-gold-dim py-3.5 font-mono text-[11px] tracking-[0.3em] uppercase text-noct-gold transition-colors hover:bg-noct-gold/5"
           >
-            Enter PIN
+            {t.game.enterPinMono}
           </button>
         </div>
         </div>
@@ -267,7 +271,7 @@ export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
 
       {/* PIN 입력 레이어 — 공개된 단서를 함께 담는다 */}
       {lockOpen && (
-        <LockModal label="잠금 장치" onClose={closeLock}>
+        <LockModal label={t.game.lockLabel} onClose={closeLock}>
           <div className="mt-4 flex items-center justify-between">
             <StageStatus
               turns={turnsSpent}
@@ -280,7 +284,7 @@ export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
           {/* 공개된 단서 — 본문이 가려지므로 여기서 다시 읽을 수 있어야 한다 */}
           <div className="mt-4 max-h-48 overflow-y-auto border-t border-noct-ink/10 pt-4">
             <p className="mb-3 font-mono text-[10px] tracking-[0.25em] uppercase text-noct-ink-faint">
-              Revealed Clues · {revealedClues.length}
+              {t.game.revealedClues} · {revealedClues.length}
             </p>
             <div className="space-y-3">
               {revealedClues.map((clue, index) => (
@@ -326,7 +330,7 @@ export default function DeductionGamePlay({ episode }: DeductionGamePlayProps) {
               role="status"
               className="mt-4 animate-fadeIn border-t border-noct-ink/10 pt-4 font-serif text-[13px] leading-relaxed text-noct-ink-dim"
             >
-              오답입니다. 새로운 단서가 공개되었습니다.
+              {t.game.wrongDeduction}
             </p>
           )}
         </LockModal>

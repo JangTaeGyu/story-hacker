@@ -6,6 +6,7 @@ import { useSearchParams } from 'next/navigation';
 import { consumeClearToken } from '@/lib/clearToken';
 import { clearRun, useProgress } from '@/lib/progress';
 import { SITE_URL } from '@/lib/site';
+import { useI18n } from '@/components/i18n/LocaleProvider';
 
 interface StoryCompleteProps {
   episodeId: number;
@@ -18,6 +19,7 @@ export default function StoryComplete({
   episodeTitle,
   nextEpisodeId,
 }: StoryCompleteProps) {
+  const { t, href } = useI18n();
   const searchParams = useSearchParams();
   const queryStars = parseInt(searchParams.get('stars') || '3', 10);
 
@@ -48,6 +50,13 @@ export default function StoryComplete({
     return () => clearTimeout(timer);
   }, []);
 
+  // 공유 문구는 한 곳에서 만든다 — 버튼마다 따로 쓰면 언어가 어긋난다.
+  const shareText = t.share.story(
+    episodeId,
+    episodeTitle,
+    `${'★'.repeat(stars)}${'☆'.repeat(3 - stars)}`
+  );
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-8 bg-noct-black">
       <div
@@ -57,12 +66,12 @@ export default function StoryComplete({
       >
         {/* 서브라인 */}
         <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-noct-ink-faint mb-5">
-          Case Closed
+          {t.complete.story.eyebrow}
         </p>
 
         {/* 타이틀 */}
         <h1 className="font-display text-4xl text-noct-gold mb-4">
-          사건 해결
+          {t.complete.story.title}
         </h1>
 
         {/* 에피소드 */}
@@ -79,22 +88,19 @@ export default function StoryComplete({
           <span className="text-noct-ink-faint">{'☆'.repeat(3 - stars)}</span>
         </div>
         <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-noct-ink-dim mb-10">
-          {stars === 3 && 'Flawless'}
-          {stars === 2 && 'Commendable'}
-          {stars === 1 && 'Resolved'}
+          {t.complete.story.ranks[stars - 1]}
         </p>
 
         {/* SNS 공유 */}
         <div className="mb-10">
           <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-noct-ink-faint mb-4">
-            Share
+            {t.complete.share}
           </p>
           <div className="flex justify-center gap-3">
             {/* X (Twitter) */}
             <button
               onClick={() => {
-                const text = `Story Hacker EP.${episodeId} "${episodeTitle}" 클리어! ${'★'.repeat(stars)}${'☆'.repeat(3 - stars)}`;
-                window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
+                window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`, '_blank');
               }}
               className="w-11 h-11 bg-noct-black-2 border border-noct-ink/10 flex items-center justify-center hover:border-noct-ink/25 transition-colors"
               title="X"
@@ -106,8 +112,7 @@ export default function StoryComplete({
             {/* Facebook */}
             <button
               onClick={() => {
-                const text = `Story Hacker EP.${episodeId} "${episodeTitle}" 클리어! ${'★'.repeat(stars)}${'☆'.repeat(3 - stars)}`;
-                window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(SITE_URL)}&quote=${encodeURIComponent(text)}`, '_blank');
+                window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(SITE_URL)}&quote=${encodeURIComponent(shareText)}`, '_blank');
               }}
               className="w-11 h-11 bg-noct-black-2 border border-noct-ink/10 flex items-center justify-center hover:border-noct-ink/25 transition-colors"
               title="Facebook"
@@ -119,8 +124,7 @@ export default function StoryComplete({
             {/* Threads */}
             <button
               onClick={() => {
-                const text = `Story Hacker EP.${episodeId} "${episodeTitle}" 클리어! ${'★'.repeat(stars)}${'☆'.repeat(3 - stars)}`;
-                window.open(`https://www.threads.net/intent/post?text=${encodeURIComponent(text)}`, '_blank');
+                window.open(`https://www.threads.net/intent/post?text=${encodeURIComponent(shareText)}`, '_blank');
               }}
               className="w-11 h-11 bg-noct-black-2 border border-noct-ink/10 flex items-center justify-center hover:border-noct-ink/25 transition-colors"
               title="Threads"
@@ -132,12 +136,11 @@ export default function StoryComplete({
             {/* 텍스트 복사 */}
             <button
               onClick={() => {
-                const text = `Story Hacker EP.${episodeId} "${episodeTitle}" 클리어! ${'★'.repeat(stars)}${'☆'.repeat(3 - stars)}`;
-                navigator.clipboard.writeText(text);
-                alert('클립보드에 복사되었습니다!');
+                navigator.clipboard.writeText(shareText);
+                alert(t.complete.copied);
               }}
               className="w-11 h-11 bg-noct-black-2 border border-noct-ink/10 flex items-center justify-center hover:border-noct-ink/25 transition-colors"
-              title="복사"
+              title={t.complete.copy}
             >
               <svg className="w-4 h-4 text-noct-ink-dim" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
@@ -151,23 +154,23 @@ export default function StoryComplete({
         <div className="space-y-4">
           {nextEpisodeId !== null && (
             <Link
-              href={`/story/${nextEpisodeId}`}
+              href={href(`/story/${nextEpisodeId}`)}
               className="block w-full py-3.5 border border-noct-gold-dim text-noct-gold font-mono text-[11px] tracking-[0.3em] uppercase hover:bg-noct-gold/5 transition-colors"
             >
-              Next Episode
+              {t.common.nextEpisode}
             </Link>
           )}
           <Link
-            href={`/story/${episodeId}`}
+            href={href(`/story/${episodeId}`)}
             className="block font-mono text-[11px] tracking-[0.3em] uppercase text-noct-ink-dim hover:text-noct-ink transition-colors"
           >
-            <span className="border-b border-noct-ink/20 pb-1">Replay</span>
+            <span className="border-b border-noct-ink/20 pb-1">{t.common.replay}</span>
           </Link>
           <Link
-            href="/story"
+            href={href('/story')}
             className="block font-mono text-[11px] tracking-[0.3em] uppercase text-noct-ink-dim hover:text-noct-ink transition-colors"
           >
-            <span className="border-b border-noct-ink/20 pb-1">Episode Select</span>
+            <span className="border-b border-noct-ink/20 pb-1">{t.common.episodeSelect}</span>
           </Link>
         </div>
       </div>

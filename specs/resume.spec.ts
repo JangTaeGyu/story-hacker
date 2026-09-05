@@ -22,7 +22,7 @@ async function clearFirstStage(page: Page) {
 
 test.describe('이어하기', () => {
   test('스테이지를 넘기면 이어하기 지점이 저장된다', async ({ page }) => {
-    await page.goto('/story/1');
+    await page.goto('/ko/story/1');
     await clearFirstStage(page);
 
     const runs = await readRuns(page);
@@ -30,14 +30,14 @@ test.describe('이어하기', () => {
   });
 
   test('다시 들어오면 이어하기를 묻고, 이어서 시작하면 그 스테이지로 간다', async ({ page }) => {
-    await page.goto('/story/1');
+    await page.goto('/ko/story/1');
     await clearFirstStage(page);
 
     // 에피소드를 끝내지 않고 이탈했다가 다시 진입
-    await page.goto('/story');
+    await page.goto('/ko/story');
     await expect(page.getByText('Stage 2 진행 중')).toBeVisible();
 
-    await page.goto('/story/1');
+    await page.goto('/ko/story/1');
     await expect(page.getByText('이어하기')).toBeVisible();
     await page.getByRole('button', { name: '이어서 시작' }).click();
 
@@ -45,10 +45,10 @@ test.describe('이어하기', () => {
   });
 
   test('처음부터를 고르면 이어하기 지점이 지워진다', async ({ page }) => {
-    await page.goto('/story/1');
+    await page.goto('/ko/story/1');
     await clearFirstStage(page);
 
-    await page.goto('/story/1');
+    await page.goto('/ko/story/1');
     await page.getByRole('button', { name: '처음부터' }).click();
 
     await expect(page.getByText('STAGE 1 / 4')).toBeVisible();
@@ -57,7 +57,7 @@ test.describe('이어하기', () => {
   });
 
   test('에피소드를 끝내면 이어하기 지점이 사라진다', async ({ page }) => {
-    await page.goto('/story/1');
+    await page.goto('/ko/story/1');
     await waitForStoryReady(page);
 
     for (const answer of ['4673', '3764', '241225', '1208']) {
@@ -77,7 +77,7 @@ test.describe('이어하기', () => {
 
 test.describe('게임오버 화면', () => {
   test('정답을 노출하지 않는다', async ({ page }) => {
-    await page.goto('/story/1/gameover?stage=0');
+    await page.goto('/ko/story/1/gameover?stage=0');
 
     await expect(page.getByText('수사 실패')).toBeVisible();
     // 스테이지 1의 정답

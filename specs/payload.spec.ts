@@ -51,9 +51,9 @@ async function deliveredTo(
 
 test.describe('클라이언트 전달 페이로드', () => {
   for (const [label, path] of [
-    ['에피소드 목록', '/story'],
-    ['완료 화면', '/story/1/complete?stars=3'],
-    ['게임오버 화면', '/story/1/gameover?stage=0'],
+    ['에피소드 목록', '/ko/story'],
+    ['완료 화면', '/ko/story/1/complete?stars=3'],
+    ['게임오버 화면', '/ko/story/1/gameover?stage=0'],
   ] as const) {
     test(`${label}에 스토리 본문이 실리지 않는다`, async ({ page, request }) => {
       const delivered = await deliveredTo(page, request, path, EP1_STORY_FRAGMENT);
@@ -66,7 +66,7 @@ test.describe('클라이언트 전달 페이로드', () => {
     request,
   }) => {
     // 정답을 대조해야 하므로 여기서는 데이터가 반드시 전달되어야 한다.
-    const delivered = await deliveredTo(page, request, '/story/1', EP1_STORY_FRAGMENT);
+    const delivered = await deliveredTo(page, request, '/ko/story/1', EP1_STORY_FRAGMENT);
     expect(delivered.inHtml).toBe(true);
   });
 });

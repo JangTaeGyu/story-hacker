@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import { useI18n } from '@/components/i18n/LocaleProvider';
 
 interface StoryGameOverProps {
   episodeId: number;
@@ -16,6 +17,7 @@ export default function StoryGameOver({
   episodeTitle,
   stageTitles,
 }: StoryGameOverProps) {
+  const { t, href } = useI18n();
   const searchParams = useSearchParams();
   const stageIndex = parseInt(searchParams.get('stage') || '0', 10);
   const stageTitle = stageTitles[stageIndex];
@@ -36,12 +38,12 @@ export default function StoryGameOver({
       >
         {/* 서브라인 */}
         <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-noct-ink-faint mb-5">
-          Access Denied
+          {t.gameOver.story.eyebrow}
         </p>
 
         {/* 타이틀 */}
         <h1 className="font-display text-4xl text-noct-ink mb-4">
-          수사 실패
+          {t.gameOver.story.title}
         </h1>
 
         {/* 에피소드 */}
@@ -54,10 +56,10 @@ export default function StoryGameOver({
 
         {/* 메시지 */}
         <p className="font-serif text-sm text-noct-ink-dim leading-relaxed mb-2">
-          시도 횟수를 모두 소진했습니다.
+          {t.gameOver.story.message}
         </p>
         <p className="font-serif text-xs text-noct-ink-faint leading-relaxed mb-6">
-          다시 도전하거나 다른 에피소드를 선택하세요.
+          {t.gameOver.story.submessage}
         </p>
         {stageTitle && (
           <p className="font-mono text-[11px] tracking-[0.2em] uppercase text-noct-ink-faint mb-10">
@@ -72,16 +74,16 @@ export default function StoryGameOver({
         {/* 버튼들 */}
         <div className="space-y-4">
           <Link
-            href={`/story/${episodeId}`}
+            href={href(`/story/${episodeId}`)}
             className="block w-full py-3.5 border border-noct-ink/15 text-noct-ink font-mono text-[11px] tracking-[0.3em] uppercase hover:border-noct-ink/30 transition-colors"
           >
-            Try Again
+            {t.common.tryAgain}
           </Link>
           <Link
-            href="/story"
+            href={href('/story')}
             className="block font-mono text-[11px] tracking-[0.3em] uppercase text-noct-ink-dim hover:text-noct-ink transition-colors"
           >
-            <span className="border-b border-noct-ink/20 pb-1">Episode Select</span>
+            <span className="border-b border-noct-ink/20 pb-1">{t.common.episodeSelect}</span>
           </Link>
         </div>
       </div>

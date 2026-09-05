@@ -17,7 +17,7 @@ const BACKGROUNDS = ['--noct-black', '--noct-page', '--noct-black-2'];
 const AA_NORMAL_TEXT = 4.5;
 
 test('전경 토큰이 배경 3종에서 모두 AA 기준을 넘는다', async ({ page }) => {
-  await page.goto('/story/1');
+  await page.goto('/ko/story/1');
 
   const results = await page.evaluate(
     ({ foregrounds, backgrounds }) => {

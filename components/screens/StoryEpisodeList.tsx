@@ -8,20 +8,19 @@ import { getDifficultyInfo } from '@/lib/utils';
 import { readAllRuns, useProgress, type RunState } from '@/lib/progress';
 import Header from '@/components/ui/Header';
 import SolvedStamp from '@/components/ui/SolvedStamp';
+import LanguageSwitcher from '@/components/i18n/LanguageSwitcher';
+import { useI18n } from '@/components/i18n/LocaleProvider';
 
-const FILTERS = [
-  { value: 0, label: 'ALL' },
-  { value: 1, label: 'EASY' },
-  { value: 2, label: 'NORMAL' },
-  { value: 3, label: 'HARD' },
-] as const;
+const FILTER_VALUES = [0, 1, 2, 3] as const;
 
 interface StoryEpisodeListProps {
   episodes: EpisodeSummary[];
 }
 
 export default function StoryEpisodeList({ episodes }: StoryEpisodeListProps) {
+  const { t, href } = useI18n();
   const { progress, totalStars } = useProgress();
+  const filterLabels = [t.filters.all, t.filters.easy, t.filters.normal, t.filters.hard];
   const [filter, setFilter] = useState<number>(0);
 
   // 진행 중인 판 (localStorage 직접 조회이므로 마운트 후에 읽는다)
@@ -35,19 +34,19 @@ export default function StoryEpisodeList({ episodes }: StoryEpisodeListProps) {
 
   return (
     <div className="min-h-screen bg-noct-black pb-24">
-      <Header backHref="/mode-select" />
+      <Header backHref={href('/mode-select')} right={<LanguageSwitcher />} />
 
       <div className="mx-auto max-w-md lg:max-w-6xl px-5 lg:px-8 pt-24">
         {/* 타이틀 */}
         <div className="mb-8">
           <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-noct-ink-faint">
-            Story Mode
+            {t.storyList.eyebrow}
           </p>
-          <h2 className="mt-2 font-display text-3xl text-noct-ink">
-            사건 기록
-          </h2>
+          <h1 className="mt-2 font-display text-3xl text-noct-ink">
+            {t.storyList.title}
+          </h1>
           <p className="mt-2 font-mono text-[10px] tracking-[0.2em] uppercase text-noct-ink-faint">
-            {filteredEpisodes.length} Episodes
+            {t.episodeList.episodes(filteredEpisodes.length)}
             <span className="mx-2 text-noct-ink-faint/50">·</span>
             <span className="text-noct-gold-dim">★ {totalStars}</span>
             <span className="text-noct-ink-faint"> / {episodes.length * 3}</span>
@@ -56,17 +55,17 @@ export default function StoryEpisodeList({ episodes }: StoryEpisodeListProps) {
 
         {/* 난이도 필터 */}
         <div className="mb-8 flex gap-2">
-          {FILTERS.map((f) => (
+          {FILTER_VALUES.map((value) => (
             <button
-              key={f.value}
-              onClick={() => setFilter(f.value)}
+              key={value}
+              onClick={() => setFilter(value)}
               className={`border px-3 py-1.5 font-mono text-[10px] tracking-[0.2em] uppercase transition-colors ${
-                filter === f.value
+                filter === value
                   ? 'border-noct-gold/60 text-noct-gold'
                   : 'border-noct-ink/10 text-noct-ink-faint hover:text-noct-ink-dim hover:border-noct-ink/20'
               }`}
             >
-              {f.label}
+              {filterLabels[value]}
             </button>
           ))}
         </div>
@@ -81,7 +80,7 @@ export default function StoryEpisodeList({ episodes }: StoryEpisodeListProps) {
             return (
               <Link
                 key={episode.id}
-                href={`/story/${episode.id}`}
+                href={href(`/story/${episode.id}`)}
                 className="group block transition-opacity duration-300 active:opacity-80"
               >
                 {/* 에피소드 이미지 — 와이드 스트립, 가장자리 페이드 */}
@@ -125,11 +124,11 @@ export default function StoryEpisodeList({ episodes }: StoryEpisodeListProps) {
                       <SolvedStamp />
                     ) : run ? (
                       <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-noct-gold-dim">
-                        Stage {run.stageIndex + 1} 진행 중
+                        {t.episodeList.inProgress(run.stageIndex + 1)}
                       </span>
                     ) : (
                       <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-noct-ink-faint">
-                        미해결
+                        {t.episodeList.unsolved}
                       </span>
                     )}
                   </div>
@@ -137,16 +136,16 @@ export default function StoryEpisodeList({ episodes }: StoryEpisodeListProps) {
 
                 {/* 텍스트 — 이미지 아래 */}
                 <div className="relative z-10 -mt-2">
-                  <h3 className="font-display text-2xl leading-snug text-noct-ink transition-colors group-hover:text-noct-gold">
+                  <h2 className="font-display text-2xl leading-snug text-noct-ink transition-colors group-hover:text-noct-gold">
                     {episode.title}
-                  </h3>
+                  </h2>
                   {episode.subtitle && (
                     <p className="mt-1 font-serif text-sm leading-relaxed text-noct-ink-dim">
                       {episode.subtitle}
                     </p>
                   )}
                   <p className="mt-2 font-mono text-[10px] tracking-[0.2em] uppercase text-noct-ink-faint">
-                    {episode.stageCount} Stages
+                    {t.episodeList.stages(episode.stageCount)}
                   </p>
                 </div>
               </Link>
