@@ -12,7 +12,7 @@ const CLUE_TAIL = '낡은 폴더폰을 쓰던 시절처럼 눌러라.';
  */
 async function hiddenTailLength(page: import('@playwright/test').Page) {
   return page
-    .locator('div.cursor-pointer span.text-transparent')
+    .locator('div.cursor-pointer span.invisible')
     .evaluateAll((spans) =>
       spans.reduce((sum, span) => sum + (span.textContent ?? '').length, 0)
     );

@@ -20,6 +20,26 @@ import { useI18n } from '@/components/i18n/LocaleProvider';
 /** 본문과 단서를 한 줄기로 잇는 구분자 — 타이핑도 이 문자열을 그대로 지나간다. */
 const CLUE_SEPARATOR = '\n\n🔍 ';
 
+/**
+ * 타이핑 커서.
+ *
+ * **글의 흐름에서 완전히 빠져 있어야 한다.** 커서 뒤에는 아직 타이핑되지 않은
+ * 투명한 본문이 이어지는데, 커서가 자리를 조금이라도 차지하면 글자 하나가 줄
+ * 끝을 넘길 때마다 줄바꿈이 다시 계산되어 아래 문단이 한 줄씩 밀린다. 실제로
+ * 그 때문에 CLS가 1.33까지 올라갔다(기준 0.1).
+ *
+ * `inline-block w-0`으로는 부족하다 — 폭이 0이어도 원자적 인라인이라 줄바꿈
+ * 기회를 만든다. 그래서 **빈 인라인 span을 기준점 삼아 커서를 absolute로 띄운다.**
+ * 내용 없는 인라인 상자는 줄바꿈에 관여하지 않고, absolute 자식은 흐름 밖이다.
+ */
+function Caret() {
+  return (
+    <span className="relative" aria-hidden="true">
+      <span className="absolute left-0 top-0 text-noct-gold">▌</span>
+    </span>
+  );
+}
+
 interface StoryGamePlayProps {
   episode: StoryEpisode;
 }
@@ -240,11 +260,13 @@ export default function StoryGamePlay({ episode }: StoryGamePlayProps) {
             <div key={stageKey} className="cursor-pointer" onClick={skipTyping}>
               <p className="whitespace-pre-wrap font-serif text-[15px] leading-[1.9] text-noct-ink">
                 {storyFull.slice(0, storyRevealed)}
-                {isTyping && storyRevealed < storyFull.length && (
-                  <span className="text-noct-gold">▌</span>
-                )}
-                {/* 아직 타이핑이 닿지 않은 뒷부분 — 자리는 잡되 보이지 않는다 */}
-                <span className="text-transparent">{storyFull.slice(storyRevealed)}</span>
+                {isTyping && storyRevealed < storyFull.length && <Caret />}
+                {/* 아직 타이핑이 닿지 않은 뒷부분 — 자리는 잡되 보이지 않는다.
+                    `invisible`(visibility:hidden)이어야 한다. `text-transparent`로 두면
+                    경계가 앞으로 밀릴 때마다 이 span의 rect가 움직여 CLS가 1.0까지 뛴다
+                    (글자는 실제로 안 움직이지만 Layout Instability API가 그렇게 센다).
+                    visibility:hidden은 시각적 표현이 없어 계산에서 빠진다. */}
+                <span className="invisible">{storyFull.slice(storyRevealed)}</span>
               </p>
 
               {/* 단서 — 좌측 액센트 블록.
@@ -259,10 +281,8 @@ export default function StoryGamePlay({ episode }: StoryGamePlayProps) {
                 </p>
                 <p className="mt-1.5 whitespace-pre-wrap font-serif text-[15px] leading-[1.8] text-noct-ink-dim">
                   {clueFull.slice(0, clueRevealed)}
-                  {isTyping && clueRevealed > 0 && clueRevealed < clueFull.length && (
-                    <span className="text-noct-gold">▌</span>
-                  )}
-                  <span className="text-transparent">{clueFull.slice(clueRevealed)}</span>
+                  {isTyping && clueRevealed > 0 && clueRevealed < clueFull.length && <Caret />}
+                  <span className="invisible">{clueFull.slice(clueRevealed)}</span>
                 </p>
               </div>
 
