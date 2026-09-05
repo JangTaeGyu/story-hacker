@@ -47,7 +47,9 @@ Spark brought a generator back to life, and Byte started laying the new headquar
 
 "We need a master key," Byte said. "Simple gets broken. I'm going to weave every number we own into it."
 
-He put the formula on screen. "Square the member count and add the project code we pulled in the last operation. Multiply that by the city code and you're done. There are five of us, project code is 198, and the city code is NEO unwound into alphabet positions and added."`,
+He turned the generator screen toward me. "The numbers we have are five people, and the one thing we tore out of the last job. The rest is in this city's name."
+
+The formula sat on the screen.`,
       clue: `[Master key generator]
 "KEY = (member count^2 + project code) × city code
  member count = 5
@@ -67,7 +69,9 @@ He put the formula on screen. "Square the member count and add the project code 
 
 It could be a trap. Byte started a trace immediately and I demanded identification. Anyone reaching a hand out of the enemy's arms has to prove themselves.
 
-The answer came back. "My employee number is A7K9. Read it by the internal conversion table — A is 10, K is 11. Turn all four characters into numbers and add them, then round the square root of that sum to a whole number. That is my proof code."`,
+Instead of an answer they sent an employee number and the internal conversion table. "Verify me with this. It is all I have to give you."
+
+Byte glanced at the screen and said, low: "That's a genuine OmniCorp internal document. A forgery would have been made better than this."`,
       clue: `[Anonymous channel]
 "Employee number A7K9 — apply the internal conversion table.
  A=10, 7=7, K=11, 9=9.
@@ -88,7 +92,9 @@ The answer came back. "My employee number is A7K9. Read it by the internal conve
 
 Eleven days. That was the time left before an entire city's brainwaves passed into OmniCorp's hands. Neon's hand stopped over her terminal, and Ghost said nothing at all.
 
-"To stop it you must disable three servers simultaneously. Location file attached." Delta's message continued. "The file password — multiply the remaining D-Day by the server count and by your team size in turn, then add my code."`,
+"To stop it you must disable three servers simultaneously. Location file attached." Delta's message continued. "I built the password from numbers you already know. I only added one of my own."
+
+The generation rule was attached to the file's lock screen exactly as written.`,
       clue: `[Delta's attached file]
 "Lock = D-Day × server count × team size + Delta code
  D-Day = 11 days, servers = 3, team size = 5

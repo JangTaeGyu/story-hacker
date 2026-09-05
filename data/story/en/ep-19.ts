@@ -31,7 +31,9 @@ The light of the core server, the characters on the terminal, Neon's face — al
 
 An emergency stop device sat in his hand. Until that released, the shutdown was impossible.
 
-"Let's play a fun game." Phantom smiled. "First lock. The years I led ShadowNet, the number of organisations I betrayed, and the digit count of the money I took — multiply all three together. Five years, three of them, eight digits. That's your answer."`,
+"Let's play a fun game." Phantom smiled. "The first lock is about me. Let's see how well you know me."
+
+He turned the device around. Three lines sat on its small screen. All of them were his record.`,
       clue: `[Emergency stop device — lock 1]
 "Code = years led × organisations betrayed × digit count of money taken
  years led = 5
@@ -72,7 +74,9 @@ He held the device out. "Add up only the numbers in that case number. Then conve
 
 A red timer appeared on the wall. 02:00. Two minutes.
 
-"If the last code isn't in before that, Project X activates immediately." Phantom's voice sped up. "The code is — from the timer's 120 seconds, subtract the digit sum of 4272, that convenience store code that was your first key. Then work out separately the Phoenix code 33 minus our member count of 5. Multiply those two."`,
+"If the last code isn't in before that, Project X activates immediately." Phantom's voice sped up. "The last one is yours, Zero. The first lock you ever opened in this city, and the organisation you built."
+
+The device's screen changed, and the final rule surfaced.`,
       clue: `[Emergency stop device — lock 3]
 "Code = (timer seconds − digit sum of 4272) × (Phoenix code − member count)
  timer seconds = 120
@@ -94,7 +98,9 @@ Three servers fell silent at the same moment.
 
 [SYSTEM] PROJECT-X deactivation complete.
 
-Neon gripped my shoulder. "You did it, Zero. We did it." And in that moment, an epilogue file surfaced on the terminal. The viewing code — "Pick out only the vowels in the word FREEDOM. E, E, O. Add their alphabet positions, then multiply by 87, the year we were set free."`,
+Neon gripped my shoulder. "You did it, Zero. We did it."
+
+In that moment a file surfaced on the terminal. Its name was 'EPILOGUE'. The viewing code instructions sat beneath it, and the ingredients were one word and this year.`,
       clue: `[Epilogue file viewing code]
 "Extract only the vowels of FREEDOM → E, E, O
  Sum the alphabet positions of each vowel

@@ -31,7 +31,9 @@ OmniCorp could not carry the weight of the scandal and collapsed. The lights on 
 
 A strange stillness settled over Phoenix headquarters. We had won, but the list of what we lost was too long.
 
-That day, a last file from Delta was found. "If you're reading this, you won. I'm leaving soon too. A final gift." The file password — "Take NEW ERA, the words for a new age, and pick out only the consonants. Throw away every vowel and add the alphabet positions of what's left."`,
+That day, a last file from Delta was found. "If you're reading this, you won. I'm leaving soon too. A final gift."
+
+The file was called NEW ERA. The password hint was inside those two words as well.`,
       clue: `[Delta's legacy — file password]
 "From NEW ERA extract only consonants, exclude vowels.
  → N, W, R
@@ -50,7 +52,9 @@ That day, a last file from Delta was found. "If you're reading this, you won. I'
 
 Neon drew a breath. 8,888,888,888 credits. Enough to raise a city back to its feet.
 
-Completing the transfer needed one last authentication. The system explained — "Add all the digits of the transfer amount, then divide that sum by the number of digits. The amount has ten digits." I stared slowly at the row of eights on screen.`,
+Completing the transfer needed one last authentication. The rule came out of the transfer amount itself, the system explained.
+
+I stared slowly at the row of eights on screen. Eight, ten times over. I had not expected the price of raising a city to have such a simple shape.`,
       clue: `[Funds Transfer System]
 "Transfer amount = 8,888,888,888 credits (ten digits)
  Authentication code = (sum of all digits) ÷ (number of digits)
@@ -72,7 +76,9 @@ The Phoenix members gathered at headquarters. Neon looked at me. "So what now, Z
 
 "Which is why we keep fighting," Byte answered, and Spark nodded once. "Agreed."
 
-I made up my mind. Phoenix continues. We decided to encrypt a new declaration — "WE ARE PHOENIX. Drop the spaces, number the letters from 1, and pick out only the odd-numbered ones. 1 is W, 3 is A, 5 is E... add the alphabet positions of everything you pull out."`,
+I made up my mind. Phoenix continues.
+
+We decided to encrypt a new declaration. The sentence was three words — WE ARE PHOENIX. Byte started numbering the letters above it.`,
       clue: `[Phoenix declaration cipher]
 "WE ARE PHOENIX
  Number the twelve letters from 1, spaces removed,
@@ -95,7 +101,9 @@ A month passed. The city slowly took its breath back, and I slept deeply for the
 
 Then one night, a message appeared on the monitor. Sender ???. "To Phoenix. A new threat is coming. Are you ready?"
 
-At the edge of the screen, one last code blinked. "Set the starting code of this whole story, 4272, beside the ending code, 2175. Add them place by place — first against first, second against second. Join the four sums in order." TO BE CONTINUED…`,
+At the edge of the screen the last code blinked. There were only two ingredients. The four digits I first solved on the night this whole story began, and the four I solved last on the dawn it ended.
+
+I wrote the two numbers side by side. TO BE CONTINUED…`,
       clue: `[Final code]
 "Start code 4272 + end code 2175
  Add place against place:

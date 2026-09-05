@@ -31,7 +31,9 @@ Server A is the control server on floor 52 of OmniCorp headquarters. Server B is
 
 The team split. Ghost and Byte to headquarters, Spark alone to the data centre, Neon and I down into the laboratory. Nobody made a joke.
 
-"Launch code," said Byte. "Add the absolute values of the three servers' floors — 52, 1, and basement 5. Multiply by the team size, then subtract the departure hour of 21. That is the operation launch code."`,
+"I built the launch code," Byte said, putting a line up on the screen. "The three floors, our head count, our departure hour. Numbers only the five of us know."
+
+Ghost read it back without making a sound, mouthing the words.`,
       clue: `[Operation launch code]
 "Code = (|52| + |1| + |-5|) × team size − departure hour
  team size = 5, departure hour = 21
@@ -50,7 +52,9 @@ The team split. Ghost and Byte to headquarters, Spark alone to the data centre, 
 
 He held his display up to the camera. In cold fluorescent characters a sequence hung there — 2, 6, 14, 30, 62, and a question mark.
 
-"It's a maths puzzle," Spark muttered. "The rule looks simple. Do something to the previous term and you get the next. 2 to 6, 6 to 14... it's doubling the previous term and adding 2. Fill in the last term and the door opens."`,
+"It's a maths puzzle," Spark muttered. "The rule is written on the panel with it. Considerate of them."
+
+A short silence. "Fill in the question mark and the door opens."`,
       clue: `[Data centre lock panel]
 "Enter the number that belongs in the ? position.
  2, 6, 14, 30, 62, ?
@@ -71,7 +75,7 @@ Then Byte's whisper. "Found the control server. But... it's double-locked, voice
 
 While Byte routed around the voice check, someone had to break the PIN. A hurriedly scrawled note was stuck beside the panel.
 
-"The PIN is — this floor number, 52, and the guard count currently deployed, 8. Work out the lowest common multiple of the two, then add up the digits of the result," Byte read down.`,
+"There's a formula scrawled on the note. This floor's number, and the guards deployed on it right now." Byte whispered. "I counted them off the corridor cameras. Eight. I'm sure."`,
       clue: `[Note beside the control server panel]
 "PIN = digit sum of LCM(floor number, guard count)
  floor number = 52, guards = 8.
@@ -91,7 +95,9 @@ An enormous core server pulsed with light in the darkness. The heart of Project 
 
 "This is it, Zero." Neon's voice trembled. "Shut this down and it's all over."
 
-The terminal in front of the server demanded authentication. The instructions on screen were long and awkward. "Administrator code — multiply the letter count of the word PROJECT by version X, then divide by the server depth. Add the 'day' of today's date at the end. PROJECT is seven letters, X is the 24th letter, the depth is the absolute value of basement 5, and today is 31 January 2087."`,
+The terminal in front of the server demanded authentication. The administrator code instructions on screen were long and awkward: the project's name and version, the depth we were standing at, and today's date. A code built entirely out of things inside this room.
+
+Neon looked at me. "31 January 2087," she said, confirming the date.`,
       clue: `[Core server authentication system]
 "Code = (letter count × version) ÷ depth + today's day
  PROJECT = 7 letters, version X = 24
@@ -113,7 +119,9 @@ The terminal in front of the server demanded authentication. The instructions on
 
 Now one single entry. Three places had to hammer in the same code within three seconds. One beat out of step and the whole operation collapses.
 
-"Final shutdown code." Byte's voice cracked with tension. "We weave together the security codes each site pulled — take the 5 from headquarters, multiply by the data centre's 126, and add the laboratory's 65. The first four digits of the result are the code."`,
+"Final shutdown code." Byte's voice cracked with tension. "We weave together the number each site pulled. One of them wrong and all three of us die."
+
+Each channel reported its number. The combination rule came up on screen.`,
       clue: `[Final shutdown code]
 "Code = HQ × data centre + laboratory
  HQ = 5, data centre = 126, laboratory = 65
