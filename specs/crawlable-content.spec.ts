@@ -54,8 +54,8 @@ test.describe('크롤 가능한 본문', () => {
     // 첫 단서를 effect에서 채우면 서버 HTML에서 빠진다. 초기 상태에 넣어 둔 이유다.
     const text = await renderedText(page, '/ko/deduction/101');
 
-    expect(text).toContain('4자리 비밀번호를 추리하세요');
-    expect(text).toContain('모든 숫자는 서로 다릅니다');
+    expect(text).toContain('책상 위에 네 자리 다이얼 자물쇠가 놓여 있다');
+    expect(text).toContain('네 숫자는 서로 다릅니다');
 
     // 아직 열리지 않은 단서와 정답은 없어야 한다
     expect(text).not.toContain('두 번째 숫자는 7입니다');
