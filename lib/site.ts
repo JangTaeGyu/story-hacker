@@ -24,7 +24,10 @@ export const GOOGLE_SITE_VERIFICATION =
  * 등록하면 주는 값을 여기에 넣으면 `<meta name="naver-site-verification">`이
  * 렌더된다. **빈 문자열이면 태그 자체를 내보내지 않는다** — 빈 값으로 태그만
  * 나가면 확인이 실패한다.
+ *
+ * 구글 토큰과 마찬가지로 **확인이 끝난 뒤에도 지우지 마세요.**
  */
-export const NAVER_SITE_VERIFICATION = '';
+export const NAVER_SITE_VERIFICATION =
+  '31712be4b52060d344f1728ba818ed066f571ef8';
 
 // 태그라인·설명은 언어마다 다르므로 lib/messages/{ko,en,ja}.ts의 `site`에 있다.

@@ -54,14 +54,17 @@ test.describe('메타데이터', () => {
 });
 
 test.describe('SEO 라우트', () => {
-  test('Search Console 소유권 확인 태그가 모든 언어판에 있다', async ({ page }) => {
-    // 확인이 끝난 뒤에도 태그가 사라지면 Search Console이 소유권을 잃고
-    // 데이터 수집이 끊긴다. 지우지 못하게 고정한다.
+  test('검색엔진 소유권 확인 태그가 모든 언어판에 있다', async ({ page }) => {
+    // 확인이 끝난 뒤에도 태그가 사라지면 소유권을 잃고 데이터 수집이 끊긴다.
+    // 구글과 네이버 각각 별개의 태그를 요구한다.
     for (const locale of ['ko', 'en', 'ja']) {
       await page.goto(`/${locale}`);
-      await expect(
-        page.locator('meta[name="google-site-verification"]')
-      ).toHaveAttribute('content', /^\S+$/);
+      for (const name of ['google-site-verification', 'naver-site-verification']) {
+        await expect(page.locator(`meta[name="${name}"]`)).toHaveAttribute(
+          'content',
+          /^\S+$/
+        );
+      }
     }
   });
 
