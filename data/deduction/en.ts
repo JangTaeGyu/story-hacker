@@ -4,6 +4,11 @@ import type { DeductionEpisode } from '@/lib/types';
 const episodes: DeductionEpisode[] = [
   {
     id: 101, title: "Number Deduction", difficulty: 2, mode: "deduction",
+    epilogue: `Three locks opened in turn. The dial on the desk, the panel, and the six-digit field.
+
+Before the last screen went dark, one line surfaced on it. — "If conditions alone can carry you to the answer, you are already ready."
+
+Numbers do not lie. They simply do not tell you everything.`,
     stages: [
       { id: 1, title: "First Principles", situation: "A four-digit dial lock sits on the desk. No key — only a note listing conditions.", lockType: "pin4", answer: "3726", maxTurns: 6,
         clues: [
@@ -38,6 +43,11 @@ const episodes: DeductionEpisode[] = [
   },
   {
     id: 102, title: "Logic Puzzle", difficulty: 2, mode: "deduction",
+    epilogue: `A box locked with a birthday, a six-digit safe, and the final gate. All three opened.
+
+There was nothing in the box. Nothing in the safe either. Beyond the last door was an empty room, and on its wall: — "If you have learned to open a thing without asking what is inside, that is enough."
+
+The alarm never did sound.`,
     stages: [
       { id: 1, title: "The Birthday", situation: "A box locked with a friend's birthday. That friend has never once mentioned it. (MMDD)", lockType: "pin4", answer: "0314", maxTurns: 5,
         clues: [
@@ -71,6 +81,11 @@ const episodes: DeductionEpisode[] = [
   },
   {
     id: 103, title: "Maths Challenge", difficulty: 2, mode: "deduction",
+    epilogue: `Multiplication, division, and a spiral.
+
+The three locks wore different faces but asked the same thing: do not trust the number in front of you — look at what sits between the numbers.
+
+The last spiral slowed, and stopped turning.`,
     stages: [
       { id: 1, title: "Multiplication Puzzle", situation: "The paper carries nothing but multiplication conditions. Find the four digits.", lockType: "pin4", answer: "2436", maxTurns: 5,
         clues: [
@@ -104,6 +119,11 @@ const episodes: DeductionEpisode[] = [
   },
   {
     id: 104, title: "Time Puzzle", difficulty: 1, mode: "deduction",
+    epilogue: `A stopped clock, a day that comes once in four years, a timer one second short of an hour.
+
+All three deal in time, but each points somewhere else. One at a halted moment, one at a day that rarely comes, one at the instant before the end.
+
+When the door opened, the clock in the corridor began counting seconds again.`,
     stages: [
       { id: 1, title: "Clock Cipher", situation: "The time on the stopped clock is the code.", lockType: "pin4", answer: "1230", maxTurns: 5,
         clues: [
@@ -137,6 +157,11 @@ const episodes: DeductionEpisode[] = [
   },
   {
     id: 105, title: "Colour Codes", difficulty: 1, mode: "deduction",
+    epilogue: `A band of seven colours, and a screen filled with only one.
+
+A colour has a name, an order, and a value. Once you know all three point at the same thing, you can answer whichever way you are asked.
+
+The red on the last screen sank slowly into black.`,
     stages: [
       { id: 1, title: "Rainbow Order", situation: "A four-box field sits beneath a band of seven colours.", lockType: "pin4", answer: "1234", maxTurns: 5,
         clues: [
@@ -160,6 +185,11 @@ const episodes: DeductionEpisode[] = [
   },
   {
     id: 106, title: "Music Puzzle", difficulty: 2, mode: "deduction",
+    epilogue: `A keyboard still marked where keys were pressed, and a single tuning fork.
+
+A note is a pitch and a number at once. Do-mi-sol-do becomes 1351, and the reference for tuning becomes 440. Move between the two and every lock in this room opens.
+
+The fork's tremor faded, and the room went quiet.`,
     stages: [
       { id: 1, title: "Solfège Code", situation: "Four keys on the keyboard still carry the mark of being pressed.", lockType: "pin4", answer: "1351", maxTurns: 5,
         clues: [
@@ -183,6 +213,11 @@ const episodes: DeductionEpisode[] = [
   },
   {
     id: 107, title: "Geography Quiz", difficulty: 3, mode: "deduction",
+    epilogue: `One pin on a map, and one statistics screen.
+
+Degrees and minutes, ten thousands and millions. Point at the same thing in different units and you get a different number. What this room asked about was not knowledge but that difference.
+
+The pin came out, and the map was folded away.`,
     stages: [
       { id: 1, title: "Find the Coordinates", situation: "A pin marks Seoul on the map. Read its latitude in degrees and minutes as four digits.", lockType: "pin4", answer: "3733", maxTurns: 5,
         clues: [
@@ -206,6 +241,11 @@ const episodes: DeductionEpisode[] = [
   },
   {
     id: 108, title: "Science Basics", difficulty: 3, mode: "deduction",
+    epilogue: `Gold on the periodic table, the distance light covers in a second, a kettle coming to the boil.
+
+All three began like things everyone knows, but what carried you to the answer was not knowledge — it was the digits. You can narrow it down without knowing. That was this room's rule.
+
+The steam thinned, and the last lock gave way.`,
     stages: [
       { id: 1, title: "Element Number", situation: "On the periodic table, only gold (Au) is lit.", lockType: "pin4", answer: "0079", maxTurns: 5,
         clues: [

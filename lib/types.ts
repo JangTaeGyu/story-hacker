@@ -58,6 +58,8 @@ export interface DeductionEpisode {
   title: string;
   difficulty: 1 | 2 | 3;
   mode: 'deduction';
+  /** 마지막 자물쇠를 연 뒤의 이야기. 스토리 모드의 `epilogue`와 같은 자리에 뜬다. */
+  epilogue?: string;
   stages: DeductionStage[];
 }
 

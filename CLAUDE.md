@@ -183,6 +183,15 @@ interface StoryEpisode {
 
 interface DeductionClue { turn: number; text: string; }
 
+interface DeductionEpisode {
+  id: number;
+  title: string;
+  difficulty: 1 | 2 | 3;
+  mode: 'deduction';
+  epilogue?: string;       // 마지막 자물쇠를 연 뒤의 이야기 — 완료 화면에 노출
+  stages: DeductionStage[];
+}
+
 interface DeductionStage {
   id: number;
   title: string;
@@ -218,8 +227,9 @@ interface GameProgress {
 2. PIN 입력 후 `pin === stage.answer`로 판정.
 3. 정답 → 다음 스테이지(턴 1로 초기화, 해당 스테이지 초기 단서 세팅) 또는 완료.
 4. 오답 → `turnsUsed++` 후 **새 `turnsUsed`와 `turn` 값이 같은 단서**를 추가 공개. `turnsUsed > maxTurns`면 게임오버 (시도 기회 = `maxTurns`회).
-5. 별점: `turnsUsed <= 2` → 3, `<= 4` → 2, 그 외 1. (`lib/utils.ts`의 `calculateDeductionStars`)
-6. 화면의 `Turns` 표시는 두 모드 모두 **사용한 시도 횟수**입니다. 추리 모드의 `turnsUsed`는 1부터 시작하므로 표시에는 `turnsSpent`(= `turnsUsed - 1`)를 쓰세요.
+5. 마지막 스테이지를 풀면 완료 화면에서 `epilogue`가 열린다. 스토리 모드와 같은 규칙이다 — 없으면 마지막 문제의 대가가 "잠금 해제" 네 글자뿐이 된다.
+6. 별점: `turnsUsed <= 2` → 3, `<= 4` → 2, 그 외 1. (`lib/utils.ts`의 `calculateDeductionStars`)
+7. 화면의 `Turns` 표시는 두 모드 모두 **사용한 시도 횟수**입니다. 추리 모드의 `turnsUsed`는 1부터 시작하므로 표시에는 `turnsSpent`(= `turnsUsed - 1`)를 쓰세요.
 
 > **단서 공개 순서.** 공개 순서는 `turn` **오름차순**입니다 — `turn: 1`이 시작 시점에 공개되고, 오답할 때마다 2, 3, … 순으로 열립니다. 데이터도 이에 맞춰 **배열 순서 = 공개 순서**로 정렬되어 있습니다(위에서 아래로 포괄적 → 구체적, 마지막 단서는 사실상 정답 확인). 단서를 추가·수정할 때 이 규칙을 유지하세요. `turn`이 `maxTurns`를 넘으면 그 단서는 게임오버 전에 공개되지 않습니다.
 
@@ -609,6 +619,7 @@ export default episode;
       ],
     },
   ],
+  epilogue: `마지막 자물쇠를 연 뒤의 이야기.`,   // 필수 — 없으면 결말이 사라진다
 }
 ```
 

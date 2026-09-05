@@ -17,6 +17,11 @@ import type { DeductionEpisode } from '@/lib/types';
 const episodes: DeductionEpisode[] = [
   {
     id: 101, title: "숫자 추리", difficulty: 2, mode: "deduction",
+    epilogue: `세 개의 자물쇠가 차례로 풀렸다. 책상 위의 다이얼, 패널, 그리고 여섯 자리 입력창.
+
+마지막 화면이 꺼지기 전에 한 줄이 떠올랐다. — "조건만으로 답에 닿을 수 있다면, 당신은 이미 준비된 사람이다."
+
+숫자는 거짓말을 하지 않는다. 다만 전부 말해주지 않을 뿐이다.`,
     stages: [
       { id: 1, title: "기초 추리", situation: "책상 위에 네 자리 다이얼 자물쇠가 놓여 있다. 열쇠는 없고, 조건만 적힌 쪽지 한 장이 함께 있다.", lockType: "pin4", answer: "3726", maxTurns: 6,
         clues: [
@@ -51,6 +56,11 @@ const episodes: DeductionEpisode[] = [
   },
   {
     id: 102, title: "논리 퍼즐", difficulty: 2, mode: "deduction",
+    epilogue: `생일로 잠긴 상자, 여섯 자리 금고, 그리고 마지막 관문. 셋 다 열렸다.
+
+상자 안에는 아무것도 없었다. 금고도 마찬가지였다. 마지막 문 너머에는 빈 방이 하나 있었고, 벽에 이렇게 적혀 있었다. — "무엇이 들었는지 묻지 않고도 여는 법을 배웠다면, 그걸로 충분하다."
+
+경보는 끝내 울리지 않았다.`,
     stages: [
       { id: 1, title: "생일 추리", situation: "친구의 생일로 잠긴 상자. 정작 그 친구는 생일을 알려준 적이 없다. (MMDD)", lockType: "pin4", answer: "0314", maxTurns: 5,
         clues: [
@@ -84,6 +94,11 @@ const episodes: DeductionEpisode[] = [
   },
   {
     id: 103, title: "수학 챌린지", difficulty: 2, mode: "deduction",
+    epilogue: `곱셈, 나눗셈, 그리고 나선.
+
+세 자물쇠는 서로 다른 얼굴을 하고 있었지만 요구하는 건 같았다. 눈앞의 수를 믿지 말고, 수와 수 사이의 관계를 보라는 것.
+
+마지막 나선 무늬가 천천히 회전을 멈췄다.`,
     stages: [
       { id: 1, title: "곱셈 퍼즐", situation: "종이에는 곱셈 조건만 적혀 있다. 네 자리를 찾아라.", lockType: "pin4", answer: "2436", maxTurns: 5,
         clues: [
@@ -117,6 +132,11 @@ const episodes: DeductionEpisode[] = [
   },
   {
     id: 104, title: "시간 퍼즐", difficulty: 1, mode: "deduction",
+    epilogue: `멈춘 시계, 4년에 한 번 오는 날, 1시간에 1초 모자라는 타이머.
+
+셋 다 시간을 다루지만 가리키는 곳이 달랐다. 하나는 멈춘 순간을, 하나는 좀처럼 오지 않는 날을, 하나는 끝나기 직전을 가리켰다.
+
+문이 열리자 복도의 시계가 다시 초를 세기 시작했다.`,
     stages: [
       { id: 1, title: "시계 암호", situation: "멈춘 시계가 가리키는 시각이 곧 코드다.", lockType: "pin4", answer: "1230", maxTurns: 5,
         clues: [
@@ -150,6 +170,11 @@ const episodes: DeductionEpisode[] = [
   },
   {
     id: 105, title: "색깔 코드", difficulty: 1, mode: "deduction",
+    epilogue: `일곱 색의 띠, 그리고 한 가지 색으로 가득 찬 화면.
+
+색에는 이름이 있고, 순서가 있고, 값이 있다. 셋이 같은 것을 가리킨다는 걸 알면 어느 쪽으로 물어도 답할 수 있다.
+
+마지막 화면의 붉은색이 서서히 검게 가라앉았다.`,
     stages: [
       { id: 1, title: "무지개 순서", situation: "일곱 색 띠 아래에 네 칸짜리 입력창이 있다.", lockType: "pin4", answer: "1234", maxTurns: 5,
         clues: [
@@ -173,6 +198,11 @@ const episodes: DeductionEpisode[] = [
   },
   {
     id: 106, title: "음악 퍼즐", difficulty: 2, mode: "deduction",
+    epilogue: `눌린 자국이 남은 건반과 소리굽쇠 하나.
+
+음은 높낮이이면서 동시에 숫자다. 도미솔도가 1351이 되고, 조율의 기준이 440이 된다. 그 사이를 오갈 수 있으면 이 방의 자물쇠는 전부 열린다.
+
+소리굽쇠의 떨림이 잦아들고, 방이 조용해졌다.`,
     stages: [
       { id: 1, title: "계이름 코드", situation: "건반 위에 네 음이 눌린 자국이 남아 있다.", lockType: "pin4", answer: "1351", maxTurns: 5,
         clues: [
@@ -196,6 +226,11 @@ const episodes: DeductionEpisode[] = [
   },
   {
     id: 107, title: "지리 퀴즈", difficulty: 3, mode: "deduction",
+    epilogue: `지도 위의 핀 하나, 그리고 통계 화면 하나.
+
+도와 분, 만과 백만. 같은 것을 가리키면서도 단위가 다르면 다른 숫자가 된다. 이 방이 물은 건 지식이 아니라 그 차이였다.
+
+핀이 뽑히고, 지도가 접혔다.`,
     stages: [
       { id: 1, title: "좌표 찾기", situation: "지도 위 서울에 핀이 꽂혀 있다. 위도를 도와 분으로 읽어 네 자리로 적어라.", lockType: "pin4", answer: "3733", maxTurns: 5,
         clues: [
@@ -219,6 +254,11 @@ const episodes: DeductionEpisode[] = [
   },
   {
     id: 108, title: "과학 상식", difficulty: 3, mode: "deduction",
+    epilogue: `주기율표의 금, 빛이 1초에 가는 거리, 끓고 있는 주전자.
+
+셋 다 누구나 아는 이야기처럼 시작했지만, 답에 닿게 해준 건 지식이 아니라 자릿수였다. 몰라도 좁혀 갈 수 있다 — 그게 이 방의 규칙이었다.
+
+주전자의 김이 잦아들며, 마지막 자물쇠가 풀렸다.`,
     stages: [
       { id: 1, title: "원소 번호", situation: "주기율표에서 금(Au)만 홀로 빛나고 있다.", lockType: "pin4", answer: "0079", maxTurns: 5,
         clues: [

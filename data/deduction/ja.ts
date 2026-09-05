@@ -4,6 +4,11 @@ import type { DeductionEpisode } from '@/lib/types';
 const episodes: DeductionEpisode[] = [
   {
     id: 101, title: "数字の推理", difficulty: 2, mode: "deduction",
+    epilogue: `三つの錠が順に外れた。机の上のダイヤル、パネル、そして六桁の入力欄。
+
+最後の画面が消える前に、一行だけ浮かんだ。——「条件だけで答えに届くなら、あなたはもう準備ができている。」
+
+数字は嘘をつかない。ただ、全部を話してくれないだけだ。`,
     stages: [
       { id: 1, title: "基礎推理", situation: "机の上に四桁のダイヤル錠。鍵はなく、条件だけを書いたメモが一枚添えてある。", lockType: "pin4", answer: "3726", maxTurns: 6,
         clues: [
@@ -38,6 +43,11 @@ const episodes: DeductionEpisode[] = [
   },
   {
     id: 102, title: "論理パズル", difficulty: 2, mode: "deduction",
+    epilogue: `誕生日で施錠された箱、六桁の金庫、そして最後の関門。三つとも開いた。
+
+箱の中には何もなかった。金庫も同じだった。最後の扉の向こうには空の部屋がひとつあり、壁にこう書かれていた。——「中に何があるかを訊かずに開ける術を学んだなら、それで十分だ。」
+
+警報は、とうとう鳴らなかった。`,
     stages: [
       { id: 1, title: "誕生日の推理", situation: "友人の誕生日で施錠された箱。その友人は誕生日を口にしたことがない。(MMDD)", lockType: "pin4", answer: "0314", maxTurns: 5,
         clues: [
@@ -71,6 +81,11 @@ const episodes: DeductionEpisode[] = [
   },
   {
     id: 103, title: "数学チャレンジ", difficulty: 2, mode: "deduction",
+    epilogue: `掛け算、割り算、そして螺旋。
+
+三つの錠は違う顔をしていたが、求めるものは同じだった。目の前の数を信じるな、数と数のあいだを見ろ、ということ。
+
+最後の螺旋模様が、ゆっくりと回転を止めた。`,
     stages: [
       { id: 1, title: "掛け算パズル", situation: "紙には掛け算の条件だけが書かれている。四桁を見つけろ。", lockType: "pin4", answer: "2436", maxTurns: 5,
         clues: [
@@ -104,6 +119,11 @@ const episodes: DeductionEpisode[] = [
   },
   {
     id: 104, title: "時間パズル", difficulty: 1, mode: "deduction",
+    epilogue: `止まった時計、4年に一度来る日、1時間に1秒足りないタイマー。
+
+三つとも時間を扱うが、指す場所が違った。ひとつは止まった瞬間を、ひとつはめったに来ない日を、ひとつは終わる直前を指していた。
+
+扉が開くと、廊下の時計がまた秒を数えはじめた。`,
     stages: [
       { id: 1, title: "時計の暗号", situation: "止まった時計が指している時刻が、そのままコードだ。", lockType: "pin4", answer: "1230", maxTurns: 5,
         clues: [
@@ -137,6 +157,11 @@ const episodes: DeductionEpisode[] = [
   },
   {
     id: 105, title: "色のコード", difficulty: 1, mode: "deduction",
+    epilogue: `七色の帯と、ひとつの色だけで埋まった画面。
+
+色には名前があり、順番があり、値がある。三つが同じものを指していると分かれば、どちらから訊かれても答えられる。
+
+最後の画面の赤が、ゆっくりと黒に沈んでいった。`,
     stages: [
       { id: 1, title: "虹の順番", situation: "七色の帯の下に四マスの入力欄がある。", lockType: "pin4", answer: "1234", maxTurns: 5,
         clues: [
@@ -160,6 +185,11 @@ const episodes: DeductionEpisode[] = [
   },
   {
     id: 106, title: "音楽パズル", difficulty: 2, mode: "deduction",
+    epilogue: `押した跡の残る鍵盤と、音叉がひとつ。
+
+音は高さであると同時に数字だ。ドミソドが1351になり、調律の基準が440になる。そのあいだを行き来できれば、この部屋の錠はすべて開く。
+
+音叉の震えが収まり、部屋が静かになった。`,
     stages: [
       { id: 1, title: "階名のコード", situation: "鍵盤の上に、四つの音を押した跡が残っている。", lockType: "pin4", answer: "1351", maxTurns: 5,
         clues: [
@@ -183,6 +213,11 @@ const episodes: DeductionEpisode[] = [
   },
   {
     id: 107, title: "地理クイズ", difficulty: 3, mode: "deduction",
+    epilogue: `地図の上のピンひとつと、統計画面がひとつ。
+
+度と分、万と百万。同じものを指していても、単位が違えば違う数字になる。この部屋が問うたのは知識ではなく、その差だった。
+
+ピンが抜かれ、地図が畳まれた。`,
     stages: [
       { id: 1, title: "座標を探す", situation: "地図の上、ソウルにピンが刺さっている。緯度を度と分で読み、四桁で書け。", lockType: "pin4", answer: "3733", maxTurns: 5,
         clues: [
@@ -206,6 +241,11 @@ const episodes: DeductionEpisode[] = [
   },
   {
     id: 108, title: "科学の常識", difficulty: 3, mode: "deduction",
+    epilogue: `周期表の金、光が1秒に進む距離、沸いているやかん。
+
+三つとも誰もが知る話のように始まったが、答えに届かせたのは知識ではなく桁だった。知らなくても絞っていける——それがこの部屋の規則だった。
+
+やかんの湯気が薄れ、最後の錠が外れた。`,
     stages: [
       { id: 1, title: "元素番号", situation: "周期表の中で、金(Au)だけがひとり光っている。", lockType: "pin4", answer: "0079", maxTurns: 5,
         clues: [

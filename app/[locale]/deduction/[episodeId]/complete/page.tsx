@@ -41,6 +41,7 @@ export default async function DeductionCompletePage({ params }: PageProps) {
       <DeductionComplete
         episodeId={episode.id}
         episodeTitle={episode.title}
+        epilogue={episode.epilogue ?? null}
         nextEpisodeId={nextEpisode?.id ?? null}
       />
     </Suspense>

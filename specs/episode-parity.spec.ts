@@ -120,6 +120,17 @@ test.describe('에피소드 언어판 정합성', () => {
     }
   });
 
+  test('추리 에피소드에도 에필로그가 세 언어로 있다', () => {
+    for (const locale of locales) {
+      for (const episode of getDeductionEpisodes(locale)) {
+        expect(
+          episode.epilogue?.trim().length ?? 0,
+          `${locale} 추리 EP.${episode.id - 100} 에필로그`
+        ).toBeGreaterThan(50);
+      }
+    }
+  });
+
   test('번역판에 원문이 그대로 남아 있지 않다', () => {
     // 번역이 누락되면 en/ja 화면에 한글 본문이 그대로 뜬다.
     const hangul = /[가-힣]/;
@@ -148,6 +159,10 @@ test.describe('에피소드 언어판 정합성', () => {
             expect(hangul.test(clue.text), `${where} 단서 T${clue.turn}`).toBe(false);
           }
         }
+        expect(
+          hangul.test(episode.epilogue ?? ''),
+          `${locale} 추리 EP.${episode.id - 100} 에필로그`
+        ).toBe(false);
       }
     }
   });
