@@ -157,24 +157,33 @@ interface DeductionGameState {
   isGameOver: boolean;
 }
 
+/** 턴 1에 해당하는 단서 — 스테이지에 들어서는 순간 공개되어 있다. */
+function initialCluesOf(stage: DeductionStage | undefined): DeductionClue[] {
+  return stage ? stage.clues.filter((clue) => clue.turn === 1) : [];
+}
+
 export function useDeductionGameState(stages: DeductionStage[]) {
-  const [state, setState] = useState<DeductionGameState>({
+  const [state, setState] = useState<DeductionGameState>(() => ({
     currentStageIndex: 0,
     pin: '',
     turnsUsed: 1,
-    revealedClues: [],
+    // 빈 배열로 시작한 뒤 effect에서 채우면 **서버가 내려주는 HTML에 첫 단서가
+    // 없다.** 추리 모드에서 검색에 걸릴 글은 상황 설명과 단서뿐이라, 그만큼이
+    // 통째로 크롤러에게 보이지 않게 된다. 처음부터 채워서 내려보낸다.
+    revealedClues: initialCluesOf(stages[0]),
     isWrong: false,
     isComplete: false,
     isGameOver: false,
-  });
+  }));
 
   const currentStage = stages[state.currentStageIndex];
   const pinLength = currentStage ? getPinLength(currentStage.lockType) : 4;
 
   // 초기 단서 설정 (턴 1에 해당하는 단서)
-  const getInitialClues = useCallback((stage: DeductionStage) => {
-    return stage.clues.filter((clue) => clue.turn === 1);
-  }, []);
+  const getInitialClues = useCallback(
+    (stage: DeductionStage) => initialCluesOf(stage),
+    []
+  );
 
   // PIN 입력
   const handlePinInput = useCallback((digit: string) => {

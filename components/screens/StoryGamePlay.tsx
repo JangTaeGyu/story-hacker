@@ -17,6 +17,9 @@ import Header from '@/components/ui/Header';
 import { storyIllustrations } from '@/components/illustrations/StoryIllustrations';
 import { useI18n } from '@/components/i18n/LocaleProvider';
 
+/** 본문과 단서를 한 줄기로 잇는 구분자 — 타이핑도 이 문자열을 그대로 지나간다. */
+const CLUE_SEPARATOR = '\n\n🔍 ';
+
 interface StoryGamePlayProps {
   episode: StoryEpisode;
 }
@@ -59,7 +62,9 @@ export default function StoryGamePlay({ episode }: StoryGamePlayProps) {
   }, [episode.id, episode.stages.length]);
 
   // 스토리 + 단서 텍스트 타이핑 효과
-  const fullText = currentStage ? `${currentStage.story}\n\n🔍 ${currentStage.clue}` : '';
+  const fullText = currentStage
+    ? `${currentStage.story}${CLUE_SEPARATOR}${currentStage.clue}`
+    : '';
   // isComplete는 게임 상태에도 있으므로 이름을 나눠 받는다.
   const {
     displayedText,
@@ -122,9 +127,24 @@ export default function StoryGamePlay({ episode }: StoryGamePlayProps) {
   const illustrationKey = `${episode.id}-${currentStage.id}`;
   const IllustrationComponent = storyIllustrations[illustrationKey];
 
-  // 타이핑된 텍스트를 본문과 단서로 분리
-  const [storyText, ...clueParts] = displayedText.split('🔍 ');
-  const clueText = clueParts.join('🔍 ');
+  // 본문과 단서는 **처음부터 통째로 DOM에 있다.** 타이핑은 글자를 만들어내는 게
+  // 아니라 "어디까지 보이는가"만 정하고, 아직 닿지 않은 뒷부분은 투명하게 둔다.
+  //
+  // 예전에는 displayedText(빈 문자열에서 자라나는 값)를 그대로 그렸다. 그래서
+  // 서버가 내려주는 HTML에는 스테이지 제목만 있고 본문이 없었고, 에피소드
+  // 페이지의 크롤 가능한 텍스트가 120자 남짓이었다. 사이트에서 검색에 걸릴
+  // 글이 있는 곳은 여기뿐인데 그게 전부 빈 페이지로 취급됐다.
+  //
+  // 덤으로 문단이 자라며 아래를 밀어내지 않으니 레이아웃 이동(CLS)도 없어진다.
+  const storyFull = currentStage.story;
+  const clueFull = currentStage.clue;
+  const revealedCount = displayedText.length;
+  const storyRevealed = Math.min(revealedCount, storyFull.length);
+  // fullText는 `${story}${CLUE_SEPARATOR}${clue}` 형태로 이어 붙여 타이핑된다.
+  const clueRevealed = Math.min(
+    Math.max(revealedCount - storyFull.length - CLUE_SEPARATOR.length, 0),
+    clueFull.length
+  );
 
   return (
     <div className="relative flex min-h-screen flex-col bg-noct-black">
@@ -219,24 +239,32 @@ export default function StoryGamePlay({ episode }: StoryGamePlayProps) {
             {/* 스토리 프로즈 — 타이핑 효과 + 탭하여 스킵 */}
             <div key={stageKey} className="cursor-pointer" onClick={skipTyping}>
               <p className="whitespace-pre-wrap font-serif text-[15px] leading-[1.9] text-noct-ink">
-                {storyText.trimEnd()}
-                {isTyping && clueParts.length === 0 && (
+                {storyFull.slice(0, storyRevealed)}
+                {isTyping && storyRevealed < storyFull.length && (
                   <span className="text-noct-gold">▌</span>
                 )}
+                {/* 아직 타이핑이 닿지 않은 뒷부분 — 자리는 잡되 보이지 않는다 */}
+                <span className="text-transparent">{storyFull.slice(storyRevealed)}</span>
               </p>
 
-              {/* 단서 — 좌측 액센트 블록 */}
-              {clueParts.length > 0 && (
-                <div className="mt-6 border-l border-noct-gold-dim pl-4">
-                  <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-noct-gold-dim">
-                    {t.game.clue}
-                  </p>
-                  <p className="mt-1.5 font-serif text-[15px] leading-[1.8] text-noct-ink-dim">
-                    {clueText}
-                    {isTyping && <span className="text-noct-gold">▌</span>}
-                  </p>
-                </div>
-              )}
+              {/* 단서 — 좌측 액센트 블록.
+                  블록 자체는 계속 자리를 지키고, 본문이 끝나야 모습을 드러낸다. */}
+              <div
+                className={`mt-6 border-l border-noct-gold-dim pl-4 transition-opacity duration-500 motion-reduce:transition-none ${
+                  clueRevealed > 0 ? 'opacity-100' : 'opacity-0'
+                }`}
+              >
+                <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-noct-gold-dim">
+                  {t.game.clue}
+                </p>
+                <p className="mt-1.5 whitespace-pre-wrap font-serif text-[15px] leading-[1.8] text-noct-ink-dim">
+                  {clueFull.slice(0, clueRevealed)}
+                  {isTyping && clueRevealed > 0 && clueRevealed < clueFull.length && (
+                    <span className="text-noct-gold">▌</span>
+                  )}
+                  <span className="text-transparent">{clueFull.slice(clueRevealed)}</span>
+                </p>
+              </div>
 
               {isTyping && (
                 <p className="mt-3 text-right font-mono text-[10px] tracking-[0.2em] uppercase text-noct-ink-faint">
@@ -275,7 +303,7 @@ export default function StoryGamePlay({ episode }: StoryGamePlayProps) {
             <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-noct-gold-dim">
               {t.game.clue}
             </p>
-            <p className="mt-1.5 font-serif text-[14px] leading-[1.7] text-noct-ink-dim">
+            <p className="mt-1.5 whitespace-pre-wrap font-serif text-[14px] leading-[1.7] text-noct-ink-dim">
               {currentStage.clue}
             </p>
           </div>

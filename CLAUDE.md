@@ -200,7 +200,9 @@ interface GameProgress {
 ### 게임 메커니즘
 
 **스토리 모드** (`turnsUsed`는 0에서 시작)
-1. `story` + `\n\n🔍 ` + `clue`를 하나의 문자열로 합쳐 타이핑 효과 재생 (탭하면 스킵). 화면에서 `🔍 ` 기준으로 본문/단서 블록을 분리합니다. 타이핑이 끝나야 "PIN 입력" 버튼이 나타납니다.
+1. `story` + `\n\n🔍 ` + `clue`를 하나의 문자열로 합쳐 타이핑 효과 재생 (탭하면 스킵). 타이핑이 끝나야 "PIN 입력" 버튼이 나타납니다.
+
+   > **본문과 단서는 처음부터 통째로 DOM에 있습니다.** 타이핑은 글자를 만들어내는 게 아니라 "어디까지 보이는가"만 정하고, 아직 닿지 않은 뒷부분은 `text-transparent`로 자리만 차지합니다. 예전처럼 `displayedText`(빈 문자열에서 자라나는 값)를 그대로 그리면 **서버 HTML에 본문이 없어** 에피소드 페이지의 크롤 가능한 텍스트가 120자로 떨어집니다 — 사이트에서 검색에 걸릴 글이 있는 곳은 여기뿐입니다. 되돌리지 마세요. `specs/crawlable-content.spec.ts`가 JS를 끄고 검사합니다.
 2. PIN 입력 후 `stage.answers.includes(pin)`으로 판정.
 3. 정답 → 다음 스테이지(턴·힌트 초기화) 또는 에피소드 완료.
 4. 오답 → `turnsUsed++`, shake 애니메이션. `turnsUsed >= maxTurns`면 게임오버 (즉 시도 기회 = `maxTurns`회).
@@ -208,7 +210,7 @@ interface GameProgress {
 6. 별점은 힌트 사용 여부만 반영하며, 오답 횟수는 별점에 영향을 주지 않습니다.
 
 **추리 모드** (`turnsUsed`는 **1**에서 시작)
-1. 상황 설명 + 현재까지 공개된 단서 목록 표시.
+1. 상황 설명 + 현재까지 공개된 단서 목록 표시. **첫 단서(`turn: 1`)는 훅의 초기 상태에서 채웁니다** — effect에서 채우면 서버 HTML에서 빠져 크롤러가 못 봅니다.
 2. PIN 입력 후 `pin === stage.answer`로 판정.
 3. 정답 → 다음 스테이지(턴 1로 초기화, 해당 스테이지 초기 단서 세팅) 또는 완료.
 4. 오답 → `turnsUsed++` 후 **새 `turnsUsed`와 `turn` 값이 같은 단서**를 추가 공개. `turnsUsed > maxTurns`면 게임오버 (시도 기회 = `maxTurns`회).
@@ -311,6 +313,7 @@ app/[locale]/layout.tsx  실제 셸 — <html lang>, 메타데이터, LocaleProv
 - **구조화 데이터(JSON-LD).** 홈에 `WebSite` + `VideoGame` 그래프, 목록에 `CollectionPage` + `ItemList`, 에피소드에 `VideoGame` + `BreadcrumbList`. 삽입은 `components/seo/JsonLd.tsx`.
 - **결과 화면은 `robots: { index: false }`** 입니다. robots.txt로도 막지만, 외부에서 링크되는 경우까지 덮으려면 메타가 필요합니다.
 - **각 페이지에 h1이 하나 있습니다.** 목록 화면의 제목이 h1, 에피소드 카드가 h2입니다. 예전에는 목록에 h1이 없어 검색엔진이 페이지 주제를 잡을 근거가 없었습니다.
+- **본문이 서버 HTML에 실려야 합니다.** 색인될 만한 글은 에피소드 페이지에만 있는데, 클라이언트에서 글자를 만들어내는 연출(타이핑)이나 effect에서 채우는 상태(추리 모드 첫 단서)를 쓰면 크롤러에게는 빈 페이지가 됩니다. 위 "게임 메커니즘"의 두 경고를 보세요.
 - 배포 도메인은 여전히 `lib/site.ts`의 `SITE_URL` 한 곳입니다.
 
 ## 스타일링 (NOCTURNE)
@@ -471,6 +474,7 @@ specs/
 ├── resume.spec.ts         # 이어하기 · 게임오버 정답 비노출
 ├── responsive.spec.ts     # 데스크톱 단일 컬럼 · 레이어 · 목록 그리드 · 가로 스크롤
 ├── i18n.spec.ts           # 언어 라우팅 · 옛 주소 리다이렉트 · hreflang · JSON-LD
+├── crawlable-content.spec.ts # JS 없이도 본문·단서가 HTML에 있는지 (SEO 핵심)
 └── episode-parity.spec.ts # 세 언어의 정답·구조 일치 (브라우저를 쓰지 않는 데이터 검사)
 ```
 
