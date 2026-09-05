@@ -8,6 +8,15 @@ const episode = {
   mode: "story",
   previousEpisode: 11,
   synopsis: "ShadowNet's first official job. You put a toe inside the outer servers of OmniCorp, the giant that holds Neo City in its fist. Only reconnaissance, they say — but inside the folder you open is a name you were never meant to see.",
+  epilogue: `We fixed the location of server room B and walked out through the lobby.
+
+Outside, Neon went to light a cigarette, then stopped and looked at me. "Your hands are shaking."
+
+"Do you know what Project X is?" I asked.
+
+She did not answer for a long time. Then she put the lighter back in her pocket. "No. But Phantom does."
+
+That night I read the report three more times. Those five words — *Phase 2 in progress* — stayed behind my eyes even when I shut them.`,
   stages: [
     {
       id: 1,

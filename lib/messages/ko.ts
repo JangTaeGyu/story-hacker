@@ -121,6 +121,7 @@ const ko = {
 
   complete: {
     share: 'Share',
+    epilogue: '에필로그',
     copy: '복사',
     copied: '클립보드에 복사되었습니다!',
     story: {

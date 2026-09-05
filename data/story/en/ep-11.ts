@@ -7,6 +7,17 @@ const episode = {
   difficulty: 2,
   mode: "story",
   synopsis: "The back alleys of Neo City, 2087. You have no name and no face, and the hacker collective 'ShadowNet' reaches out a hand. On your first night living as codename 'Zero', three tests are waiting.",
+  epilogue: `The chip woke and buzzed once against my palm.
+
+"You're one of us now," Neon said. "Got a codename?"
+
+I thought for a moment. I could not remember the last time anyone had called me anything.
+
+"Zero." I said the word exactly as it had appeared on my screen.
+
+Neon nodded and pressed the chip in behind my ear. "All right, Zero. Sleep while you still can."
+
+Outside, the neon sign blinked once more. For the first time, I felt that this city had a place in it for me.`,
   stages: [
     {
       id: 1,

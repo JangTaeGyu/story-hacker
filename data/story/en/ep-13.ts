@@ -8,6 +8,13 @@ const episode = {
   mode: "story",
   previousEpisode: 12,
   synopsis: "OmniCorp has noticed the intrusion. A back-trace begins, and Zero runs into the dark, erasing his own footprints as he goes. Waiting at the safe house is one small box left by Neon.",
+  epilogue: `The box held compressed rations, a first-aid kit, and one spare comms chip.
+
+Under the chip was a second note. "This one's on my frequency. If anything happens, call me on it. Nobody else can hear."
+
+I put the chip in my pocket and sat by the window. Twice the red dot of a tracking drone crossed the rain. The third time, it did not come.
+
+I slept a little before dawn. It was my first night on the run, and somehow I did not feel alone.`,
   stages: [
     {
       id: 1,

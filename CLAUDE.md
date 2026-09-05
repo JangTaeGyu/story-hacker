@@ -173,7 +173,8 @@ interface StoryEpisode {
   id: number;
   title: string;
   subtitle?: string;       // 에피소드 목록 카드에 노출
-  synopsis?: string;       // 현재 UI 미노출 (데이터에는 존재)
+  synopsis?: string;       // 목록엔 미노출, generateMetadata의 설명으로 쓰임
+  epilogue?: string;       // 마지막 자물쇠를 연 뒤의 이야기 — 완료 화면에 노출
   previousEpisode?: number;
   difficulty: 1 | 2 | 3;
   mode: 'story';
@@ -206,8 +207,9 @@ interface GameProgress {
 2. PIN 입력 후 `stage.answers.includes(pin)`으로 판정.
 3. 정답 → 다음 스테이지(턴·힌트 초기화) 또는 에피소드 완료.
 4. 오답 → `turnsUsed++`, shake 애니메이션. `turnsUsed >= maxTurns`면 게임오버 (즉 시도 기회 = `maxTurns`회).
-5. 힌트 → `hintUsed = true`, `stars`가 1 감소(최소 1). 스테이지가 넘어가면 다시 사용 가능하지만 `stars`는 복구되지 않습니다.
-6. 별점은 힌트 사용 여부만 반영하며, 오답 횟수는 별점에 영향을 주지 않습니다.
+5. 마지막 스테이지를 풀면 완료 화면에서 `epilogue`가 열린다. **본문(`story`)은 항상 "이제 이것만 풀면…"으로 끝나므로, 닫는 이야기는 에필로그에만 있다.** 빠뜨리면 가장 어려운 마지막 문제의 대가가 "사건 해결" 다섯 글자뿐이 된다 (`specs/episode-parity.spec.ts`가 세 언어 모두 검사).
+6. 힌트 → `hintUsed = true`, `stars`가 1 감소(최소 1). 스테이지가 넘어가면 다시 사용 가능하지만 `stars`는 복구되지 않습니다.
+7. 별점은 힌트 사용 여부만 반영하며, 오답 횟수는 별점에 영향을 주지 않습니다.
 
 **추리 모드** (`turnsUsed`는 **1**에서 시작)
 1. 상황 설명 + 현재까지 공개된 단서 목록 표시. **첫 단서(`turn: 1`)는 훅의 초기 상태에서 채웁니다** — effect에서 채우면 서버 HTML에서 빠져 크롤러가 못 봅니다.
@@ -558,6 +560,7 @@ const episode = {
       maxTurns: 3,
     },
   ],
+  epilogue: `마지막 자물쇠를 연 뒤의 이야기.`,   // 필수 — 없으면 결말이 사라진다
 } satisfies StoryEpisode;        // as const 불필요
 
 export default episode;

@@ -7,6 +7,11 @@ const episode = {
   difficulty: 1,
   mode: "story",
   synopsis: "Han-byeol, my guildmate of three years, has not logged in for three days. The last message was a single line — 'I think I'm in real trouble.' The answer is inside his account.",
+  epilogue: `The box held hundreds of recordings — an operator falsifying item logs to bury rigged drop rates. Han-byeol had simply seen it by accident.
+
+I published all of it. Three days later the server went down for maintenance, and a week after that one name disappeared from the operations team.
+
+A month on, an unfamiliar account joined the guild chat. "Sorry. They took my phone and my computer." The handle was different, but the greeting was identical. That night, for the first time in three years, I heard his voice.`,
   stages: [
     {
       id: 1,

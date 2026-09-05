@@ -7,6 +7,13 @@ const episode = {
   difficulty: 1,
   mode: "story",
   synopsis: "One New Year's Day the winter before graduation, we buried a time capsule under the maple in the schoolyard. Ten years on I dig it up again, and undo one by one the three locks our younger selves left behind.",
+  epilogue: `In the video the three of us are holding the camera far too close, so all our faces are warped.
+
+"In ten years we all meet here and watch this!" my twelve-year-old self shouts. Ji-u laughs somewhere behind, and Han-byeol covers the lens with a finger.
+
+I called them both that evening. Ji-u answered in three hours. Han-byeol took three days.
+
+That winter the three of us stood under the maple again. We did not bury anything this time. We just stood there a long while.`,
   stages: [
     {
       id: 1,

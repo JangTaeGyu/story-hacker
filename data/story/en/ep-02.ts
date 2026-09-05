@@ -7,6 +7,11 @@ const episode = {
   difficulty: 2,
   mode: "story",
   synopsis: "Instead of a will, my grandfather left behind an old smartphone. From behind its screen, a man who loved riddles all his life speaks to his grandchild one final time.",
+  epilogue: `There were no bankbooks in the safe, no deeds. Three handwritten letters, one for each grandchild.
+
+Mine read: "If you are reading this, you solved them all. That is the whole inheritance. The rest I left with your father. I wanted to leave you something better than money — the stubbornness to finish a thing."
+
+At the bottom of the envelope was an old key. It opened the desk drawer in the study where he sat all his life. It took me a long while to find the courage to use it.`,
   stages: [
     {
       id: 1,

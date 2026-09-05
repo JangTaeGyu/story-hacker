@@ -7,6 +7,11 @@ const episode = {
   difficulty: 1,
   mode: "story",
   synopsis: "I wake in a blacked-out hospital before dawn. I cannot remember my room number, my name, or why I am here. Beyond the locked door, someone is trying to keep me inside.",
+  epilogue: `The door opened, and the cold air of the fire stairs hit my face.
+
+I carried the notebook out of the hospital. That page — three room numbers and my name — became evidence for four people in the end.
+
+My memory came back in pieces over the following days. I had been a nurse on that ward. My own name still feels strange some mornings. But I have never once forgotten 211, 318, 415. Those three numbers are what I recite now, every day.`,
   stages: [
     {
       id: 1,

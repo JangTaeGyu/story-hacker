@@ -8,6 +8,13 @@ const episode = {
   mode: "story",
   previousEpisode: 13,
   synopsis: "Someone inside ShadowNet is on OmniCorp's string. On Phantom's orders, Zero begins an investigation that means suspecting his own.",
+  epilogue: `Every exit sealed. Viper put a third-floor window out and dropped through it, and was gone.
+
+Phantom looked out at the street for a long time, then said: "Well done, Zero. The inside is clean now."
+
+After the other five scattered I went through the logs once more. Viper always connected at 02:13. And at that hour, one other person in the organisation had been awake.
+
+I did not know what that meant yet. I closed the window and turned off the light.`,
   stages: [
     {
       id: 1,
@@ -41,9 +48,9 @@ All three at 2:13 in the morning. Not a second's variance. Not a pattern a perso
 
 Viper's personal server PIN was hidden in the pattern itself. I had to weave the time and the dates together.`,
       clue: `[Decryption note]
-"Write the connection time 02:13 as digits, exactly as in 24-hour notation.
+"Drop the leading zero from the connection time 02:13 and write it as 213.
  Append the sum of the 'day' of all three connection dates (10, 12, 14)."`,
-      hint: "Build two chunks. The front is the small-hours time read as hour then minute; the back is the sum of the days of the three dates. Time first, date sum second.",
+      hint: "Build two chunks. The front is the small-hours time read as hour then minute with the leading zero stripped; the back is the sum of the days of the three dates. Unlike every other lock here, this one drops a zero instead of padding one.",
       lockType: "pin5",
       answers: ["21336"],
       maxTurns: 3,

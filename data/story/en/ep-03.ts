@@ -7,6 +7,11 @@ const episode = {
   difficulty: 1,
   mode: "story",
   synopsis: "The exam is tomorrow, and someone has spread word that the whole paper has leaked. I go into the empty staff room to find out — and meet a secret far warmer than the rumour.",
+  epilogue: `The folder opened. Twenty-three videos — one for each junior in the art club, and the last one with my name on it. Messages from the seniors who were leaving.
+
+I am not in the art club. I played it, and a third-year grinned awkwardly and said: "Hey. We all know you hang around outside our room every day. Just come in. The door isn't locked."
+
+I sat the exam the next day, and when it was over I opened the art room door. I never did ask who started the rumour.`,
   stages: [
     {
       id: 1,
@@ -54,9 +59,11 @@ The rumour was turning into a different shape entirely. I put my hand on the dia
 
 An old USB stick lay wrapped in a handkerchief. A small sticker was stuck to its side, and when I plugged it in, a password box appeared. The sticker was the hint.
 
-Past the password, a folder of videos opened. Messages from the graduating art club members, one for each of the juniors they were leaving behind. The rumour about the leaked exam had been a lie, told by someone afraid this surprise would be found out.
+The folder was called 'Graduation Videos'. Not exam papers, not an answer key.
 
-On screen, a senior waved and grinned. I sat in the art room chair for a long time.`,
+Only then did the shape of the rumour start to show. Somebody had not wanted what was in here to be found, so they spread a more convincing lie instead.
+
+I sat down in the art room chair and read the sticker again.`,
       clue: `The sticker on the USB:
 "Graduation work no. — MCMXCIV
  M=1000, D=500, C=100, L=50, X=10, V=5, I=1

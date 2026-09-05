@@ -44,6 +44,7 @@ export default async function StoryCompletePage({ params }: PageProps) {
       <StoryComplete
         episodeId={episode.id}
         episodeTitle={episode.title}
+        epilogue={episode.epilogue ?? null}
         nextEpisodeId={nextEpisode?.id ?? null}
       />
     </Suspense>

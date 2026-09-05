@@ -7,6 +7,11 @@ const episode = {
   difficulty: 1,
   mode: "story",
   synopsis: "The barista at my regular café stopped coming in one day. The owner says he simply quit — but under the seat where he always sat, I find the note he left behind.",
+  epilogue: `The ledger held three years of import papers, every one of them kept in duplicate. Do-yun had found it, confronted the owner, and been dismissed the same day.
+
+I made copies and handed them to the authorities. The café closed two months later.
+
+In autumn a small shop opened in an alley two stops away. There was no number on the sign. I pushed the door and Do-yun looked up, and before I could say anything he took down a cup. He still knew my order by heart.`,
   stages: [
     {
       id: 1,

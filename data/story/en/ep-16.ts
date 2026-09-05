@@ -8,6 +8,15 @@ const episode = {
   mode: "story",
   previousEpisode: 15,
   synopsis: "The moment the true shape of Project X is revealed, a deeper betrayal inside ShadowNet surfaces alongside it.",
+  epilogue: `We finally stopped under an overpass at the edge of the city.
+
+Neon pushed her wet hair back. "So what now?"
+
+Instead of answering I took out my comms chip. Deleting Phantom's channel took three seconds. Five years of leadership, gone from a list in three seconds.
+
+"The organisation is finished," I said. "So we build a new one."
+
+Through the rain, floor 52 of the OmniCorp tower was still burning bright. I looked at that light for a long time.`,
   stages: [
     {
       id: 1,

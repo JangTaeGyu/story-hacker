@@ -8,6 +8,16 @@ const episode = {
   mode: "story",
   previousEpisode: 14,
   synopsis: "From the server Viper abandoned, a hole in OmniCorp headquarters security comes to light. Zero and ShadowNet begin a direct infiltration.",
+  epilogue: `[PROJECT-X FINAL REPORT] opened.
+
+Objective: manipulate citizens' brainwaves to achieve total social control
+Phase 1: medical chip distribution — complete
+
+My hand stopped on the first line. *Complete.* It was already done.
+
+Neon read over my shoulder and said, very quietly, "My mum got that chip last year."
+
+We copied the whole file and left the server room. Neither of us said a word the entire way up from basement three.`,
   stages: [
     {
       id: 1,

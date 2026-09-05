@@ -116,6 +116,7 @@ const ja: Messages = {
 
   complete: {
     share: 'Share',
+    epilogue: 'エピローグ',
     copy: 'コピー',
     copied: 'クリップボードにコピーしました。',
     story: {

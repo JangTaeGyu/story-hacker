@@ -116,6 +116,7 @@ const en: Messages = {
 
   complete: {
     share: 'Share',
+    epilogue: 'Epilogue',
     copy: 'Copy',
     copied: 'Copied to clipboard.',
     story: {

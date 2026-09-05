@@ -107,6 +107,19 @@ test.describe('에피소드 언어판 정합성', () => {
     }
   });
 
+  test('모든 에피소드에 에필로그가 세 언어로 있다', () => {
+    // 본문(`story`)은 항상 "이제 이것만 풀면…"으로 끝난다. 닫는 문단은 에필로그에만
+    // 있으므로, 빠지면 마지막 자물쇠를 푼 대가가 "사건 해결" 다섯 글자뿐이 된다.
+    for (const locale of locales) {
+      for (const episode of getStoryEpisodes(locale)) {
+        expect(
+          episode.epilogue?.trim().length ?? 0,
+          `${locale} EP.${episode.id} 에필로그`
+        ).toBeGreaterThan(50);
+      }
+    }
+  });
+
   test('번역판에 원문이 그대로 남아 있지 않다', () => {
     // 번역이 누락되면 en/ja 화면에 한글 본문이 그대로 뜬다.
     const hangul = /[가-힣]/;
@@ -121,6 +134,10 @@ test.describe('에피소드 언어판 정합성', () => {
           expect(hangul.test(stage.clue), `${where} 단서`).toBe(false);
           expect(hangul.test(stage.hint), `${where} 힌트`).toBe(false);
         }
+        expect(
+          hangul.test(episode.epilogue ?? ''),
+          `${locale} EP.${episode.id} 에필로그`
+        ).toBe(false);
       }
 
       for (const episode of getDeductionEpisodes(locale)) {

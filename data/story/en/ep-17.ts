@@ -8,6 +8,15 @@ const episode = {
   mode: "story",
   previousEpisode: 16,
   synopsis: "ShadowNet has fallen and Phantom is gone. Out of the ashes, the survivors gather again. This time under nobody's orders but our own will.",
+  epilogue: `Three sets of coordinates came up on the screen.
+
+Ghost whistled low. "HQ floor 52, the northern data centre, the lab on basement five. All three at once?"
+
+"Eleven days to D-Day," said Byte. "And there are five of us."
+
+Spark spoke for the first time. "Then someone goes alone." Nobody answered, and he shrugged. "I'll go. I work alone anyway."
+
+Neon looked at me. I nodded. That night, for the first time, Phoenix did not sleep.`,
   stages: [
     {
       id: 1,

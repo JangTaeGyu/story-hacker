@@ -7,6 +7,13 @@ const episode = {
   difficulty: 2,
   mode: "story",
   synopsis: "I wake alone on a station that has lost contact with Earth. My five crewmates are nowhere, and the system insists there are six of us. Slowly, I come to understand whose place is missing.",
+  epilogue: `The pod opened. At the very bottom of the inner wall, beneath the five names, there was a sixth line. It was mine, and beside it was written:
+
+"You were the youngest. Don't carry this."
+
+For the first time in 312 days I cried out loud. Then I sat down at the transmitter again. This time I did not send a distress call. I sent a record — five names, and what they chose.
+
+The reply came ninety-one hours later. "Received. All six names confirmed."`,
   stages: [
     {
       id: 1,
@@ -76,9 +83,9 @@ Five people could not be kept alive on one person's oxygen. So they made a decis
 
 Open this door and I face what I have been living with.`,
       clue: `The note scratched into the pod wall:
-"Do not forget. The day the five let go —
- mission day 38. Two like a month, two like a day.
- The code is 0038, turned back to front."`,
+"Do not forget. The day the five let go — mission day 38.
+ Put that number in four boxes and it reads 0038.
+ The code is that, turned back to front."`,
       hint: "Take the whole four-digit number in the note and flip it left to right. There is nothing new to compute — only the order of the places changes.",
       lockType: "pin4",
       answers: ["8300"],

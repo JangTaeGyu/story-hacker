@@ -7,6 +7,13 @@ const episode = {
   difficulty: 1,
   mode: "story",
   synopsis: "The archmage was found dead at the top of his own tower. They call it an accident. But I was his last apprentice, and I have to know why he set fresh seals throughout the tower before he died.",
+  epilogue: `The box did not hold my master's last grimoire. It held a letter.
+
+"If it is you opening this, then I am glad. I burned the forbidden magic myself. What he wants no longer exists in the world. He will not believe that, of course — so leave this tower."
+
+I did not leave the tower. Instead I cut a new inscription at the entrance. The same test of fire and water my master once set for me.
+
+Years later a child stood in front of it. From the window I watched them count to thirteen.`,
   stages: [
     {
       id: 1,

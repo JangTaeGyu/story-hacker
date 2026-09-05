@@ -11,12 +11,15 @@ import { useI18n } from '@/components/i18n/LocaleProvider';
 interface StoryCompleteProps {
   episodeId: number;
   episodeTitle: string;
+  /** 마지막 자물쇠를 연 뒤의 이야기 — 이 화면에서만 읽을 수 있다 */
+  epilogue: string | null;
   nextEpisodeId: number | null;
 }
 
 export default function StoryComplete({
   episodeId,
   episodeTitle,
+  epilogue,
   nextEpisodeId,
 }: StoryCompleteProps) {
   const { t, href } = useI18n();
@@ -60,9 +63,9 @@ export default function StoryComplete({
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-8 bg-noct-black">
       <div
-        className={`w-full max-w-xs lg:max-w-sm text-center ${
-          showContent ? 'animate-fadeIn' : 'opacity-0'
-        }`}
+        className={`w-full text-center ${
+          epilogue ? 'max-w-sm lg:max-w-md' : 'max-w-xs lg:max-w-sm'
+        } ${showContent ? 'animate-fadeIn' : 'opacity-0'}`}
       >
         {/* 서브라인 */}
         <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-noct-ink-faint mb-5">
@@ -87,9 +90,24 @@ export default function StoryComplete({
           <span className="text-noct-gold">{'★'.repeat(stars)}</span>
           <span className="text-noct-ink-faint">{'☆'.repeat(3 - stars)}</span>
         </div>
-        <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-noct-ink-dim mb-10">
+        <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-noct-ink-dim">
           {t.complete.story.ranks[stars - 1]}
         </p>
+
+        {/* 에필로그 — 마지막 자물쇠를 연 대가.
+            산문이라 가운데 정렬로는 읽히지 않아 좌측 정렬로 둔다. */}
+        {epilogue ? (
+          <section className="mt-9 border-t border-noct-ink/10 pt-7 text-left">
+            <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.3em] text-noct-gold-dim">
+              {t.complete.epilogue}
+            </p>
+            <p className="whitespace-pre-wrap font-serif text-[14px] leading-[1.9] text-noct-ink-dim">
+              {epilogue}
+            </p>
+          </section>
+        ) : null}
+
+        <div className="mb-10" />
 
         {/* SNS 공유 */}
         <div className="mb-10">

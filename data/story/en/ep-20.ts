@@ -8,6 +8,19 @@ const episode = {
   mode: "story",
   previousEpisode: 19,
   synopsis: "Project X was stopped. OmniCorp fell. But a city's shadows never lift all at once. This is not an ending — it is the first page of a different beginning.",
+  epilogue: `Below the message from sender ???, one more set of coordinates surfaced.
+
+Neon looked at the screen. "Are we going?"
+
+Ghost had already picked up his jacket, and Byte was packing a terminal. Spark cut the generator.
+
+I took one last look around the headquarters. The person who arrived in this city five years ago without a name is not here any more.
+
+"Let's go."
+
+The door closed, and morning came over the grey factory.
+
+TO BE CONTINUED`,
   stages: [
     {
       id: 1,

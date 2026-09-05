@@ -8,6 +8,19 @@ const episode = {
   mode: "story",
   previousEpisode: 17,
   synopsis: "To stop Project X, three servers must die in the same instant. Phoenix begins the most dangerous operation it has ever attempted.",
+  epilogue: `The code went in at three places at once.
+
+[SYSTEM] Server A — no response
+[SYSTEM] Server B — no response
+[SYSTEM] Server C — no resp
+
+Before the third line finished, every light on basement five went out. The core server's pulse stopped, and the cooling fans wound slowly down.
+
+"Is it done?" Neon asked.
+
+Spark's voice came through the channel. "North is finished. But Zero —"
+
+Before he could finish, the emergency lamps came on. And behind us, there were footsteps.`,
   stages: [
     {
       id: 1,

@@ -7,6 +7,11 @@ const episode = {
   difficulty: 1,
   mode: "story",
   synopsis: "The man next door leaves his flat every morning at three. A heavy bag in hand, his eyes never meeting anyone's. One day he drops a worn notebook — and it pulls me straight into his secret.",
+  epilogue: `Inside the box were a letter and a bundle of hospital bills, none of them posted yet.
+
+"Ha-eun. Your dad takes the first bus every morning so he can see you one hour longer. Let's open this box together, after you're well."
+
+I put the notebook back where I found it and closed the door. At three the next morning I passed him on the stairs, and for the first time I spoke first. He looked startled for a second, then lifted his cap a little.`,
   stages: [
     {
       id: 1,

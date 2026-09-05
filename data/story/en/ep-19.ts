@@ -8,6 +8,17 @@ const episode = {
   mode: "story",
   previousEpisode: 18,
   synopsis: "An instant before the shutdown code goes in, every screen dies. And he comes back. Only one of us can end this — him, or me.",
+  epilogue: `The epilogue file held one video. A recording from five years ago, the day Phantom founded ShadowNet.
+
+A younger man smiling into the camera. "This city will sell what's inside people's heads. We stop it."
+
+I watched it to the end. Then I helped him to his feet.
+
+"I'm going to report you," I said.
+
+"You should," he answered. For the first time, there was something like relief in his voice.
+
+Outside it was dawn — the first light in Neo City I had ever seen that was not neon.`,
   stages: [
     {
       id: 1,

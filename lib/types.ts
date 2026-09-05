@@ -20,6 +20,14 @@ export interface StoryEpisode {
   title: string;
   subtitle?: string;
   synopsis?: string;
+  /**
+   * 마지막 자물쇠를 연 뒤의 이야기. 완료 화면에 뜬다.
+   *
+   * 이게 없으면 가장 어려운 마지막 문제의 대가가 "사건 해결" 다섯 글자뿐이다.
+   * 본문(`story`)이 항상 "이제 이것만 풀면…"으로 끝나기 때문에, 닫는 문단은
+   * 여기에만 있다. 새 에피소드를 쓸 때 빠뜨리지 말 것.
+   */
+  epilogue?: string;
   previousEpisode?: number;
   difficulty: 1 | 2 | 3;
   mode: 'story';

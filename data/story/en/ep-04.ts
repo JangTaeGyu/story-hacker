@@ -7,6 +7,11 @@ const episode = {
   difficulty: 2,
   mode: "story",
   synopsis: "A woman held out her request form with shaking hands, said she was going to the toilet, and walked out of the office. She never came back. Only her phone is left on the desk.",
+  epilogue: `There was one address in the file. A disused warehouse on the edge of the city. I called the police and then, unable to wait for them, drove.
+
+Kim Sa-wol was alive. Her wrists were bound but her eyes were clear, and the first thing she said was: "That phone code took you longer than I expected."
+
+Lee was picked up that night, and the accident from the company dinner two years ago was reopened. A few days later she came by the office and left the fee. On the envelope she had written — "Next time I say I'm going to the toilet, I'll actually just go to the toilet."`,
   stages: [
     {
       id: 1,
