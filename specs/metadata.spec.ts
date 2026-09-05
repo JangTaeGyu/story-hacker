@@ -54,6 +54,17 @@ test.describe('메타데이터', () => {
 });
 
 test.describe('SEO 라우트', () => {
+  test('Search Console 소유권 확인 태그가 모든 언어판에 있다', async ({ page }) => {
+    // 확인이 끝난 뒤에도 태그가 사라지면 Search Console이 소유권을 잃고
+    // 데이터 수집이 끊긴다. 지우지 못하게 고정한다.
+    for (const locale of ['ko', 'en', 'ja']) {
+      await page.goto(`/${locale}`);
+      await expect(
+        page.locator('meta[name="google-site-verification"]')
+      ).toHaveAttribute('content', /^\S+$/);
+    }
+  });
+
   test('robots.txt가 사이트맵을 가리키고 결과 화면을 제외한다', async ({ request }) => {
     const body = await (await request.get('/robots.txt')).text();
 

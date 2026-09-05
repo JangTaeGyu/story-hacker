@@ -3,7 +3,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { locales, localeMeta, toLocale, type Locale } from '@/lib/i18n';
 import { getMessages } from '@/lib/messages';
 import { alternatesFor, openGraphLocale } from '@/lib/seo';
-import { SITE_NAME, SITE_URL } from '@/lib/site';
+import { GOOGLE_SITE_VERIFICATION, SITE_NAME, SITE_URL } from '@/lib/site';
 import { LocaleProvider } from '@/components/i18n/LocaleProvider';
 import '../globals.css';
 
@@ -84,6 +84,8 @@ export async function generateMetadata({ params }: LayoutProps): Promise<Metadat
       follow: true,
       googleBot: { index: true, follow: true, 'max-image-preview': 'large' },
     },
+    // <meta name="google-site-verification"> — Search Console 소유권 확인
+    verification: { google: GOOGLE_SITE_VERIFICATION },
     icons: {
       icon: '/icon.svg',
       apple: '/icons/icon-192.png',
